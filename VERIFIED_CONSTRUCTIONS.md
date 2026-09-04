@@ -28,15 +28,15 @@ Prefix of length 20,000 of the fixed point starting at 0: **ACF**. Command: `./b
 
 ### 2. Up-and-Down, period 1000
 
-- **Length:** 65,986 (budget-limited, not a stall)
+- **Length:** 65,986 (**right-crucial / dead-end**, not budget-limited)
 - **Generator:** reverse priority every 1000 letters, starting with `(3,2,1,0)`
-- **Verification:** full `find_cube`, ACF
+- **Verification:** full `find_cube`, ACF as a finite word; tail \(q=0\) by unique-vote (`./bin/core_scan word`) and Python `q_vote`
 - **File:** `data/word_updown_p1000_n65986.txt`
 - **Command:** `./bin/acf_tool grow updown 2000000 200000 1000`
 
 ### 3. Up-and-Down, period 2000, cap 400,000
 
-- **Length:** 400,000 (hit the cap; not a stall)
+- **Length:** 400,000 (hit the cap; **not** a stall: tail \(q=1\))
 - **Generator:** `updown` period 2000, budget 20,000,000, cap 400,000
 - **Verification:** full `find_cube` in the grow command, ACF. Independent `analyze` confirms ACF.
 - **File:** `data/word_updown_p2000_n400000.txt`
@@ -49,7 +49,7 @@ Prefix of length 20,000 of the fixed point starting at 0: **ACF**. Command: `./b
 
 ### 4. Up-and-Down, period 5000, cap 400,000
 
-- **Length:** 400,000 (hit cap)
+- **Length:** 400,000 (hit cap; tail \(q=3\))
 - **File:** `data/word_updown_p5000_n400000.txt`
 - **Mean:** 1.50097
 - **Command:** `./bin/acf_tool grow updown 20000000 400000 5000`

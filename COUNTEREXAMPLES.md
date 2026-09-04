@@ -211,3 +211,26 @@ The characteristic sequence of \(\{n:S(2n)=2S(n)\}\) has 2-kernel fingerprints s
 
 ## H31. An expanding non-Perron eigenvalue prevents a long ACF prefix
 **Status:** KILLED as a “quick cube” claim. The m=3 maximizer has eigenvalues \(3,1\pm\sqrt{2},1\), so \(\lvert\lambda_2\rvert=1+\sqrt{2}>1\), and still reaches ACF prefix **1647** before cubing. Expansion is compatible with a long finite ACF prefix. The map is not an infinite ACF word.
+
+---
+
+## H32. A recurrent finite-state / macro-block core can generate only ACF infinite paths
+**Status:** KILLED (Theorems AI, AJ, AK). A recurrent labelled graph has a cycle; the periodic path is an ordinary cube. Deterministic finite-memory strategies are eventually periodic. Macro-block cycles are the same obstruction at block scale.
+
+## H33. Every sufficiently long ACF word over {0,1,2,3} has at least two legal extensions
+**Status:** KILLED at length 8 (`20010100`, \(q=1\)). Also false for Cassaigne over {0,1,3,4} (first \(q=1\) at 337), so the statement is not even a special obstruction of the exceptional alphabet.
+
+## H34. Every ACF word two-branches within a fixed lookahead R
+**Status:** KILLED by right-crucial words (length 14, and later length 38). True for all 8-mers with \(R=2\), which is not a theorem for all \(n\).
+
+## H35. Up-and-Down is a nested recursive block substitution \(W_{n+1}=F(W_n)\)
+**Status:** KILLED. Period-\(P\) and period-\(Q>P\) archives share a prefix of length \(P\), then diverge. Period-blocks have distinct Parikh vectors and are not reversals.
+
+## H36. The period-1000 Up-and-Down archive of length 65986 is only budget-limited
+**Status:** KILLED. Tail \(q=0\): the word is right-crucial. (The 400k period-2000/5000 archives are cap-limited: tail \(q=1\) and \(q=3\).)
+
+## H37. Nested palindrome / doubling templates \(WxW^R\), \(WW\) from short seeds yield unbounded ACF words
+**Status:** KILLED for all ACF seeds of length 2–4, cap 256. Best palindrome-fold prefix 9.
+
+## H38. Positive finite-language growth implies a finite-state ACF core
+**Status:** KILLED. Growth of \(c_n\) (open as a theorem, empirical through \(n=12\)) does not produce an all-paths finite graph of ACF infinite words (Theorem AI). König’s lemma needs unbounded lengths, not a sofic generator.

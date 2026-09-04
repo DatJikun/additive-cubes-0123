@@ -1,5 +1,11 @@
 # Research Log
 
+## 2026-09-04 — self-sustaining core / finite-language geometry
+
+Mission: extract a finite-memory / macro-block / two-branch core of the ACF language, or a rigorous obstruction. Do **not** repeat unique-vote, B(m), Cassaigne lattice, Krylov, triples, automaticity, bounded \(p_T\).
+
+Proved: no recurrent all-paths letter- or block-labelled core (Thm AI, AK); deterministic finite-memory strategies are eventually periodic (Thm AJ). Computationally verified: \(q=1\) from length 8 (Thm AL); length-14 dead-ends are isolated leaves (Thm AM); no uniform two-extension operators (Thm AN); nested palindrome/doubling templates die (Thm AO); Up-and-Down LCP equals one period (Thm AP); the p=1000 archive is a genuine dead-end (Thm AQ). Dual C++/Python. Report: `CORE_REPORT.md`. Infinite problem still open. The bottleneck is unbounded memory / morphic drivers, not more suffix-automaton search.
+
 ## 2026-09-04 — bounded \(p_T\) / exhaustive \(B(3)\)
 
 Mission: does automatic ACF force bounded additive complexity (Conjecture A)? Kill it or prove it. Exhaustive m=3. Compactness at fixed m. Do **not** chase generic \((D_1,D_2)\) zeros.

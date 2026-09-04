@@ -67,8 +67,16 @@ There exists a Lipschitz f:ℕ→ℤ whose graph has no 3-AP.
 
 ---
 
+## C17. A finite-memory self-sustaining core of the ACF language exists
+**Status:** KILLED as stated (Theorems AI–AK, `CORE_REPORT.md`).
+
+A recurrent finite letter- or block-labelled graph always has a periodic path, hence an ordinary cube. Deterministic finite-memory strategies are eventually periodic. The remaining infinite-word candidates are unbounded-memory procedures (Up-and-Down) and morphic/S-adic systems with an already-infinite driver — not finite cores.
+
+## C18. Every ACF word of length \(\ge N\) has \(q(w)\ge 2\)
+**Status:** KILLED (\(N=8\) already fails). See Theorem AL.
+
 ## C8. Up-and-Down with a sufficiently large reversal period produces ACF words of unbounded length
-**Status:** CONJECTURED by the construction’s behaviour, **not proved**. Hitting a cap of 400,000 with periods 2000 and 5000 is consistent with Liétard’s 70.88M but does not imply infinitude. The method has no finite mathematical rule independent of backtracking, so even an infinite run would not be an “explicit infinite word” in the sense of Phase 7.
+**Status:** CONJECTURED by the construction’s behaviour, **not proved**. Hitting a cap of 400,000 with periods 2000 and 5000 is consistent with Liétard’s 70.88M but does not imply infinitude. Period 1000 in this archive **died** (\(q=0\) at 65986). The method has no finite mathematical rule independent of backtracking, so even an infinite run would not be an “explicit infinite word” in the sense of Phase 7. LCP of different periods equals the smaller period (Theorem AP): not a nested recurrence.
 
 ---
 

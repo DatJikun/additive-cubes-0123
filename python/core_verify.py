@@ -306,8 +306,8 @@ def main():
         else:
             with0 += 1
     print("inject n=5 words", len(words5), "ge2", with2, "eq1", with1, "eq0", with0)
-    if len(words5) != 864:
-        print("FAIL c5", len(words5))
+    if len(words5) != 864 or with2 != 864:
+        print("FAIL c5/inject", len(words5), with2)
         fails += 1
 
     # basin: 13-prefixes of dead-ends
@@ -324,8 +324,8 @@ def main():
                 prefs[w[:13]] += 1
         n_multi = sum(1 for v in prefs.values() if v > 1)
         print("basin dead14", nlines, "pref13", len(prefs), "multi", n_multi)
-        if nlines != 8170:
-            print("FAIL dead14 count", nlines)
+        if nlines != 8170 or n_multi != 0 or len(prefs) != 8170:
+            print("FAIL dead14 count/basin", nlines, len(prefs), n_multi)
             fails += 1
 
     path = "data/word_fixed_p1000_n24396.txt"
@@ -371,6 +371,37 @@ def main():
         fails += 1
     else:
         print("OK no uniform two-letter operator on all ACF 4-mers")
+
+    w38s = "00100100200100112001020011003010130300"
+    w38 = [int(c) for c in w38s]
+    if len(w38) != 38 or find_cube(w38) is not None or q_vote(w38) != 0 or q_brute(w38) != 0:
+        print("FAIL n38", find_cube(w38), q_vote(w38), q_brute(w38))
+        fails += 1
+    else:
+        print("OK n=38 q=0", w38s)
+    for a, expect_d in [(0, 1), (1, 4), (2, 5), (3, 2)]:
+        c = find_cube(w38 + [a])
+        if c is None or c[1] != expect_d:
+            print("FAIL n38 ext", a, c)
+            fails += 1
+    print("OK n=38 four extensions cube")
+
+    w28s = "0010010020010011200102001100"
+    w28 = [int(c) for c in w28s]
+    if len(w28) != 28 or q_vote(w28) != 1 or q_brute(w28) != 1:
+        print("FAIL n28", q_vote(w28), q_brute(w28), find_cube(w28))
+        fails += 1
+    else:
+        print("OK n=28 q=1")
+
+    path = "data/word_fixed_p1000_n24396.txt"
+    if os.path.exists(path) and q_vote(load_digits(path)) != 0:
+        print("FAIL fixed tail not q=0")
+        fails += 1
+    path = "data/word_updown_p1000_n65986.txt"
+    if os.path.exists(path) and q_vote(load_digits(path)) != 0:
+        print("FAIL updown p1000 tail not q=0")
+        fails += 1
 
     print("core_verify_fails", fails)
     if fails:

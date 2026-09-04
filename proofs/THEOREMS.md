@@ -395,6 +395,57 @@ This is **not** an infinite ACF word, **not** a proof of \(B(m)<\infty\) for all
 
 ---
 
+## Theorem AI — no recurrent all-paths ACF core
+**Status: PROVED** (elementary). Novelty: ELEMENTARY / KNOWN (sofic shifts have periodic points).
+
+Let \(G\) be a finite directed graph with edges labelled by letters. If \(G\) is recurrent, it has a cycle. The infinite path that repeats that cycle is purely periodic, hence contains an ordinary cube (Theorem A). Therefore there is no recurrent finite letter-labelled graph whose every infinite path is additive-cube-free, on any alphabet.
+
+The overlap graph of ACF \(n\)-mers is an instance: it is cyclic, and any cycle period \(u\) yields the cube \(uuu\). Certificates: `./bin/core_scan cycle 6` (period `001`, cube \(d=3\)) and `cycle 8` (period `200100100`, cube \(d=9\)).
+
+This kills the “self-sustaining core” of `CORE_REPORT.md` as defined (recurrent component, every generated path globally ACF).
+
+## Theorem AJ — deterministic finite-memory next-letter strategies
+**Status: PROVED** (elementary). Census: COMPUTATIONALLY VERIFIED.
+
+A deterministic finite-state machine with no external input produces an eventually periodic word, hence an ordinary cube. Exhaustive \(k=1\): all \(256\) maps \(f\colon\{0,1,2,3\}\to\{0,1,2,3\}\), all seeds, maximum ACF prefix **11**. `./bin/core_scan detfsm`.
+
+## Theorem AK — finite macro-block graphs
+**Status: PROVED** (elementary). Empirical: COMPUTATIONALLY VERIFIED.
+
+A recurrent finite graph labelled by finite blocks \(\{B_i\}\) has a cycle of some letter-length \(L\); repeating it produces an ordinary cube of block length \(L\). Free 3-fold concatenations of the four most frequent 8-mers in the period-1000 Up-and-Down word: \(0\) of \(64\) ACF. `./bin/core_scan macro FILE 8`.
+
+## Theorem AL — Candidate A is false
+**Status: COMPUTATIONALLY VERIFIED.**
+
+Not every ACF word of large length has \(q\ge 2\). The shortest \(q=1\) ACF words have length **8** (72 of them); example `20010100`. Cassaigne’s infinite ACF word over \(\{0,1,3,4\}\) also has \(q=1\) (first at length 337), so forced letters are compatible with infinitude. Dual C++/Python. See `CORE_REPORT.md`.
+
+## Theorem AM — length-14 dead-ends are isolated leaves
+**Status: COMPUTATIONALLY VERIFIED.** Novelty: UNVERIFIED NOVELTY.
+
+The 8170 right-crucial words of length 14 have 8170 distinct length-13 prefixes. Each such prefix has at least one live length-14 sibling (22178 live siblings in total). No 13-prefix is a basin root whose every 14-child is dead. `./bin/core_scan basin`; Python count of prefixes in `data/deadends14.txt`.
+
+## Theorem AN — no uniform two-extension operators on all \(n\)-mers
+**Status: COMPUTATIONALLY VERIFIED.**
+
+No pair of distinct letters extends every ACF 4-mer (best 204/228) or 5-mer (best 726/864). No pair of ACF 2-mers extends every ACF 6-mer (best 2738/3152). For \(n\le 7\) every word has two children with \(q\ge 2\); this fails at \(n=8\) for the 72 \(q=1\) words.
+
+## Theorem AO — nested concatenation / palindrome templates from short seeds
+**Status: COMPUTATIONALLY VERIFIED.**
+
+From all 304 ACF seeds of length 2–4, the maps \(WW\), \(WxW\), \(WxW^R\), \(WW^R\) cube before length 256. Best palindrome-fold prefix length 9. `./bin/core_scan recgen 256`.
+
+## Theorem AP — Up-and-Down periods are not nested recurrences
+**Status: COMPUTATIONALLY VERIFIED.**
+
+Archived Up-and-Down words with periods \(P<Q\) have longest common prefix exactly \(P\) (pairs \(1000/2000\), \(2000/5000\)) or \(101\) for \(P=100\). They share the first priority block, then diverge. Adjacent period-blocks are never exact reversals and have distinct Parikh vectors. `./bin/core_scan lcp`.
+
+## Theorem AQ — the period-1000 archive is a dead-end
+**Status: COMPUTATIONALLY VERIFIED.**
+
+The word `data/word_updown_p1000_n65986.txt` has \(q=0\) at length 65986 (C++ unique-vote in `core_scan word` and independent Python `q_vote`). It is right-crucial, not budget-limited. The fixed-order word of length 24396 is likewise \(q=0\). The period-2000 and period-5000 archives of length 400000 have tail \(q=1\) and \(q=3\) (cap-limited). Dual check of the vote oracle: `q_vote` matches `q_brute` on all ACF words of length \(\le 6\) and on the \(n=38\) dead-end.
+
+---
+
 ## Corollary AH — Conjecture A is not a new lever
 **Status: PROVED** as a logical reduction (DIRECT COROLLARY of Ardal et al. 2012, Thm 5). Novelty: DIRECT COROLLARY.
 

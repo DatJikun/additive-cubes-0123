@@ -84,3 +84,21 @@ python3 python/brute_verify.py
 | Grow fixed, budget 2e6, length 24396 | 4.7 s |
 | Grow updown p=1000, budget 2e6, length 65986 | 12.9 s |
 | Exhaustive uniform k=2, cap 800 (prolongable only) | few seconds |
+
+## Finite-language core scan
+
+`bin/core_scan` (Theorems AI–AQ, `CORE_REPORT.md`):
+
+```bash
+./bin/core_scan trie 12
+./bin/core_scan inject 8
+./bin/core_scan basin
+./bin/core_scan detfsm
+./bin/core_scan cycle 6
+./bin/core_scan cass 8000
+./bin/core_scan recgen 256
+./bin/core_scan lcp
+./bin/core_scan word data/word_updown_p1000_n65986.txt
+python3 python/core_verify.py
+```
+
