@@ -44,21 +44,26 @@ Over a 2-letter integer alphabet, additive powers coincide with abelian powers. 
 
 ---
 
-## Theorem D — No dead-end of length \(\le 14\)
-**Status: COMPUTATIONALLY VERIFIED** (independent enumeration; not found in the literature at this length)
+## Theorem D — Unique vote, and no right-crucial word of length `≤10`
+**Status: PROVED** (elementary). Novelty: UNVERIFIED NOVELTY (not located in the literature; may be unwritten folklore).
 
-Every additive-cube-free word of length \(n\le 14\) over \(\{0,1,2,3\}\) has at least one letter \(a\in\{0,1,2,3\}\) such that \(wa\) is additive-cube-free.
+When appending a letter `x` to an ACF word of length `n`, each block length `d` with `3d≤n+1` forbids at most one value of `x` (the unique solution of `s_3=s_1` when `s_1=s_2`). Over a 4-letter alphabet a right-crucial word therefore requires `⌊(n+1)/3⌋≥4`, i.e. `n≥11`.
 
-**Method.** Exhaustive DFS of the ACF trie using the incremental verifier. At each node of depth \(\le 14\), all four one-letter extensions were tested. The dead-end counter is 0 at every depth \(0..14\).
+This holds for every 4-letter integer alphabet, including `{0,1,3,4}`. It does **not** explain exceptionality of `{0,1,2,3}`.
 
-**Check.** Counts through length 6 match the independent Python brute-force enumerator. Counts through length 5 match OEIS A051043. The C++ incremental checker agrees with the full \(O(n^2)\) checker on all words of length \(\le 6\).
+Independent check: `python/independent_checks.py` compares unique-vote forbidden sets to brute-force extensions on all ACF words of length `≤6`.
 
-This does **not** prove that the language is infinite. It does prove that the first obstruction, if any, occurs at length \(\ge 15\).
+## Theorem D′ — First covering is at length 14 over `{0,1,2,3}`
+**Status: COMPUTATIONALLY VERIFIED.** Novelty: UNVERIFIED NOVELTY.
 
----
+There are no right-crucial ACF words of length `11,12,13`. At those lengths, every 4-active word has vote tuple in a fixed list of 12, none of which covers `{0,1,2,3}`. Length 14 has **8170** right-crucial words.
+
+The same first-crucial length 14 occurs over `{0,1,3,4}` (2656 dead-ends). See `STRUCTURAL_REPORT.md`.
+
+**Supersedes** the earlier false statement “no dead-end of length `≤14`” (off-by-one in a DFS that did not test extensions at the cap).
 
 ## Theorem E — Exact enumeration through length 12
-**Status: COMPUTATIONALLY VERIFIED**
+**Status: COMPUTATIONALLY VERIFIED, REPRODUCTION of known values `c_8…c_12`**
 
 Let \(c_n\) be the number of ACF words of length \(n\) over \(\{0,1,2,3\}\):
 
@@ -79,7 +84,8 @@ n  c_n
 12 6772220
 ```
 
-Liétard’s thesis Table 2.2 tabulated \(c_n\) for \(1\le n\le 8\); the HTML dump did not yield the digits, so \(n=7,8\) are independent recomputations and \(n=9..12\) appear to be new.
+The values \(c_8=42070,\ldots,c_{12}=6772220\) are already public and are reproduced here.
+Also computed: \(c_{13}=23818052\), \(c_{14}=83821562\) (UNVERIFIED NOVELTY as counts).
 
 Empirical branching \(c_{n+1}/c_n \approx 3.52\) at \(n=11\). Letter frequencies under the uniform measure on length-12 ACF words: \((0.251,0.249,0.249,0.251)\).
 

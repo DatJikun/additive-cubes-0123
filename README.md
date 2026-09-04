@@ -1,14 +1,12 @@
 # Additive-cube research archive
 
 Autonomous attack on additive-cube-free words over `{0,1,2,3}`.  
-The infinite problem is **open**. The new result is a computational theorem on crucial words and enumeration; see `RESULTS.md` and `REPORT.md`.
+The infinite problem is **open**. Structural results: `STRUCTURAL_REPORT.md`.
 
 ## Build and test
 
 ```bash
-make
-./bin/acf_tool test
-python3 python/brute_verify.py
+make test
 ```
 
 Auxiliary binaries:
@@ -22,6 +20,7 @@ g++ -std=c++17 -O3 -o bin/mutate_candidate src/mutate_candidate.cpp
 
 | File | Contents |
 |---|---|
+| `STRUCTURAL_REPORT.md` | **Primary deliverable:** unique-vote lemma, dead-end taxonomy, Cassaigne recoding, comparison with `{0,1,3,4}` |
 | `NOVELTY_AUDIT.md` | Literature status as of 2026 |
 | `REPORT.md` | Final mathematical report |
 | `RESULTS.md` | Known vs new, with novelty checks |

@@ -1,5 +1,7 @@
 # Results
 
+> **Retraction (2026-09-04).** Several claims below were oversold. See `STRUCTURAL_REPORT.md` for the structural-research deliverable. In particular: `c_8…c_12` are **already public** (do not cite as new); uniform morphisms of image length `≤7` were already excluded by Liétard; bounded-discrepancy obstructions are Ardal–Brown–Jungić–Sahasrabudhe 2012. The unique-vote lemma, the length-`≥11` dead-end bound, the 12 vote tuples at lengths 11–13, and the Cassaigne recoding certificate supersede the “NEW 1–4” marketing below.
+
 ## What is already known (do not cite as new)
 
 See `NOVELTY_AUDIT.md`. In brief: the infinite ACF problem over {0,1,2,3} is open; infinite constructions exist on every other 4-letter number alphabet; Liétard constructed a finite ACF word of length 70,880,000 by Up-and-Down; morphism size ≤ 6 was already computationally excluded by Liétard; eventually periodic words are trivially impossible.
