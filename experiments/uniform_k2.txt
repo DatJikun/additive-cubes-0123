@@ -1,0 +1,11 @@
+# exhaustive uniform k=2 morphisms=65536 cap=800
+best 6  0->20 | 1->10 | 2->00 | 3->00 seed=1 cube i=3 d=1
+best 22  0->21 | 1->10 | 2->00 | 3->00 seed=1 cube i=19 d=1
+best 29  0->13 | 1->01 | 2->20 | 3->00 seed=2 cube i=26 d=1
+best 30  0->12 | 1->03 | 2->20 | 3->00 seed=2 cube i=12 d=6
+best 45  0->23 | 1->12 | 2->01 | 3->00 seed=1 cube i=42 d=1
+best 70  0->23 | 1->02 | 2->21 | 3->00 seed=2 cube i=7 d=21
+best 76  0->31 | 1->03 | 2->21 | 3->10 seed=2 cube i=43 d=11
+best 83  0->02 | 1->33 | 2->12 | 3->10 seed=0 cube i=74 d=3
+best 120  0->32 | 1->31 | 2->20 | 3->01 seed=2 cube i=57 d=21
+scanned=65536 skipped_few_sums=11800 prolongable_pairs=53736 survivors=0 best=120 0->32 | 1->31 | 2->20 | 3->01 seed=2

@@ -1,0 +1,6 @@
+mode=drift period=1000 budget=2000000 cap=200000
+length=13394 time_s=1.89132
+verified_acf=yes
+mean=1.49978
+freq 0=0.266911 1=0.232492 2=0.234508 3=0.266089
+wrote /agent/data/word_drift_p1000_n13394.txt

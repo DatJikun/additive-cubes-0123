@@ -1,0 +1,6 @@
+mode=updown period=5000 budget=20000000 cap=400000
+length=400000 time_s=69.016
+verified_acf=yes
+mean=1.50097
+freq 0=0.278168 1=0.221532 2=0.221463 3=0.278838
+wrote /agent/data/word_updown_p5000_n400000.txt

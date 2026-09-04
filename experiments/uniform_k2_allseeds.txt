@@ -1,0 +1,12 @@
+# exhaustive uniform k=2 morphisms=65536 cap=250 (all 4 seeds)
+best 2  0->00 | 1->00 | 2->00 | 3->00 seed=0 cube i=0 d=0
+best 5  0->10 | 1->00 | 2->00 | 3->00 seed=0 cube i=0 d=0
+best 21  0->21 | 1->10 | 2->00 | 3->00 seed=1 cube i=0 d=0
+best 22  0->31 | 1->21 | 2->00 | 3->00 seed=0 cube i=0 d=0
+best 25  0->13 | 1->21 | 2->00 | 3->00 seed=1 cube i=0 d=0
+best 29  0->12 | 1->31 | 2->10 | 3->00 seed=3 cube i=0 d=0
+best 44  0->23 | 1->12 | 2->01 | 3->00 seed=1 cube i=0 d=0
+best 69  0->23 | 1->02 | 2->21 | 3->00 seed=0 cube i=0 d=0
+best 83  0->23 | 1->31 | 2->20 | 3->10 seed=3 cube i=0 d=0
+best 119  0->32 | 1->31 | 2->20 | 3->01 seed=2 cube i=0 d=0
+scanned=65536 few_sums=11800 survivors=0 best=119 0->32 | 1->31 | 2->20 | 3->01 seed=2

@@ -1,0 +1,6 @@
+mode=fixed period=1000 budget=2000000 cap=30000
+length=24396 time_s=4.68645
+verified_acf=yes
+mean=0.959338
+freq 0=0.439293 1=0.275291 2=0.1722 3=0.113215
+wrote /agent/data/word_fixed_p1000_n24396.txt

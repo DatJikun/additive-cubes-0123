@@ -1,0 +1,3 @@
+# exhaustive uniform k=1 morphisms=256 cap=200
+best 1  0->2 | 1->1 | 2->0 | 3->0 seed=1 cube i=0 d=0
+scanned=256 skipped_few_sums=88 prolongable_pairs=168 survivors=0 best=1 0->2 | 1->1 | 2->0 | 3->0 seed=1

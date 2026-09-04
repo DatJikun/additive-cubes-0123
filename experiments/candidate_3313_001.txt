@@ -1,0 +1,2 @@
+cap=300 got=300 acf=yes time=3.9845e-05
+cap=1000 got=378 acf=NO time=4.0567e-05 cube i=201 d=59 sum=66 end=378
