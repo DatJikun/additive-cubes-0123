@@ -362,3 +362,9 @@ Only after a second literature search on the specific object:
 - **Record to reconstruct:** Liétard Up-and-Down, length 70,880,000.
 - **Morphism searches have already been done**, especially size \(\le 6\). New morphism work must start at size \(\ge 7\) or use a genuinely different class (S-adic, coding of larger alphabets, transducers), and must not rediscover \(\varphi_0\)-lookalikes on the wrong alphabet.
 - **A long random computation without a finite mathematical rule is not success.**
+
+---
+
+## 18. Addendum (desubstitution attack, 2026-09-04)
+
+Second search specifically for unaligned additive-cube desubstitution in uniform morphic words: CCSS, Rao 2015, Liétard thesis, Liétard–Rosenfeld, Andrade–Mol arXiv:2408.15390, WORDS list arXiv:1705.04055. **Not found:** the `(r,s)` classification, the identity `T·v+Δδ=0` as a cube criterion, or Theorem J. Label **UNVERIFIED NOVELTY**. Do **not** claim the AP lattice vector `(1,-2,1,0)` as new. Do **not** claim 2-uniform failure as new. See `DESUBSTITUTION_REPORT.md` §7.

@@ -69,3 +69,12 @@ There exists a Lipschitz f:ℕ→ℤ whose graph has no 3-AP.
 
 ## C8. Up-and-Down with a sufficiently large reversal period produces ACF words of unbounded length
 **Status:** CONJECTURED by the construction’s behaviour, **not proved**. Hitting a cap of 400,000 with periods 2000 and 5000 is consistent with Liétard’s 70.88M but does not imply infinitude. The method has no finite mathematical rule independent of backtracking, so even an infinite run would not be an “explicit infinite word” in the sense of Phase 7.
+
+---
+
+## C9. Large cubes in a primitive uniform word have ancestor v in a finite union of rank-2 affine lattices
+**Status:** CONJECTURED (surviving remnant of the killed desubstitution dream).
+
+For fixed `m`-uniform `σ`, cube types `(r,s)` are finite and `v=ψ_X−ψ_Y` satisfies `T·v=−Δδ` with `Δδ` from a finite defect set (Theorems K, L, **proved**). The conjecture is that this is the *only* complexity: `‖v‖₁` may grow (witness: `‖v‖₁=38` at `d=1767`) but the direction stays in `Λ(Δn,Δδ)`. This does **not** imply that a cube must occur.
+
+**Killed companion:** “`v` itself has bounded `L¹`” and “`v∈L(A)`”. See `DESUBSTITUTION_REPORT.md`.

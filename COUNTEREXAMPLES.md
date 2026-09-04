@@ -89,3 +89,17 @@ Short periods thrash and lose.
 
 Every ACF word of length ≤ 13 extends; 8170 words of length 14 do not.  
 See `data/deadends14.txt` and `RESULTS.md`.
+
+---
+
+## H11. Every large additive cube in a uniformly morphic word desubstitutes to an ancestor letter-sum cube
+**Status:** KILLED.
+
+Dream theorem of the unaligned-desubstitution attack. False for two independent reasons:
+
+1. Theorem J: the leftmost cube of a prolongable uniform fixed point has an ACF ancestor.
+2. Witness `0→32,1→31,2→20,3→01`, seed 2, cube `i=45,d=25`: ancestor Parikh difference `v=(1,-1,1,-1)` not in `L(A)`, cancelled by defect `(1,3)`. Dual C++/Python.
+
+The claim `v` in `L(A)` already fails at exhaustive 2-uniform first cubes with `d=3`, `v=(-1,0,0,1)`.
+
+Correct replacement: `T·v + Δδ = 0` with `δ` from a finite fragment set. See `DESUBSTITUTION_REPORT.md`.

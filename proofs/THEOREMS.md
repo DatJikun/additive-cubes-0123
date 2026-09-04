@@ -114,6 +114,33 @@ See `UNIFORM_MORPHIC_REPORT.md` Theorem U4. The AP-only lattice vector \((1,-2,1
 
 ---
 
+## Theorem J — First cubes of prolongable uniform words are not letter-desubstitutions
+**Status: PROVED.** Novelty: UNVERIFIED NOVELTY (elementary).
+
+Let \(\sigma\) be \(m\)-uniform, \(m\ge 2\), prolongable at \(a\), and \(W=\sigma^\omega(a)\). Let \(XYZ\) be an additive cube of \(W\) of minimal endpoint \(N\). The ancestor prefix \(U=\sigma^n(a)\) with \(m^n<N\) is a prefix of the ACF word \(W[:N-1]\), hence ACF. So \(XYZ\) is not \(\sigma\) of an additive cube of \(U\).
+
+See `DESUBSTITUTION_REPORT.md`.
+
+## Theorem K — Unaligned identity
+**Status: PROVED.** Novelty: UNVERIFIED NOVELTY as a packaged additive-cube statement.
+
+For \(W=\sigma(U)\) with \(\sigma\) \(m\)-uniform and \(T(a)=\sum\sigma(a)\),
+
+\[
+\sum W[p,p+d) = T\cdot\psi + \delta
+\]
+
+where \(\psi\) is the Parikh vector of complete ancestor letters and \(\delta\) is the sum of at most two proper image fragments. An additive cube is equivalent to \(T\cdot(\psi_X-\psi_Y)+(\delta_X-\delta_Y)=0\) and the companion \(Y,Z\) equation. Dual C++/Python verification on the witness cube, on all 442 cubes of the length-2048 iterate, and on 65536+65536 two-uniform first cubes over \(\{0,1,2,3\}\) and \(\{0,1,3,4\}\).
+
+## Theorem L — Finite defects, affine ancestor lattice
+**Status: PROVED.**
+
+For fixed \(\sigma\) the possible \(\delta\) form a finite set. Hence \(v=\psi_X-\psi_Y\) lies in one of finitely many affine lattices \(\{x:1\cdot x=\Delta n,\; T\cdot x=-\Delta\delta\}\). Vanishing defect and \(\Delta n=0\) give \(\ker(1)\cap\ker(T)\), the Cassaigne lattice of the *image-sum* alphabet, not of the letter alphabet.
+
+The universal claims “\(v\in L(A)\)” and “every large cube desubstitutes to an ancestor letter-sum cube” are **false**. Counterexamples: exhaustive 2-uniform `d=3`, `v=(-1,0,0,1)`; witness `i=45`, `d=25`, `v=(1,-1,1,-1)`.
+
+---
+
 ## Theorem G — High complexity of Up-and-Down words
 **Status: COMPUTATIONALLY VERIFIED**
 

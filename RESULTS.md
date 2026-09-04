@@ -105,6 +105,7 @@ A 400,000-letter Up-and-Down word (period 2000) contains every ACF factor of len
 - No new finite record.
 - No proof ruling out all morphisms of size ≥7.
 - No progress on Green’s Problem 15 (additive squares / 3-APs).
+- The universal unaligned letter-desubstitution theorem is false; see `DESUBSTITUTION_REPORT.md` (Theorems J, K, L).
 
 ## Status of the original problem
 
