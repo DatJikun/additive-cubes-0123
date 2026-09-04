@@ -1,0 +1,15 @@
+alph: (0, 1, 3, 4)
+krylov_A: {2: 462, 3: 11186, 4: 53888}
+krylov_T: {1: 324, 2: 8034, 3: 36742, 4: 20436}
+L_invariant: 8358
+kerT_invariant: 1016
+T_affine: 462
+n4_Linv: 426 (affine 138, not_affine 288)
+n3_Linv: 2212
+n3_kerT: 266
+nge3_Linv_notaff: 2500
+nge3_kerT: 347
+n4_krylovT2: 426
+n3_krylovT2: 2212
+smallest_n4_Linv_not_affine: code=1617 T=(1,2,4,0) T2=(3,4,6,2)
+dual: C++ quotient_scan census matches independent Python minors census exactly

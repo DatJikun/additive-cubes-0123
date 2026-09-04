@@ -78,3 +78,8 @@ There exists a Lipschitz f:ℕ→ℤ whose graph has no 3-AP.
 For fixed `m`-uniform `σ`, cube types `(r,s)` are finite and `v=ψ_X−ψ_Y` satisfies `T·v=−Δδ` with `Δδ` from a finite defect set (Theorems K, L, **proved**). The conjecture is that this is the *only* complexity: `‖v‖₁` may grow (witness: `‖v‖₁=38` at `d=1767`) but the direction stays in `Λ(Δn,Δδ)`. This does **not** imply that a cube must occur.
 
 **Killed companion:** “`v` itself has bounded `L¹`” and “`v∈L(A)`”. See `DESUBSTITUTION_REPORT.md`.
+
+---
+
+## C10. Quotienting by `ker(T)` produces a finite-state obstruction
+**Status:** KILLED (Theorems M–P; `QUOTIENT_REPORT.md`). The surviving exact state is the Krylov package of `T` under `M^⊤`, typically of dimension 3 or 4, plus finite fragments. On cubes the first two coordinates `(1·v, T·v)` are bounded; the extra `T_2·v` is not known to be bounded.

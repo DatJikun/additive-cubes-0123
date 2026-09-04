@@ -1,7 +1,7 @@
 # Additive-cube research archive
 
 Autonomous attack on additive-cube-free words over `{0,1,2,3}`.  
-The infinite problem is **open**. Structural results: `STRUCTURAL_REPORT.md`. Unaligned desubstitution: `DESUBSTITUTION_REPORT.md`.
+The infinite problem is **open**. Structural results: `STRUCTURAL_REPORT.md`. Unaligned desubstitution: `DESUBSTITUTION_REPORT.md`. Quotient dynamics of `T·v+Δδ=0`: `QUOTIENT_REPORT.md`.
 
 ## Build and test
 
@@ -20,6 +20,7 @@ g++ -std=c++17 -O3 -o bin/mutate_candidate src/mutate_candidate.cpp
 
 | File | Contents |
 |---|---|
+| `QUOTIENT_REPORT.md` | Defect equation modulo `ker(T)`: quotient is infinite; Krylov package; killed finite-state `Q` |
 | `DESUBSTITUTION_REPORT.md` | Unaligned cubes: exact geometry, T+defect identity, killed dream theorem |
 | `UNIFORM_MORPHIC_REPORT.md` | Uniform morphisms: Cassaigne lattice vs AP, Pisot-uniform impossibility, 2-uniform forensics |
 | `STRUCTURAL_REPORT.md` | Unique-vote lemma, dead-end taxonomy, Cassaigne recoding |
@@ -37,6 +38,7 @@ g++ -std=c++17 -O3 -o bin/mutate_candidate src/mutate_candidate.cpp
 
 - `data/deadends14.txt` — 8170 right-crucial ACF words of length 14
 - `data/scan2_summary.txt` — exhaustive 2-uniform first-cube types on `{0,1,2,3}` and `{0,1,3,4}`
+- `data/krylov_census_{A,B}.txt` — 2-uniform Krylov / `L`-invariance census (C++ matches Python)
 - `data/famous_all_cubes.csv` — all additive cubes in the length-2048 witness iterate
 - `data/word_fixed_p1000_n24396.txt` — Liétard stall, reconstructed
 - `data/word_updown_p2000_n400000.txt` — 400k Up-and-Down word (not a record)

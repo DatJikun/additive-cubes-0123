@@ -368,3 +368,19 @@ Only after a second literature search on the specific object:
 ## 18. Addendum (desubstitution attack, 2026-09-04)
 
 Second search specifically for unaligned additive-cube desubstitution in uniform morphic words: CCSS, Rao 2015, Liétard thesis, Liétard–Rosenfeld, Andrade–Mol arXiv:2408.15390, WORDS list arXiv:1705.04055. **Not found:** the `(r,s)` classification, the identity `T·v+Δδ=0` as a cube criterion, or Theorem J. Label **UNVERIFIED NOVELTY**. Do **not** claim the AP lattice vector `(1,-2,1,0)` as new. Do **not** claim 2-uniform failure as new. See `DESUBSTITUTION_REPORT.md` §7.
+
+---
+
+## 19. Addendum (quotient / defect dynamics, 2026-09-04)
+
+Third search: Rao 2015 Thm 2 (substitutions *preserving* ACF — opposite direction); CMRS / Andrade–Mol *affine* morphisms (`|σ(x)|` and `∑σ(x)` linear in the letter — KNOWN name for `T∈span{1,A}`); Rao–Rosenfeld templates / Jordan form; Liétard–Rosenfeld `L(A)`; Ardal et al. additive complexity; FSTTCS 2024 additive complexity + Walnut; Parikh automata (different object).
+
+**KNOWN:** affine morphisms and 2-coordinate (length, sum) templates when `T` is affine (CMRS, Andrade–Mol). `L(A)` vs `L(B)` (Liétard–Rosenfeld). Theorems J/K/L from the previous run.
+
+**ELEMENTARY/LIKELY KNOWN:** Theorem M (`Z^n/ker φ ≅ im φ`). Uniform incidence has left Perron eigenvector `1`. `T = M^⊤ A`.
+
+**UNVERIFIED NOVELTY:** Theorems N, O as a packaged obstruction to finite-state dynamics on `Q=Z^4/ker(T)`; the split `K_A` vs `K_T`; the 2-uniform census including **332** four-sum `L`-invariant non-affine morphisms (H13 killed a false collapse to affine); AP-interior `v=(0,-1,2,-1)` at `d=27`. Do **not** inflate to GENUINELY NEW WITH EVIDENCE.
+
+**Not found:** a theorem that `Z^4/ker(T)` yields a finite automaton of additive-cube defects under uniform substitution.
+
+See `QUOTIENT_REPORT.md`.

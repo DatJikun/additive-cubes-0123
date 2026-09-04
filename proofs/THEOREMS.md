@@ -139,7 +139,48 @@ For fixed \(\sigma\) the possible \(\delta\) form a finite set. Hence \(v=\psi_X
 
 The universal claims “\(v\in L(A)\)” and “every large cube desubstitutes to an ancestor letter-sum cube” are **false**. Counterexamples: exhaustive 2-uniform `d=3`, `v=(-1,0,0,1)`; witness `i=45`, `d=25`, `v=(1,-1,1,-1)`.
 
+## Theorem M — \(\mathbb{Z}^4/\ker(T)\) is infinite
+**Status: PROVED.** Novelty: ELEMENTARY/LIKELY KNOWN (first isomorphism theorem).
+
+Let \(T\in\mathbb{Z}^4\) be nonzero and \(d=\gcd(T)\). Then \(\varphi_T(x)=T\cdot x\) has kernel \(\ker(T)\) and image \(d\mathbb{Z}\), so
+\[
+\mathbb{Z}^4/\ker(T)\;\cong\; d\mathbb{Z}\;\cong\;\mathbb{Z}.
+\]
+The only information surviving in this quotient is the integer \(T\cdot v\). Cubes occupy finitely many classes therein (Theorem L), but the quotient group is not a finite-state space. For the witness \(T=(5,4,2,1)\), \(d=1\).
+
+## Theorem N — \(M\) preserves \(L\) iff \(T_2\in\mathrm{span}\{1,T\}\)
+**Status: PROVED.** Novelty: UNVERIFIED NOVELTY as packaged for this defect equation; the linear algebra is elementary.
+
+Write \(T_2:=M^\top T\). Always \(1^\top M=m\,1^\top\), so \(M\) preserves \(\ker(1)\). For \(k\in L:=\ker(1)\cap\ker(T)\),
+\[
+T\cdot(Mk)=T_2\cdot k.
+\]
+This vanishes for all \(k\in L\) iff \(T_2\in\mathrm{span}\{1,T\}\). Equivalently, \(\dim\mathrm{span}\{1,T,T_2,\ldots\}\le 2\). If moreover \(T_2\in\mathrm{span}\{T\}\), then \(M\) preserves \(\ker(T)\) itself and acts on \(\mathbb{Z}^4/\ker(T)\).
+
+On the witness, \(T_2=(3,5,7,9)\). The \(3\times 3\) minors of the matrix with rows \(1,T,T_2\) are \((2,2,-2,-2)\), so the rank is 3 and \(L\) is not invariant. Parametrically \(L=\{(x,y,-4x-3y,3x+2y)\}\), with \(T_2\cdot e_i=2\neq 0\) on the complementary direction to \(\ker(M)\cap L=\langle(1,-1,-1,1)\rangle\).
+
+## Theorem O — Krylov closure is the maximal invariant linear package
+**Status: PROVED.** Novelty: UNVERIFIED NOVELTY as applied to additive-cube defects.
+
+The linear forms appearing as interior sums under iterated desubstitution are \(T_k=(M^\top)^k A\) with \(T_1=T=M^\top A\). The smallest \(M^\top\)-invariant space containing \(T\) and \(1\) is
+\[
+K_T=\mathrm{span}\{1,T,T_2,T_3,\ldots\}.
+\]
+The maximal lattice that can be quotiented at every scale without losing defect data is \(K_T^\perp\cap\mathbb{Z}^4\). For the witness, \(\dim K_T=3\) and \(K_T^\perp\) has rank 1.
+
+Write \(K_A=\mathrm{span}\{1,A,T,T_2,\ldots\}\). Always \(K_T\subseteq K_A\). On a 4-letter alphabet with \(\mathrm{rank}\{1,A\}=2\), one has \(\dim K_A=2\) if and only if \(T\in\mathrm{span}\{1,A\}\) (Theorem P). That is the *affine* case of Currie–Mol–Rampersad–Shallit / Andrade–Mol, already known.
+
+## Theorem P — affine image-sums iff \(\dim K_A=2\)
+**Status: PROVED.** Novelty: ELEMENTARY; the name “affine morphism” is KNOWN (CMRS 2021, Andrade–Mol 2024).
+
+Let \(A\) have four distinct values, so \(\mathrm{rank}\{1,A\}=2\). Then \(T\in\mathrm{span}\{1,A\}\) iff \(\mathrm{rank}\{1,A,T\}=2\). If \(T=\alpha 1+\beta A\), then \(T_2=M^\top T=\alpha m\,1+\beta T\in\mathrm{span}\{1,T\}\subseteq\mathrm{span}\{1,A\}\), hence \(\dim K_A=2\). Conversely \(\dim K_A=2\) forces \(T\in\mathrm{span}\{1,A\}\).
+
+This class is strictly smaller than “\(L\) is \(M\)-invariant”. Exhaustive 2-uniform census (C++ matches Python): on \(\{0,1,2,3\}\), \(T\) affine for 854 morphisms, while \(L\)-invariant for 9548, including **332** four-sum non-affine examples (smallest: \(0\mapsto 33,\;1\mapsto 31,\;2\mapsto 10,\;3\mapsto 00\), \(T=(6,4,1,0)\), \(T_2=12\cdot 1-2T\)) and **2626** three-sum \(L\)-invariant morphisms. So \((1\cdot v,\,T\cdot v)\) can close without \(T\) being a letter-sum.
+
+The proposed quotient \(\mathbb{Z}^4/\ker(T)\) still does not carry an \(M\)-action unless \(T_2\in\mathrm{span}\{T\}\) (1182 morphisms; 373 of them have \(\ge 3\) image sums).
+
 ---
+
 
 ## Theorem G — High complexity of Up-and-Down words
 **Status: COMPUTATIONALLY VERIFIED**

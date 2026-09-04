@@ -103,3 +103,19 @@ Dream theorem of the unaligned-desubstitution attack. False for two independent 
 The claim `v` in `L(A)` already fails at exhaustive 2-uniform first cubes with `d=3`, `v=(-1,0,0,1)`.
 
 Correct replacement: `T·v + Δδ = 0` with `δ` from a finite fragment set. See `DESUBSTITUTION_REPORT.md`.
+
+---
+
+## H12. After quotienting by `ker(T)`, cube defects become a finite-state dynamical obstruction
+**Status:** KILLED.
+
+`Q = Z^4 / ker(T) ≅ gcd(T) Z` is infinite (Theorem M). Cubes occupy a finite subset of `Q` (Theorem L restated). The incidence matrix does not act on `Q` unless `T_2 ∈ span{T}`. On the witness, `T_2 · e_i = 2 ≠ 0` for a basis vector of `L`, so `[Mv]` is not a function of `[v]`. Reachable `T·v` of consecutive ancestor factors already fills `{−8,…,8}` (75520 pairs, minimum occupancy 1895). See `QUOTIENT_REPORT.md`.
+
+---
+
+## H13. Among 2-uniform 4-sum morphisms, `L` invariant implies `T` affine to the letters
+**Status:** KILLED.
+
+Conflated `dim K_A = 2` (which *does* equal `T` affine: 854 morphisms, of which 402 have four image sums) with `L`-invariance. Dual C++/Python census: **734** four-sum `L`-invariant morphisms, of which **332** are not affine. Smallest code 383:
+`0→33`, `1→31`, `2→10`, `3→00`, `T=(6,4,1,0)`, `T_2=(0,4,10,12)=12·1−2T`.
+There are also **2626** three-sum `L`-invariant morphisms (automatically not affine). The interesting closed `(1,T)` class exists already at `m=2`.
