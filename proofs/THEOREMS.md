@@ -179,6 +179,23 @@ This class is strictly smaller than “\(L\) is \(M\)-invariant”. Exhaustive 2
 
 The proposed quotient \(\mathbb{Z}^4/\ker(T)\) still does not carry an \(M\)-action unless \(T_2\in\mathrm{span}\{T\}\) (1182 morphisms; 373 of them have \(\ge 3\) image sums).
 
+## Theorem Q — \(\omega\)-identity for triples
+**Status: PROVED.** Novelty: ELEMENTARY (repackaging of Theorem K). The name is not a new cube criterion.
+
+For \(W=\sigma(U)\) \(m\)-uniform and \(F=W[p,p+d)\), \(\omega(F):=T\cdot\psi_F+\delta_F\) equals \(\sum F\). Consecutive equal-length \(X,Y,Z\) form an additive cube iff \(\omega(X)=\omega(Y)=\omega(Z)\), for every residue type. Equivalent: \(\omega_i=\omega_{i+d}=\omega_{i+2d}\) with \(\omega_i=S(i+d)-S(i)\).
+
+## Theorem R — exactly \(m^2\) triple types
+**Status: PROVED.** Novelty: ELEMENTARY/LIKELY KNOWN.
+
+If \(i\equiv r\pmod m\) and \(d\equiv s\pmod m\), then \(r_Y=(r+s)\bmod m\) and \(r_Z=(r+2s)\bmod m\). Fragment slot lengths are functions of \((m,r,s)\) and determine \((r,s)\) uniquely, so there are exactly \(m^2\) residue types and exactly \(m^2\) slot signatures. At most four ancestor letters appear as fragments (X-left, XY-junction, YZ-junction, Z-right). Dual census \(m=2,\ldots,7\).
+
+## Theorem S — junction covering
+**Status: PROVED.** Novelty: ELEMENTARY.
+
+At an unaligned XY junction the right prefix of \(X\) and left suffix of \(Y\) are complementary pieces of one image \(\sigma(a)\), hence sum to \(T(a)\). Likewise YZ. Famous cube: YZ junction \(U[47]=1\), pieces `3`+`1` \(=T(1)=4\).
+
+See `TRIPLE_REPORT.md`.
+
 ---
 
 

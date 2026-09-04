@@ -119,3 +119,30 @@ Correct replacement: `T·v + Δδ = 0` with `δ` from a finite fragment set. See
 Conflated `dim K_A = 2` (which *does* equal `T` affine: 854 morphisms, of which 402 have four image sums) with `L`-invariance. Dual C++/Python census: **734** four-sum `L`-invariant morphisms, of which **332** are not affine. Smallest code 383:
 `0→33`, `1→31`, `2→10`, `3→00`, `T=(6,4,1,0)`, `T_2=(0,4,10,12)=12·1−2T`.
 There are also **2626** three-sum `L`-invariant morphisms (automatically not affine). The interesting closed `(1,T)` class exists already at `m=2`.
+
+---
+
+## H14. Every primitive uniformly recurrent word has an additive cube (Claim A)
+**Status:** KILLED (KNOWN). Cassaigne \(\varphi_0^\omega(0)\) over `{0,1,3,4}`.
+
+---
+
+## H15. The corrected-weight graph is finite-state for every uniform morphism (Claim C)
+**Status:** KILLED. Famous witness: window-sum range grows with `d` (`d=1` four values; `d=100` interval `[129,171]`, 42 values). The unbounded coordinate is \(\omega\) itself.
+
+---
+
+## H16. The middle factor Y determines both defect equations (Claim E)
+**Status:** KILLED. Famous cube: X-left ancestor letter is `U[22]=3`, not in Y's ancestor span `[35,47]`. Outer fragment letter is extra.
+
+---
+
+## H17. Triple coupling eliminates pair-window saturation as an obstruction (Claim D)
+**Status:** KILLED as an obstruction; TRUE as a filter.
+
+Famous `n=512`: 1995 squares, 59 cubes, 1524 XY-pairs that do not extend. Cassaigne `n=800`: 2724 squares, 0 cubes. Coupling is the original cube condition. Dual C++/Python.
+
+---
+
+## H18. Cubes are 2-paths in a single finite T-weighted factor graph independent of `d`
+**Status:** KILLED. For each `d` the step-`d` graph is `d` paths on positions. After identifying `d`-factors the size is \(p(d)\). Famous aligned `d=8` graph has 0 equal-weight 2-paths while unaligned cubes exist.

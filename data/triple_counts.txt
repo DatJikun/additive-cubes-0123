@@ -1,0 +1,4 @@
+famous_n=512 squares=1995 cubes=59 pair_not_triple=1524 yz_only=1739 P_and_S=59 P_only=1524 S_only=1739 neither=40283 middles=43605 first_sq_dloop=(19,1,0) first_cube_dloop=(153,4,8) find_cube=(45,25,35)
+cassaigne_n=800 squares=2724 cubes=0 pair_not_triple=2404 yz_only=2399 P_and_S=0 first_sq_dloop=(6,1,1) first_sq_iloop=(3,4,8)
+types: for m=2..7 slot_sigs=m^2, max_fragment_letters=4
+dual: C++ triple_scan matches python pair_triple_counts and type_census exactly

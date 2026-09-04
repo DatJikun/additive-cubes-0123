@@ -384,3 +384,9 @@ Third search: Rao 2015 Thm 2 (substitutions *preserving* ACF — opposite direct
 **Not found:** a theorem that `Z^4/ker(T)` yields a finite automaton of additive-cube defects under uniform substitution.
 
 See `QUOTIENT_REPORT.md`.
+
+---
+
+## 20. Addendum (triple / ω graph, 2026-09-04)
+
+Fourth search: CCSS triple search tree (Schaeffer slides; arXiv:1106.5204); Pirillo–Varricchio / Halbeisen–Hungerbühler (APs on the graph of S); Ardal additive complexity; Liétard–Rosenfeld; Rao 2015; CMRS templates. **KNOWN:** \(\omega=\mathrm{sum}\) is the definition; CCSS already tracks triples of consecutive blocks. **REPRODUCED:** Cassaigne has additive squares and no cubes. **ELEMENTARY:** \(m^2\) types; junction covering. **UNVERIFIED NOVELTY:** packaged uniform slot/letter count; exact pair-vs-triple numbers. Do **not** claim a new obstruction. See `TRIPLE_REPORT.md`.

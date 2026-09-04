@@ -83,3 +83,8 @@ For fixed `m`-uniform `σ`, cube types `(r,s)` are finite and `v=ψ_X−ψ_Y` sa
 
 ## C10. Quotienting by `ker(T)` produces a finite-state obstruction
 **Status:** KILLED (Theorems M–P; `QUOTIENT_REPORT.md`). The surviving exact state is the Krylov package of `T` under `M^⊤`, typically of dimension 3 or 4, plus finite fragments. On cubes the first two coordinates `(1·v, T·v)` are bounded; the extra `T_2·v` is not known to be bounded.
+
+---
+
+## C11. Shared-middle triples yield a finite T-weighted factor-graph obstruction
+**Status:** KILLED (`TRIPLE_REPORT.md`). \(\omega(X)=\omega(Y)=\omega(Z)\) is the original cube condition. Finite extra data: \(m^2\) types and \(\le 4\) fragment letters. Unbounded: \(\omega\). Coupling filters squares to cubes but is not an obstruction (Cassaigne has squares, no cubes; famous has both).
