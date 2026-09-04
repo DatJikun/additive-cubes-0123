@@ -1,0 +1,52 @@
+dfao_fail 0
+psi_fail 0
+S2n_fail 0
+L_fail 0
+L (7, 3, -3, -7)
+T2 (3, 5, 7, 9)
+krylov_T 3
+S_module_rank 7
+a_kernel_fp 37
+U_kernel_fp 37
+sq_kernel_fp 9
+cu_kernel_fp 1
+n_prefix_squares 13
+n_prefix_cubes 0
+L_absmax 124
+diam_64 (64, 526, 32, True)
+n_with_00_le64 24
+Delta_max 4096
+n_distinct_D1 72
+n_cube_len_lt200 59
+n_missing_lt200 140
+missing_head [1, 2, 3, 5, 7, 9, 10, 11, 13, 14, 15, 17, 19, 20, 21, 23, 25, 27, 29, 31, 33, 35, 36, 37, 39, 40, 41, 43, 45, 47]
+pT_1 4
+pT_16 20
+pT_64 40
+first_cube_a (90, 50, 145)
+first_cube_U (45, 25, 35)
+LM2_fail 0
+L_psi_70 0
+mod2 7800 2554 6
+mod3 7800 915 6
+mod4 7800 653 6
+mod5 7800 242 6
+mod8 7800 130 6
+cass_2ker 127
+cass_3ker 121
+cass_cube None
+tm_cube (0, 2, 1)
+tm_Delta_max 1
+tm_a_ker 2
+tm_sq_ker 3
+pd_cube (0, 3, 2)
+pd_Delta_max 6
+pd_sq_ker 7
+scan m=2 A=(0, 1, 2) cap=80 tried=480 surv=0 best=26 rec=('01 12 20', (1, 3, 2), 3, True, (1, (8, 10, 9), 26))
+scan m=2 A=(0, 1, 3) cap=80 tried=492 surv=0 best=44 rec=('01 13 30', (1, 4, 3), 3, True, (1, (11, 21, 27), 44))
+scan m=2 A=(0, 1, 4) cap=80 tried=492 surv=2 best=80 rec=('01 14 40', (1, 5, 4), 3, True, (0, None, 80))
+scan m=2 A=(0, 2, 3) cap=80 tried=492 surv=0 best=44 rec=('03 20 32', (3, 2, 5), 3, True, (2, (11, 21, 36), 44))
+scan m=2 A=(0, 1, 2) cap=80 tried=210 surv=0 best=26 rec=('01 12 20', (1, 3, 2), 3, True, (1, (8, 10, 9), 26))
+scan m=3 A=(0, 1, 2) cap=60 tried=13252 surv=4 best=60 rec=('001 122 021', (1, 5, 3), 3, True, (0, None, 60))
+scan m=3 A=(0, 1, 2, 3) cap=80 tried=884 surv=0 best=25 rec=('112 110 000 000', (4, 2, 0, 0), 3, False, (1, (0, 25, 20), 25))
+rand_m3 n_ok=3953 surv=0 best=109 rec=('103 100 022 323', (4, 1, 4, 8), 3, True, (1, (27, 33, 47), 109))

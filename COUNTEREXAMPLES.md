@@ -167,3 +167,22 @@ Theorem X: Cassaigne frequencies are irrational, so the word is not automatic. T
 
 ## H18. Cubes are 2-paths in a single finite T-weighted factor graph independent of `d`
 **Status:** KILLED. For each `d` the step-`d` graph is `d` paths on positions. After identifying `d`-factors the size is \(p(d)\). Famous aligned `d=8` graph has 0 equal-weight 2-paths while unaligned cubes exist.
+
+---
+
+## H22. Prefix-square zeros of the famous T-word are not 2-automatic
+**Status:** KILLED as a kernel-growth claim.
+
+The characteristic sequence of \(\{n:S(2n)=2S(n)\}\) has 2-kernel fingerprints saturating at 9. The set is closed under \(n\mapsto 4n\) (Theorem AC). It is an infinite 2-recognizable family of additive **squares**, not cubes.
+
+## H23. Every \(d>C(\sigma)\) is an \(E_\sigma\)-cube (Candidate D)
+**Status:** KILLED. Famous T-word: 140 missing cube lengths below 200; smallest missing \(d=1\).
+
+## H24. \(D_1\equiv D_2\equiv 0\pmod M\) plus primitivity forces an integer cube
+**Status:** KILLED as a finite-modulus argument. Famous 7800-pair window: 2554 zeros mod 2 versus 6 integer zeros. Modular equality is automatic and strictly larger.
+
+## H25. Growing \(\mathrm{diam} R_\sigma(n)\) is an automaticity-specific semilinearity obstruction
+**Status:** KILLED. Sublinear diam is compatible with semilinear slices. Cassaigne (not automatic, ACF) has \(\mathrm{diam} R(64)=86\), larger than famous 32.
+
+## H26. A 2-uniform 3-letter map on \(\{0,1,4\}\) is an automatic ACF candidate
+**Status:** KILLED at ACF prefix 108. Map \(0\to 01,\ 1\to 14,\ 4\to 40\), seed 0, cube \((i,d,\mathrm{sum})=(2,63,105)\). Dual C++/Python. Alphabet not affine-equivalent to \(\{0,1,2\}\). All 210 prolongable 3-sum 2-uniform maps on \(\{0,1,2\}\) cube by length 26.

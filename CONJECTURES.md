@@ -88,6 +88,8 @@ This is the uniform problem (Theorems V, W). Cassaigne is morphic and not automa
 
 **Attack:** Theorem X/Y kill same-word uniformization. They do not kill every automatic candidate.
 
+Kernel/regular attack (Theorems AA–AC): synchronized summatory is exactly bounded \(p_T\) (already Ardal cubes). Prefix T-squares of the famous map form an infinite 4-adic family and still do not yield cubes. Structured m=3 4-letter samples (3953+4012 primitive 3-sum maps) all cubed by length 160. Still not a proof for \(m\ge 3\).
+
 ---
 
 ## C13. The CCSS length-compensation mechanism cannot run on a uniform morphism
@@ -104,3 +106,13 @@ Equal image length forces equal ancestor length for complete images. The Cassaig
 
 ## C11. Shared-middle triples yield a finite T-weighted factor-graph obstruction
 **Status:** KILLED (`TRIPLE_REPORT.md`). \(\omega(X)=\omega(Y)=\omega(Z)\) is the original cube condition. Finite extra data: \(m^2\) types and \(\le 4\) fragment letters. Unbounded: \(\omega\). Coupling filters squares to cubes but is not an obstruction (Cassaigne has squares, no cubes; famous has both).
+
+---
+
+## C14. The bivariate zero set of \((D_1,D_2)\) is m-automatic for every primitive uniform map
+**Status:** KILLED as a general claim; OPEN for this special pair.
+
+Generic k-regular zeros are not regular (Allouche–Shallit 5.2 / Krenn–Shallit). Famous prefix \(D_1(0,n)=0\) *does* look 2-automatic (kernel 9). Prefix \(D_1=D_2=0\) is empty in length 4096. Modular \((D_1,D_2)\) is automatic and larger than the integer set. No finite automaton for integer cubes was constructed.
+
+## C15. Every primitive 3-letter uniform numerical word has additive cubes (Layer B)
+**Status:** COMPUTATIONALLY SUPPORTED for m=2 (exhaustive) and m=3 cap 81; not proved. Best ACF prefix 108 on \(\{0,1,4\}\). Rao’s 3-letter ACF word is non-uniform, so it is not a counterexample to the uniform statement.

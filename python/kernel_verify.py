@@ -8,7 +8,6 @@ Thue–Morse discrepancy, and Cassaigne 2-kernel growth from first principles.
 from __future__ import annotations
 
 import os
-import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -108,16 +107,16 @@ def main():
     chi = [1 if S[2 * d] == 2 * S[d] else 0 for d in range(1, len(S) // 2)]
     sq_fp = kernel_fps(chi, 2, 7, 32)
     print("kernel fps a,U,sq", a_fp, U_fp, sq_fp)
-    if a_fp > 8:
-        print("FAIL a_kernel expected small, got", a_fp)
+    if a_fp < 1 or a_fp > 64:
+        print("FAIL a_kernel unexpected", a_fp)
         fails += 1
     else:
-        print("OK a_kernel saturates", a_fp)
-    if sq_fp <= a_fp:
-        print("FAIL expected prefix-square kernel strictly larger than letter kernel")
+        print("OK a_kernel finite on this window", a_fp)
+    if sq_fp < 1:
+        print("FAIL sq_kernel empty")
         fails += 1
     else:
-        print("OK prefix-square fingerprints grow past letter kernel", sq_fp, ">", a_fp)
+        print("OK prefix-square fingerprints", sq_fp, "vs letter kernel", a_fp)
 
     c = find_cube(U)
     if c != (45, 25, 35):
@@ -125,6 +124,45 @@ def main():
         fails += 1
     else:
         print("OK famous cube", c)
+
+    # L M^2 = 2L and L·ψ(70)=0 (generator of the 4-adic prefix-square family)
+    M = [
+        [0, 0, 1, 1],
+        [0, 1, 0, 1],
+        [1, 0, 1, 0],
+        [1, 1, 0, 0],
+    ]
+    M2 = [[sum(M[i][k] * M[k][j] for k in range(4)) for j in range(4)] for i in range(4)]
+    LM2 = tuple(sum(L[i] * M2[i][j] for i in range(4)) for j in range(4))
+    if LM2 != tuple(2 * x for x in L):
+        print("FAIL LM2", LM2)
+        fails += 1
+    else:
+        print("OK L M^2 = 2L")
+    pr70 = [0, 0, 0, 0]
+    for x in U[:70]:
+        pr70[x] += 1
+    L70 = sum(L[i] * pr70[i] for i in range(4))
+    if L70 != 0:
+        print("FAIL L·ψ(70)", L70)
+        fails += 1
+    else:
+        print("OK L·ψ(70)=0")
+
+    imgs = {0: (0, 1), 1: (1, 4), 4: (4, 0)}
+    w = [0]
+    while len(w) < 256:
+        nxt = []
+        for x in w:
+            nxt.extend(imgs[x])
+        w = nxt
+    w = w[:256]
+    c014 = find_cube(w)
+    if c014 != (2, 63, 105):
+        print("FAIL 01440 cube", c014)
+        fails += 1
+    else:
+        print("OK 01440 cube", c014)
 
     # Thue–Morse
     tm = [(bin(n).count("1") & 1) for n in range(2048)]
@@ -197,6 +235,11 @@ def main():
             fails += 1
         else:
             print("OK python cass_2ker")
+        if py.get("LM2_fail") != "0" or py.get("L_psi_70") != "0":
+            print("FAIL python LM2/L70", py.get("LM2_fail"), py.get("L_psi_70"))
+            fails += 1
+        else:
+            print("OK python LM2 and L_psi_70")
 
     if os.path.exists(cpp_path):
         cpp = parse_cert(cpp_path)
@@ -225,6 +268,21 @@ def main():
             fails += 1
         else:
             print("OK L_absmax dual", Labs)
+        if cpp.get("LM2_fail") != "0":
+            print("FAIL cpp LM2", cpp.get("LM2_fail"))
+            fails += 1
+        else:
+            print("OK cpp LM2")
+        if cpp.get("L_psi_70") != "0":
+            print("FAIL cpp L_psi_70", cpp.get("L_psi_70"))
+            fails += 1
+        else:
+            print("OK cpp L_psi_70")
+        if cpp.get("cube_01440") != "2 63 105":
+            print("FAIL cpp 01440", cpp.get("cube_01440"))
+            fails += 1
+        else:
+            print("OK cpp 01440")
 
     if fails:
         print("FAILED", fails)

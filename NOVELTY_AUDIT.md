@@ -408,3 +408,20 @@ Fifth search: CCSS; Liétard–Rosenfeld; Rao 2015; Ardal 2012 Thm 5; Banero 201
 **FALSE as universals, corrected in `TEMPLATE_REPORT.md` §8:** Claims E, F; Krylov-escape; CSV `acf_prefix` as survival.
 
 See `TEMPLATE_REPORT.md`.
+
+---
+
+## 22. Addendum (m-kernel / k-regular block sums, 2026-09-04)
+
+Sixth search: Allouche–Shallit TCS 1992 Thm 5.2 (undecidable zeros of k-regular sequences); Krenn–Shallit TCS 2022 (undecidable regularity of fibres); Shallit *Logical Approach* Thm 10.6.1 and WORDS 2021 (synchronized vs regular summatory); Burns arXiv:2405.17536 (TM sum synchronized, period-doubling not); Dekking 1979; Ardal 2012; Rao 2015 (non-uniform 3-letter ACF); CMRS / Andrade–Mol Walnut for Parikh-collinear morphisms; FSTTCS 2024 additive complexity of automatic sequences.
+
+**KNOWN:** summatory of k-regular is k-regular; automatic sequences have rational frequencies; bounded \(p_T\Rightarrow\) cubes; Layer A (binary) is Dekking; Rao’s 3-letter construction is not uniform; no theorem “primitive automatic \(\Rightarrow\) additive cube”.
+
+**DIRECT COROLLARY:** Theorem AA (synchronized iff bounded \(\Delta\)).
+
+**ELEMENTARY:** Theorem AB (\(S(mn)=T_2\cdot\psi(n)\); Krylov = aligned kernel).
+
+**UNVERIFIED NOVELTY:** Theorem AC (famous prefix T-squares 4-adic via \(LM^2=2L\)); the packaged obstruction that doubling closes and \(3d\) does not. Do not claim a decision procedure (Endgame D is blocked by Thm 5.2 at generic regularity). Do not claim exhaustive m=3 on 4 letters.
+
+See `KERNEL_REPORT.md`.
+

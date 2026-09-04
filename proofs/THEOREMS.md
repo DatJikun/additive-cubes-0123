@@ -252,6 +252,56 @@ See `TEMPLATE_REPORT.md`.
 
 ---
 
+## Theorem AA — Synchronized summatory iff bounded discrepancy
+**Status: PROVED.** Novelty: DIRECT COROLLARY of Shallit, *The Logical Approach to Automatic Sequences*, Theorem 10.6.1, plus rational letter frequencies of primitive constant-length substitutions.
+
+Let \(U\) be a primitive \(m\)-uniform word over a finite integer alphabet, \(a=T\circ U\), \(S(n)=\sum_{j<n}a_j\), and \(\mu\in\mathbb{Q}\) the mean of \(a\). Write \(\Delta(n)=S(n)-\mu n\).
+
+A \((m,m)\)-synchronized function which is \(o(n)\) is bounded (Shallit 10.6.1 with \(\ell=m\)). Primitive uniform maps have a simple Perron eigenvalue \(m\), so \(\Delta=o(n)\). The identity function \(n\mapsto n\) is \(m\)-synchronized, hence so is \(\mu n\). Thus if \(S\) is \(m\)-synchronized then \(\Delta\) is too, hence bounded.
+
+Conversely, bounded \(\Delta\) means \(S(n)=\mu n+O(1)\). A bounded \(m\)-regular sequence is \(m\)-automatic, and the graph of \(\mu n\) plus an automatic sequence is an \(m\)-synchronized graph. So \(S\) is \(m\)-synchronized.
+
+Bounded discrepancy is equivalent to bounded additive complexity of \(a\), which forces additive \(k\)-powers for all \(k\) (Ardal–Brown–Jungić–Sahasrabudhe, Integers 2012, Thm 5). Therefore first-order / Walnut methods that require a synchronized summatory see only a class in which cubes are already forced.
+
+The famous map has spectrum \(\{2,\sqrt{2},-\sqrt{2},0\}\), so \(\Delta\) is unbounded of order \(n^{1/2}\) (\(\max_{n<4096}\lvert S(n)-3n\rvert=63\)). Its summatory is 2-regular, not 2-synchronized.
+
+Cassaigne is not uniform, hence not a counterexample to the constant-length hypothesis.
+
+---
+
+## Theorem AB — Aligned kernel of \(S\) is the Krylov orbit
+**Status: PROVED.** Novelty: ELEMENTARY.
+
+Let \(\sigma\) be \(m\)-uniform with incidence matrix \(M\), \(U=\sigma^\omega(a)\), \(\psi(n)=\mathrm{Parikh}(U[0:n))\), \(T_1=T\) the vector of image sums, \(T_{k+1}=M^\top T_k\). Then \(U[0:mn)=\sigma(U[0:n))\), so \(\psi(mn)=M\psi(n)\) and
+\[
+S(mn)=T\cdot\psi(mn)=T_2\cdot\psi(n).
+\]
+Inductively \(S(m^r n)=T_{r+1}\cdot\psi(n)\). The linear forms appearing in the aligned \(m\)-kernel of \(S\) are exactly the Krylov orbit of \(T\) under \(M^\top\).
+
+The remainder of the kernel uses incomplete images:
+\[
+\psi(mn+r)=M\psi(n)+\mathrm{Parikh}(\sigma(U[n])[0:r]),
+\]
+which is an affine recurrence on \(\mathbb{Z}^{|A|}\) with finite control state \(U[n]\). This is not a finite-state representation of the integer \(S(n)\).
+
+Dual check on the famous map: \(S(2n)=T_2\cdot\psi(n)\) for all \(n\le 400\), \(T_2=(3,5,7,9)\).
+
+---
+
+## Theorem AC — Famous prefix T-squares are 4-adic
+**Status: PROVED** (the scaling identity is a \(4\times 4\) multiplication; the seed zero \(L\cdot\psi(70)=0\) is a finite Parikh count). Novelty: UNVERIFIED NOVELTY as a packaged additive-square statement; the linear algebra is elementary.
+
+Let \(L=2T-T_2=(7,3,-3,-7)\). Then \(D_1(0,n)=L\cdot\psi(n)\), so prefix T-squares are the zeros of \(L\cdot\psi\). Direct multiplication gives \(LM^2=2L\). Combined with \(\psi(4n)=M^2\psi(n)\),
+\[
+L\cdot\psi(4n)=2L\cdot\psi(n).
+\]
+Hence the zero set is invariant under \(n\mapsto 4n\). Independent C++/Python: \(L\cdot\psi(70)=0\), therefore \(L\cdot\psi(70\cdot 4^k)=0\) for every \(k\ge 0\). This is an infinite 2-recognizable family of prefix additive **squares** in the T-word.
+
+It does **not** produce prefix T-cubes: \(\chi_{\mathrm{cu}}\) is the zero sequence on the length-4096 prefix. Cubes use \(\psi(3n)\), which is not in the orbit of \(M\).
+
+Cassaigne has no prefix squares in length 2048 (\(n_{\mathrm{sq}}=0\)) and is not uniform, so this mechanism uses constant length.
+
+---
 
 ## Theorem G — High complexity of Up-and-Down words
 **Status: COMPUTATIONALLY VERIFIED**

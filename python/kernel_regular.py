@@ -225,7 +225,8 @@ def cube_char_prefix(S: Sequence[int]) -> list[int]:
 def R_sigma_n(S: Sequence[int], n: int) -> set[tuple]:
     N = len(S)
     out = set()
-    for i in range(0, N - 3 * n + 1):
+    # Need S[i+3n], so i+3n <= N-1.
+    for i in range(0, N - 3 * n):
         out.add((D1(S, i, n), D2(S, i, n)))
     return out
 
@@ -322,7 +323,7 @@ def famous_analysis(cap: int = 4096) -> dict:
     for Mmod in (2, 3, 4, 5, 8):
         n_mod = n_int = n_tot = 0
         for n in range(1, 40):
-            for i in range(0, min(200, len(S) - 3 * n + 1)):
+            for i in range(0, min(200, len(S) - 3 * n)):
                 x = D1(S, i, n)
                 y = D2(S, i, n)
                 n_tot += 1
@@ -334,7 +335,7 @@ def famous_analysis(cap: int = 4096) -> dict:
 
     cube_ds = set()
     for n in range(1, min(200, len(S) // 3)):
-        for i in range(0, len(S) - 3 * n + 1):
+        for i in range(0, len(S) - 3 * n):
             if D1(S, i, n) == 0 and D2(S, i, n) == 0:
                 cube_ds.add(n)
                 break
@@ -390,6 +391,8 @@ def famous_analysis(cap: int = 4096) -> dict:
         "first_cube_U": find_cube(U),
         "transitions": dfao_transitions(sigma),
         "incidence": M,
+        "LM2": tuple(sum(L[i] * sum(M[i][k] * M[k][j] for k in range(4)) for i in range(4)) for j in range(4)),
+        "L_psi_70": (lambda pr: L[0]*pr[0]+L[1]*pr[1]+L[2]*pr[2]+L[3]*pr[3])(parikh_list(U[:70], sigma.alph)),
     }
 
 
@@ -612,6 +615,10 @@ def cert_lines(rec: dict, cass: dict, tm: dict, pd: dict, scans: list, rnd: dict
     lines.append(f"pT_64 {rec['pT_64']}")
     lines.append(f"first_cube_a {rec['first_cube_a']}")
     lines.append(f"first_cube_U {rec['first_cube_U']}")
+    lm2 = rec["LM2"]
+    twoL = tuple(2 * x for x in rec["L"])
+    lines.append(f"LM2_fail {0 if lm2 == twoL else 1}")
+    lines.append(f"L_psi_70 {rec['L_psi_70']}")
     for Mmod, v in rec["mod_vs_int"].items():
         lines.append(f"mod{Mmod} {v['pairs']} {v['mod0']} {v['int0']}")
     lines.append(f"cass_2ker {cass['letter_2kernel']['n_fingerprints']}")

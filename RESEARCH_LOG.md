@@ -1,5 +1,11 @@
 # Research Log
 
+## 2026-09-04 — m-kernel / k-regular block sums
+
+Mission: structure of \(R_\sigma\) via m-kernel, linear representations, zero sets; force cubes or find an automatic ACF candidate. **No factor graph.**
+
+Proved: synchronized summatory iff bounded discrepancy (Thm AA); aligned kernel of \(S\) is the Krylov orbit (Thm AB); famous prefix T-squares are 4-adic (Thm AC) and do not yield prefix cubes. Modular zeros strictly larger than integer zeros. Candidate D killed. No automatic ACF candidate (best 3-letter uniform ACF prefix 108). Dual C++/Python. Report: `KERNEL_REPORT.md`. Infinite problem still open. ENDGAME C.
+
 ## 2026-09-04 — non-affine uniform templates
 
 Mission: whether rank \(K_T\ge 3\) / non-affine uniform morphisms admit an additive-complexity or template obstruction forcing cubes. **No finite-state cube graph.**

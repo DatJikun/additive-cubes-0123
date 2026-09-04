@@ -458,5 +458,40 @@ int main() {
     std::cout << "rand_m3_surv " << n_surv4 << "\n";
     std::cout << "rand_m3_best " << best4 << "\n";
     std::cout << "rand_m3_code " << best4code << "\n";
+
+    // L M^2 = 2L on the famous incidence matrix
+    const int Mf[4][4] = {{0, 0, 1, 1}, {0, 1, 0, 1}, {1, 0, 1, 0}, {1, 1, 0, 0}};
+    int M2[4][4] = {};
+    for (int i = 0; i < 4; ++i)
+        for (int k = 0; k < 4; ++k)
+            for (int j = 0; j < 4; ++j)
+                M2[i][j] += Mf[i][k] * Mf[k][j];
+    int lm2_fail = 0;
+    for (int j = 0; j < 4; ++j) {
+        int s = 0;
+        for (int i = 0; i < 4; ++i) s += Lform[i] * M2[i][j];
+        if (s != 2 * Lform[j]) ++lm2_fail;
+    }
+    std::cout << "LM2_fail " << lm2_fail << "\n";
+
+    int pr70[4] = {0, 0, 0, 0};
+    for (int i = 0; i < 70; ++i) pr70[U[i]]++;
+    int L70 = Lform[0] * pr70[0] + Lform[1] * pr70[1] + Lform[2] * pr70[2] + Lform[3] * pr70[3];
+    std::cout << "L_psi_70 " << L70 << "\n";
+
+    // 3-letter {0,1,4} control: 0→01, 1→14, 4→40 dies
+    std::vector<std::vector<u8>> imgs014 = {{0, 1}, {1, 4}, {}, {}, {4, 0}};
+    std::vector<u8> w014 = {0};
+    while ((int)w014.size() < 256) {
+        std::vector<u8> nxt;
+        for (u8 a : w014) nxt.insert(nxt.end(), imgs014[a].begin(), imgs014[a].end());
+        w014.swap(nxt);
+    }
+    if ((int)w014.size() > 256) w014.resize(256);
+    auto c014 = find_cube(w014);
+    if (c014)
+        std::cout << "cube_01440 " << c014->i << " " << c014->d << " " << c014->sum << "\n";
+    else
+        std::cout << "cube_01440 none\n";
     return 0;
 }

@@ -1,0 +1,44 @@
+dfao_fail 0
+S2n_fail 0
+L_fail 0
+L_absmax 124
+a_kernel_fp 37
+U_kernel_fp 37
+sq_kernel_fp 9
+cu_kernel_fp 1
+n_prefix_squares 13
+n_prefix_cubes 0
+diam_64_val 32
+n_with_00_le64 24
+n_cube_len_lt200 59
+n_missing_lt200 140
+pT_1 4
+pT_16 20
+pT_64 40
+first_cube_a 90 50 145
+first_cube_U 45 25 35
+mod2 7800 2554 6
+mod3 7800 915 6
+mod4 7800 653 6
+mod5 7800 242 6
+mod8 7800 130 6
+cass_2ker 127
+cass_3ker 121
+cass_cube none
+tm_cube yes
+tm_Delta_max 1
+tm_a_ker 2
+tm_sq_ker 3
+scan3_2_tried 480
+scan3_2_surv 0
+scan3_2_best 26
+scan3_2_nsums3_tried 210
+scan3_2_nsums3_surv 0
+scan3_2_nsums3_best 26
+rand_m3_n_ok 4012
+rand_m3_surv 0
+rand_m3_best 142
+rand_m3_code 200 100 312 332
+LM2_fail 0
+L_psi_70 0
+cube_01440 2 63 105
