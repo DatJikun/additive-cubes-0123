@@ -3,7 +3,7 @@ CXXFLAGS = -std=c++17 -O3 -march=native -Wall -Wextra -DNDEBUG
 
 .PHONY: all test clean
 
-all: bin/acf_tool bin/dump_deadends bin/run_candidate bin/taxonomy bin/votes bin/code_cassaigne bin/compare_alph
+all: bin/acf_tool bin/dump_deadends bin/run_candidate bin/taxonomy bin/votes bin/code_cassaigne bin/compare_alph bin/morph_forensics
 
 bin/acf_tool: src/acf_tool.cpp src/acf.hpp src/search.hpp
 	mkdir -p bin
@@ -32,6 +32,10 @@ bin/code_cassaigne: src/code_cassaigne.cpp src/acf.hpp src/search.hpp
 bin/compare_alph: src/compare_alph.cpp src/acf.hpp src/search.hpp
 	mkdir -p bin
 	$(CXX) $(CXXFLAGS) -o $@ src/compare_alph.cpp
+
+bin/morph_forensics: src/morph_forensics.cpp src/acf.hpp src/search.hpp
+	mkdir -p bin
+	$(CXX) $(CXXFLAGS) -o $@ src/morph_forensics.cpp
 
 test: bin/acf_tool
 	./bin/acf_tool test

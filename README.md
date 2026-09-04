@@ -20,7 +20,8 @@ g++ -std=c++17 -O3 -o bin/mutate_candidate src/mutate_candidate.cpp
 
 | File | Contents |
 |---|---|
-| `STRUCTURAL_REPORT.md` | **Primary deliverable:** unique-vote lemma, dead-end taxonomy, Cassaigne recoding, comparison with `{0,1,3,4}` |
+| `UNIFORM_MORPHIC_REPORT.md` | Uniform morphisms: Cassaigne lattice vs AP, Pisot-uniform impossibility, 2-uniform forensics |
+| `STRUCTURAL_REPORT.md` | Unique-vote lemma, dead-end taxonomy, Cassaigne recoding |
 | `NOVELTY_AUDIT.md` | Literature status as of 2026 |
 | `REPORT.md` | Final mathematical report |
 | `RESULTS.md` | Known vs new, with novelty checks |

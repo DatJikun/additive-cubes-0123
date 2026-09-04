@@ -94,13 +94,23 @@ Empirical branching \(c_{n+1}/c_n \approx 3.52\) at \(n=11\). Letter frequencies
 ## Theorem F — Classification of 2-uniform morphisms (partial)
 **Status: COMPUTATIONALLY VERIFIED**, with a residual caveat stated below
 
-Every 2-uniform morphism \(h:\{0,1,2,3\}\to\{0,1,2,3\}^2\) that is prolongable on at least one letter \(a\) (i.e. \(h(a)\) begins with \(a\)) produces an additive cube in the prefix of \(h^\omega(a)\) of length \(\le 120\). Exhaustive scan of all \(4^8=65536\) morphisms; 0 survivors to length 800 among prolongable seeds. Best prefix: \(0\mapsto 32,\;1\mapsto 31,\;2\mapsto 20,\;3\mapsto 01\), seed 2, first cube by length 120.
+Every 2-uniform morphism \(h:\{0,1,2,3\}\to\{0,1,2,3\}^2\) that is prolongable on at least one letter \(a\) (i.e. \(h(a)\) begins with \(a\)) produces an additive cube in the prefix of \(h^\omega(a)\) of length \(\le 120\). Exhaustive scan of all \(4^8=65536\) morphisms; 0 survivors to length 800 among prolongable seeds. Best prefix: \(0\mapsto 32,\;1\mapsto 31,\;2\mapsto 20,\;3\mapsto 01\), seed 2, first cube at length 120 with \((i,d,\mathrm{sum})=(45,25,35)\), **unaligned**. Image sums \((5,4,2,1)\) are four distinct values; eigenvalues \(\{2,\sqrt{2},-\sqrt{2},0\}\).
 
-**Caveat (closed in a follow-up scan):** non-prolongable seeds and non-expanding images were not in the first scan. The all-seed rescan is the certificate to cite; until it finishes, the claim is only for purely morphic words generated from a prolongable letter.
+This is a reproduction of Liétard’s size-2 failure with alignment forensics, not a new non-existence theorem.
 
 Combined with Theorem C, morphisms with \(\le 2\) image sums are independently excluded for infinite iterates.
 
-This is a sharpening of Liétard’s “size at least 7 if a morphism exists”, restricted to the uniform size-2 subclass, with an explicit worst-case prefix length.
+## Theorem H — Pisot-uniform morphisms are not ACF
+**Status: PROVED** (combination of Perron-Frobenius + Ardal et al. 2012). Novelty: UNVERIFIED NOVELTY as a packaged statement.
+
+Let \(\sigma\) be a primitive \(m\)-uniform morphism over a finite subset of \(\mathbb{Z}\) whose incidence matrix has every eigenvalue other than \(m\) of modulus \(<1\). Then any infinite fixed point has bounded prefix-sum discrepancy, hence bounded additive complexity, hence additive \(k\)-powers for all \(k\) (Ardal–Brown–Jungić–Sahasrabudhe, Integers 12 (2012), Thm. 5). This holds over \(\{0,1,2,3\}\) and over \(\{0,1,3,4\}\).
+
+The Cassaigne morphism evades the theorem: it is not uniform and has two expanding eigenvalues.
+
+## Theorem I — Cassaigne lattice distinction
+**Status: COMPUTATIONALLY VERIFIED** against the published \(\tau\) and \(C\); mechanism **KNOWN** (Liétard–Rosenfeld Lemma 3.3 / Thm 4.1).
+
+See `UNIFORM_MORPHIC_REPORT.md` Theorem U4. The AP-only lattice vector \((1,-2,1,0)\) (the relation \(0+2=1+1\)) has \(|\tau\cdot x|\approx 1.22<C\) and does not lie in \(L(\{0,1,3,4\})\).
 
 ---
 
