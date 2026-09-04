@@ -185,7 +185,9 @@ def morph_from_strings(imgs: Sequence[str], alph: Sequence[int] = (0, 1, 2, 3)) 
 
 def morph_from_words(imgs: Sequence[Sequence[int]], alph: Sequence[int] = (0, 1, 2, 3)) -> UniformMorph:
     m = len(imgs[0])
-    images = {alph[i]: tuple(imgs[i]) for i in range(4)}
+    if len(imgs) != len(alph):
+        raise ValueError(f"need {len(alph)} images, got {len(imgs)}")
+    images = {alph[i]: tuple(imgs[i]) for i in range(len(alph))}
     return UniformMorph(m=m, alph=tuple(alph), images=images)
 
 

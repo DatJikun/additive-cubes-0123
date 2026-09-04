@@ -3,7 +3,7 @@ CXXFLAGS = -std=c++17 -O3 -march=native -Wall -Wextra -DNDEBUG
 
 .PHONY: all test clean
 
-all: bin/acf_tool bin/dump_deadends bin/run_candidate bin/taxonomy bin/votes bin/code_cassaigne bin/compare_alph bin/morph_forensics bin/desub_scan bin/quotient_scan bin/triple_scan bin/template_scan
+all: bin/acf_tool bin/dump_deadends bin/run_candidate bin/taxonomy bin/votes bin/code_cassaigne bin/compare_alph bin/morph_forensics bin/desub_scan bin/quotient_scan bin/triple_scan bin/template_scan bin/kernel_scan
 
 bin/acf_tool: src/acf_tool.cpp src/acf.hpp src/search.hpp
 	mkdir -p bin
@@ -53,7 +53,11 @@ bin/template_scan: src/template_scan.cpp src/acf.hpp src/search.hpp
 	mkdir -p bin
 	$(CXX) $(CXXFLAGS) -o $@ src/template_scan.cpp
 
-test: bin/acf_tool bin/desub_scan bin/quotient_scan bin/triple_scan bin/template_scan
+bin/kernel_scan: src/kernel_scan.cpp src/acf.hpp src/search.hpp
+	mkdir -p bin
+	$(CXX) $(CXXFLAGS) -o $@ src/kernel_scan.cpp
+
+test: bin/acf_tool bin/desub_scan bin/quotient_scan bin/triple_scan bin/template_scan bin/kernel_scan
 	./bin/acf_tool test
 	python3 python/brute_verify.py
 	python3 python/independent_checks.py
@@ -66,6 +70,9 @@ test: bin/acf_tool bin/desub_scan bin/quotient_scan bin/triple_scan bin/template
 	python3 python/triple_verify.py
 	./bin/template_scan
 	python3 python/template_verify.py
+	./bin/kernel_scan | tee data/kernel_cert_cpp.txt
+	python3 python/kernel_regular.py
+	python3 python/kernel_verify.py
 
 clean:
 	rm -f bin/*
