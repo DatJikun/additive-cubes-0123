@@ -390,3 +390,21 @@ See `QUOTIENT_REPORT.md`.
 ## 20. Addendum (triple / ω graph, 2026-09-04)
 
 Fourth search: CCSS triple search tree (Schaeffer slides; arXiv:1106.5204); Pirillo–Varricchio / Halbeisen–Hungerbühler (APs on the graph of S); Ardal additive complexity; Liétard–Rosenfeld; Rao 2015; CMRS templates. **KNOWN:** \(\omega=\mathrm{sum}\) is the definition; CCSS already tracks triples of consecutive blocks. **REPRODUCED:** Cassaigne has additive squares and no cubes. **ELEMENTARY:** \(m^2\) types; junction covering. **UNVERIFIED NOVELTY:** packaged uniform slot/letter count; exact pair-vs-triple numbers. Do **not** claim a new obstruction. See `TRIPLE_REPORT.md`.
+
+---
+
+## 21. Addendum (non-affine uniform templates, 2026-09-04)
+
+Fifth search: CCSS; Liétard–Rosenfeld; Rao 2015; Ardal 2012 Thm 5; Banero 2013 anchors; CMRS / Andrade–Mol affine templates; Allouche–Shallit automatic sequences; Allouche–Shallit–Zamboni arXiv:1711.10807 / “Hidden automatic sequences” Prop. 5.3 (irrational PF ⇒ not automatic); Cobham; abelian / k-abelian complexity.
+
+**KNOWN:** Ardal bounded \(p_T\Rightarrow\) additive \(k\)-powers; Banero equal-slope anchors; CMRS affine length-and-sum templates; automatic frequencies rational; Prop. 5.3; CCSS construction; \(L(A)\) vs \(L(B)\).
+
+**ELEMENTARY:** Theorems V, V′, W (length rigidity; \(m=2\) equal interiors; finite coupled \(E_\sigma\)). Cassaigne \(|\varphi(w)|=2|w|-|w|_3\).
+
+**ELEMENTARY/LIKELY KNOWN:** Theorem X (Cassaigne not automatic) as an application of Prop. 5.3; not located as a numbered statement about \(\varphi_0\) in the papers searched. Theorem Y (same-word uniformization impossible).
+
+**UNVERIFIED NOVELTY:** Theorem Z (Krylov escape is not an obstruction), packaged. Covering reduction “uniform ACF iff automatic \(E_\sigma\)-cubes”. Do not inflate to a solution of the infinite problem. Do not claim sampled \(m=3..8\) as exhaustive.
+
+**FALSE as universals, corrected in `TEMPLATE_REPORT.md` §8:** Claims E, F; Krylov-escape; CSV `acf_prefix` as survival.
+
+See `TEMPLATE_REPORT.md`.

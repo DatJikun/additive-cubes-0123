@@ -638,6 +638,10 @@ def famous_T_analysis(cap: int = 1024, pmax: int = 40) -> dict:
     cube_W = find_cube(W)
     cube_T = find_cube(Tw)
     cube_U = find_cube(U)
+    U_cover = ancestor_of(W, sigma, cube_W[0] + 3 * cube_W[1]) if cube_W else U
+    Tw_cover = T_word(U_cover, sigma.T, sigma.alph)
+    cube_T_cover = find_cube(Tw_cover)
+    cube_U_cover = find_cube(U_cover)
     pT = additive_complexity(Tw, min(pmax, len(Tw) // 4))
     pW = additive_complexity(W, min(pmax, len(W) // 4))
     # consecutive exact cubes in T-word vs defect window
@@ -668,8 +672,11 @@ def famous_T_analysis(cap: int = 1024, pmax: int = 40) -> dict:
         "|U|": len(U),
         "T": sigma.T,
         "cube_W": cube_W,
-        "cube_U": cube_U,
-        "cube_Tword": cube_T,
+        "cube_U_nested": cube_U,
+        "cube_U_cover": cube_U_cover,
+        "|U_cover|": len(U_cover),
+        "cube_Tword_nested": cube_T,
+        "cube_Tword_cover": cube_T_cover,
         "pT": pT,
         "pW": pW,
         "pT_unbounded_evidence": pT[-1] > pT[0] and max(pT) >= 8,
@@ -791,8 +798,10 @@ def main():
     ft = famous_T_analysis(512, 24)
     for k in (
         "cube_W",
-        "cube_U",
-        "cube_Tword",
+        "cube_U_nested",
+        "cube_U_cover",
+        "cube_Tword_nested",
+        "cube_Tword_cover",
         "pT",
         "pW",
         "aligned_T_cubes_count_nle80",

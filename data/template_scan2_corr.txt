@@ -1,0 +1,7 @@
+n: 65536
+max_d: 66
+max_row: (660, 2, 66, 3, 0, 4, (1, 3, 2, 0))
+kT_counts: {1: 452, 2: 9770, 3: 36168, 4: 19146}
+stats_by_kT: {1: {'n': 452, 'min': 1, 'max': 2, 'mean_milli': 1876, 'median': 2}, 2: {'n': 9770, 'min': 1, 'max': 63, 'mean_milli': 3533, 'median': 2}, 3: {'n': 36168, 'min': 1, 'max': 66, 'mean_milli': 7166, 'median': 3}, 4: {'n': 19146, 'min': 1, 'max': 66, 'mean_milli': 12068, 'median': 3}}
+stats_by_affine: {0: {'n': 64638, 'min': 1, 'max': 66, 'mean_milli': 8063, 'median': 3}, 1: {'n': 898, 'min': 1, 'max': 63, 'mean_milli': 4902, 'median': 2}}
+stats_by_nsums: {1: {'n': 452, 'min': 1, 'max': 2, 'mean_milli': 1876, 'median': 2}, 2: {'n': 11348, 'min': 1, 'max': 66, 'mean_milli': 4249, 'median': 2}, 3: {'n': 35280, 'min': 1, 'max': 66, 'mean_milli': 7981, 'median': 3}, 4: {'n': 18456, 'min': 1, 'max': 66, 'mean_milli': 10564, 'median': 3}}

@@ -198,6 +198,60 @@ See `TRIPLE_REPORT.md`.
 
 ---
 
+## Theorem V — Length rigidity of uniform morphisms
+**Status: PROVED.** Novelty: ELEMENTARY.
+
+Let \(\sigma\) be \(m\)-uniform, \(m\ge 2\). Then \(|\sigma(w)|=m|w|\) for every finite word \(w\). Consequently, concatenations of complete images have equal length if and only if they have equal ancestor length.
+
+For three consecutive intervals of length \(d=km+s\) in \(\sigma(U)\) starting at offset \(r\), the complete-block counts \(n_X,n_Y,n_Z\) depend only on \((m,r,s,k)\), and
+\[
+|n_X-n_Y|\le 1,\qquad |n_Y-n_Z|\le 1.
+\]
+Dual C++/Python for \(m=2,\ldots,7\) (`bin/template_scan`, `python/template_verify.py`).
+
+By contrast the Cassaigne morphism satisfies \(|\varphi(w)|=2|w|-|w|_3\), so equal image length is a Parikh constraint and ancestor lengths may differ by \(\Theta(|w|)\). Example: \(|\varphi(00)|=|\varphi(330)|=4\).
+
+## Theorem V′ — 2-uniform interiors have equal complete-block length
+**Status: PROVED.** Novelty: ELEMENTARY/LIKELY KNOWN.
+
+If \(m=2\) and \(k\ge 1\), then \(n_X=n_Y=n_Z\) for every residue type \((r,s)\). The interior problem is exactly three consecutive \(n\)-factors of the ancestor. For \(m\ge 3\) the possible pairs \((n_X-n_Y,n_Y-n_Z)\) are a subset of \(\{-1,0,1\}^2\).
+
+## Theorem W — Interior defect pairs \(E_\sigma\)
+**Status: PROVED.** Novelty: ELEMENTARY (repackaging of Theorems K, L, U3).
+
+A cube in \(W=\sigma(U)\) is equivalent to
+\[
+(T\cdot\psi_X-T\cdot\psi_Y,\; T\cdot\psi_Y-T\cdot\psi_Z)=(\delta_Y-\delta_X,\;\delta_Z-\delta_Y)\in E_\sigma,
+\]
+where \(E_\sigma\) is finite, depending only on \(\sigma\) and the residue type, and is computed by enumerating at most four shared fragment letters. For the famous morphism, the coupled set has 59 pairs; the independent-letter product has 121. The aligned type \((0,0)\) has \(E=\{(0,0)\}\): aligned cubes if and only if the T-coded ancestor has an additive cube.
+
+If \(\sigma\) is primitive and prolongable, \(W\) is \(m\)-automatic and the T-coded word is a coding of \(W\). Cubes in \(W\) are exactly \(E_\sigma\)-cubes of that automatic numerical word, with complete-block length \(n=\lfloor d/m\rfloor+O(1)\).
+
+## Theorem X — The Cassaigne word is not automatic
+**Status: PROVED** (standard frequency test applied to \(\varphi\)). Novelty: ELEMENTARY/LIKELY KNOWN as a remark; not located as a numbered CCSS theorem.
+
+The Cassaigne incidence matrix (letters \(0,1,3,4\)) is primitive (\(M^6>0\)), with column sums \(2,2,1,2\) and characteristic polynomial \(x^4-x^3-2x^2+2x-1\). This polynomial has no rational roots and does not factor into monic integer quadratics, and \(p(1)=-1\), \(p(2)=3\), so the Perron eigenvalue lies in \((1,2)\) and is irrational. Primitive morphic letter frequencies are the normalised PF eigenvector, hence not all rational. Automatic sequences with existing letter frequencies have rational frequencies. Therefore the Cassaigne fixed point is not \(k\)-automatic for any \(k\ge 2\).
+
+Independent checks: \(\det(M)=-1\), \(\mathrm{tr}(M)=1\), \(|\varphi^k(0)|=1,2,3,5,8,14,23,40,66\) (not \(2^k\)). Dual C++/Python.
+
+## Theorem Y — Same-word uniformization of Cassaigne is impossible
+**Status: PROVED.** Novelty: ELEMENTARY from Theorem X.
+
+A letter-to-letter coding of a \(k\)-uniform morphism is \(k\)-automatic. By Theorem X the Cassaigne word is not such a coding. In particular higher-block encodings that remain constant-length cannot produce the same infinite word.
+
+Padding \(\varphi(3)=1\) to a length-2 image produces a different 2-uniform word over \(\{0,1,3,4\}\). All eight pads, all four seeds, cap 200: cubes; best ACF prefix 48 (C++ matches Python). This is a special case of the exhaustive 2-uniform failure on that alphabet (Theorem F analogue on \(B\)).
+
+## Theorem Z — Krylov expansion does not eject cubes from the T-window
+**Status: PROVED** by explicit cubes. Novelty: UNVERIFIED NOVELTY as a packaged countertheorem; the coordinates are REPRODUCED.
+
+If \(T_2=a\cdot 1+b\cdot T+R\) with \(R\neq 0\), then on \(L=\ker(1)\cap\ker(T)\) one has \(T_2\cdot v=R\cdot v\). Growth of \(T_2\cdot v\) is compatible with \(T\cdot v\) remaining in the finite defect window.
+
+Famous witness: first cube \(v=(1,-1,1,-1)\), \(T\cdot v=2\), \(T_2\cdot v=-4\). On 442 cubes of the length-2048 iterate, \(T\cdot v\in[-4,3]\) while \(T_2\cdot v\in[-10,8]\) and \(\|v\|_1\le 18\). The proposed obstruction “a nonzero expanding Krylov component forces T-weight out of every bounded defect window” is false.
+
+See `TEMPLATE_REPORT.md`.
+
+---
+
 
 ## Theorem G — High complexity of Up-and-Down words
 **Status: COMPUTATIONALLY VERIFIED**

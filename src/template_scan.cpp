@@ -2,6 +2,7 @@
 // Independent of Python: prefix-sum cubes, Cassaigne incidence recurrence,
 // padding, T-word of the famous iterate, additive complexity counts.
 #include "acf.hpp"
+#include <algorithm>
 #include <array>
 #include <cstdlib>
 #include <iostream>
@@ -155,7 +156,13 @@ int main(int argc, char** argv) {
     std::cout << "FAMOUS_W";
     if (cW) std::cout << " i=" << cW->i << " d=" << cW->d << " s=" << cW->sum;
     else std::cout << " NONE";
-    std::cout << "\nFAMOUS_U " << (cU ? "CUBE" : "ACF") << " n=" << U.size() << "\n";
+    std::cout << "\nFAMOUS_U_FULL " << (cU ? "CUBE" : "ACF") << " n=" << U.size();
+    if (cU) std::cout << " i=" << cU->i << " d=" << cU->d;
+    std::cout << "\n";
+    int cover = cW ? (cW->i + 3 * cW->d + 1) / 2 : 0;
+    std::vector<u8> Ucover(U.begin(), U.begin() + std::min(cover, (int)U.size()));
+    auto cUc = find_cube(Ucover);
+    std::cout << "FAMOUS_U_COVER " << (cUc ? "CUBE" : "ACF") << " n=" << Ucover.size() << "\n";
     std::cout << "FAMOUS_T";
     if (cT) std::cout << " i=" << cT->i << " d=" << cT->d << " s=" << cT->sum;
     else std::cout << " NONE n=" << Tw.size();

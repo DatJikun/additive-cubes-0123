@@ -1,5 +1,11 @@
 # Research Log
 
+## 2026-09-04 — non-affine uniform templates
+
+Mission: whether rank \(K_T\ge 3\) / non-affine uniform morphisms admit an additive-complexity or template obstruction forcing cubes. **No finite-state cube graph.**
+
+Proved: length rigidity (Thm V, V′); interior \(E_\sigma\) (Thm W); Cassaigne not automatic (Thm X); same-word uniformization impossible (Thm Y); Krylov escape false (Thm Z). Dual C++/Python. Report: `TEMPLATE_REPORT.md`. Infinite problem still open. ENDGAME C.
+
 ## 2026-09-04  — session start
 
 ### Phase 0

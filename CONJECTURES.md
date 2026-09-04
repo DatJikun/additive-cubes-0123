@@ -81,8 +81,24 @@ For fixed `m`-uniform `σ`, cube types `(r,s)` are finite and `v=ψ_X−ψ_Y` sa
 
 ---
 
+## C12. There is no k-automatic infinite ACF word over a 4-letter integer alphabet
+**Status:** STRONGLY CONJECTURED for 2-automatic 4-letter maps (exhaustive m=2); open in general.
+
+This is the uniform problem (Theorems V, W). Cassaigne is morphic and not automatic (Theorem X), so it is not a counterexample. Sampled 2-uniform maps on 5, 6, 8 letters coded onto `{0,1,3,4}` failed by length 27 (40 each, not a theorem). Affine / Pisot / two-sum strata are already excluded.
+
+**Attack:** Theorem X/Y kill same-word uniformization. They do not kill every automatic candidate.
+
+---
+
+## C13. The CCSS length-compensation mechanism cannot run on a uniform morphism
+**Status:** PROVED (Theorems V, X, Y). Not a conjecture.
+
+Equal image length forces equal ancestor length for complete images. The Cassaigne identity `|φ(w)|=2|w|-|w|_3` has no uniform analogue. This does **not** prove that no uniform ACF morphism exists.
+
+---
+
 ## C10. Quotienting by `ker(T)` produces a finite-state obstruction
-**Status:** KILLED (Theorems M–P; `QUOTIENT_REPORT.md`). The surviving exact state is the Krylov package of `T` under `M^⊤`, typically of dimension 3 or 4, plus finite fragments. On cubes the first two coordinates `(1·v, T·v)` are bounded; the extra `T_2·v` is not known to be bounded.
+**Status:** KILLED (Theorems M–P; `QUOTIENT_REPORT.md`). The surviving exact state is the Krylov package of `T` under `M^⊤`, typically of dimension 3 or 4, plus finite fragments. On cubes the first two coordinates `(1·v, T·v)` are bounded; the extra `T_2·v` takes many values (famous: `[-10,8]` on 442 cubes) and is **not** an obstruction (Theorem Z).
 
 ---
 

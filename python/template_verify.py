@@ -160,7 +160,20 @@ def main():
     else:
         print("OK trace=1")
 
-    # Iterate lengths not a pure k^n.
+    # claimed charpoly x^4 - x^3 - 2x^2 + 2x - 1
+    def claimed(x):
+        return x**4 - x**3 - 2 * x**2 + 2 * x - 1
+
+    cp_fail = 0
+    for x in range(-1, 5):
+        A = [[(x if i == j else 0) - CASSAIGNE_M[i][j] for j in range(4)] for i in range(4)]
+        got = det4(A)
+        if got != claimed(x):
+            print("FAIL charpoly at", x, got, claimed(x))
+            cp_fail += 1
+            fails += 1
+    if cp_fail == 0:
+        print("OK charpoly x^4-x^3-2x^2+2x-1 at x=-1..4")
     v = [1, 1, 1, 1]
     lengths0 = [1]
     MT = list(zip(*CASSAIGNE_M))
@@ -178,29 +191,41 @@ def main():
     print("OK aligned defects vanish by construction (no fragments)")
 
     # Famous T-word cube vs W cube.
+    # Nested iterates: σ^n(2) begins with σ^{n-1}(2), so decoding W[:512] yields
+    # U = W[:256], which already contains the first cube of W. The ACF ancestor is
+    # the covering of that cube only (Theorem J).
     sigma = FAMOUS
     W = sigma.iterate(2, 512)
-    U = ancestor_of(W, sigma, len(W))
-    Tw = [sigma.T[a] for a in U]  # T is ordered as alph (0,1,2,3)
+    U_full = ancestor_of(W, sigma, len(W))
     cW = find_cube(W)
-    cT = find_cube(Tw)
-    cU = find_cube(U)
-    print("famous cube W", cW, "U", cU, "T-word", cT)
     if cW is None or cW != (45, 25, 35):
         print("FAIL famous W cube", cW)
         fails += 1
-    if cU is not None:
-        print("FAIL ancestor U should be ACF prefix", cU)
+    U_cube = ancestor_of(W, sigma, cW[0] + 3 * cW[1])
+    cU_cube = find_cube(U_cube)
+    cU_full = find_cube(U_full)
+    Tw_full = [sigma.T[a] for a in U_full]
+    Tw_cube = [sigma.T[a] for a in U_cube]
+    cT_full = find_cube(Tw_full)
+    cT_cube = find_cube(Tw_cube)
+    print("famous cube W", cW, "U_cube", cU_cube, "|U_cube|", len(U_cube))
+    print("U_full cube", cU_full, "|U_full|", len(U_full), "T-word_full", cT_full, "T-word_cube_cover", cT_cube)
+    if cU_cube is not None:
+        print("FAIL covering ancestor of first cube should be ACF", cU_cube)
         fails += 1
     else:
-        print("OK U ACF (recoding of a prefix of W)")
-    if cT is None:
-        print("FAIL T-word of |U|~256 expected a cube (aligned cubes exist later; prefix may be short)")
-        # T-word of a 256-letter ancestor: W has length 512, U length 256.
-        # First W cube is unaligned so T-word need not cube yet. Not a failure.
-        print("  (allowed: first W cube is unaligned)")
+        print("OK covering ancestor of first cube is ACF, |U|=", len(U_cube))
+    if cU_full is None:
+        print("FAIL full nested ancestor should contain the cube of W")
+        fails += 1
     else:
-        print("OK T-word cube", cT)
+        print("OK U_full = nested prefix contains a cube at", cU_full)
+    Tw = Tw_full
+    if cT_full is None:
+        print("FAIL T-word of nested prefix expected a cube")
+        fails += 1
+    else:
+        print("OK T-word cube", cT_full)
 
     pT = additive_complexity(Tw, 20)
     pW = additive_complexity(W, 20)

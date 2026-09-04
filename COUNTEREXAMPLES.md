@@ -144,5 +144,26 @@ Famous `n=512`: 1995 squares, 59 cubes, 1524 XY-pairs that do not extend. Cassai
 
 ---
 
+## H19. Expanding Krylov coordinates force T-weight out of the defect window (Claim, Phase 4–5)
+**Status:** KILLED.
+
+Famous first cube: \(T\cdot v=2\) (inside the window) and \(T_2\cdot v=-4\neq 0\). On 442 cubes, \(T\cdot v\) stays in \([-4,3]\) while \(T_2\cdot v\) ranges over \([-10,8]\). Expansion of a higher coordinate is cancellation in \(L\), not ejection from the T-window. See Theorem Z.
+
+---
+
+## H20. The Cassaigne word is a coding of a uniform morphism / can be padded to a 2-uniform ACF map (Claims E, F as universals)
+**Status:** KILLED for the *word* and for padding.
+
+Theorem X: Cassaigne frequencies are irrational, so the word is not automatic. Theorem Y: it is not a uniform morphic coding. All 8 pads of \(\varphi(3)\) to length 2 have cubes by length 48. The CCSS *length-compensation* mechanism requires non-uniform image lengths (Theorem V vs \(|\varphi(w)|=2|w|-|w|_3\)). Existence of some other uniform ACF morphism remains open.
+
+---
+
+## H21. CSV lex-first `d` / `acf_prefix` from a length-200 iterate measures survival
+**Status:** KILLED as a statistic.
+
+`find_cube` is smallest start index, then smallest `d`. Code 7754 seed 2: lex-first cube \(d=65\) in a length-200 word, true ACF prefix **8**. Famous remains the 2-uniform record (true ACF prefix 119). Do not correlate Krylov rank against CSV `acf_prefix`.
+
+---
+
 ## H18. Cubes are 2-paths in a single finite T-weighted factor graph independent of `d`
 **Status:** KILLED. For each `d` the step-`d` graph is `d` paths on positions. After identifying `d`-factors the size is \(p(d)\). Famous aligned `d=8` graph has 0 equal-weight 2-paths while unaligned cubes exist.

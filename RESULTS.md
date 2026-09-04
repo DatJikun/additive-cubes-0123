@@ -106,6 +106,7 @@ A 400,000-letter Up-and-Down word (period 2000) contains every ACF factor of len
 - No proof ruling out all morphisms of size ≥7.
 - No progress on Green’s Problem 15 (additive squares / 3-APs).
 - The universal unaligned letter-desubstitution theorem is false; see `DESUBSTITUTION_REPORT.md` (Theorems J, K, L).
+- No force-cubes theorem for non-affine uniform morphisms. Krylov escape and CCSS-style length templates do not supply one (`TEMPLATE_REPORT.md`, Theorems V–Z). The remaining bottleneck is whether an *automatic* 4-letter numerical word can avoid \(E_\sigma\)-cubes.
 
 ## Status of the original problem
 
