@@ -1,0 +1,24 @@
+filter_n_prol 11468800
+filter_n_prim 6993126
+filter_n_3sum_prol 9992241
+filter_n_tried 6116013
+file_push_lines 86
+recompute_n_surv_2187 0
+recompute_best2_acf 1647
+recompute_best2_code 12507201
+recompute_best2_seed 1
+max_acf 1647
+max_cube 982 222 229
+max_T 1 3 6 8
+max_imgs 100 102 132 332
+max_pT_1 4
+max_pT_8 17
+max_pT_16 35
+max_pT_64 81
+max_diam_64 102
+famous_acf 119
+famous_cube 45 25 35
+famous_acfpref_pT_8 11
+famous_acfpref_pT_16 13
+famous_acfpref_diam_16 12
+pt_verify_fails 0

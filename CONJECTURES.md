@@ -56,7 +56,7 @@ This is the analogue, for additive cubes, of the “minimal crucial word” theo
 ---
 
 ## C6. Uniform morphisms of length k=3 over {0,1,2,3} all fail
-**Status:** NOT SETTLED. 4¹²=16,777,216 morphisms; we did not exhaust. Random samples and the related shape 3,3,1,3 failed. Liétard’s “size ≥ 7” if true already implies C6.
+**Status:** COMPUTATIONALLY VERIFIED for primitive prolongable maps (Theorem AG). \(B(3)=1647<\infty\). Exhaustive \(4^{12}\) census, dual C++/Python on the cap-243 tail. Not a proof for \(m\ge 4\). See `PT_REPORT.md`.
 
 ---
 
@@ -82,13 +82,13 @@ For fixed `m`-uniform `σ`, cube types `(r,s)` are finite and `v=ψ_X−ψ_Y` sa
 ---
 
 ## C12. There is no k-automatic infinite ACF word over a 4-letter integer alphabet
-**Status:** STRONGLY CONJECTURED for 2-automatic 4-letter maps (exhaustive m=2); open in general.
+**Status:** COMPUTATIONALLY VERIFIED for primitive prolongable 2-uniform and 3-uniform maps on `{0,1,2,3}` (\(B(2)=119\), \(B(3)=1647\)). Open for \(m\ge 4\) and for automatic words that are not pure morphic of a 4-letter m-uniform substitution.
 
 This is the uniform problem (Theorems V, W). Cassaigne is morphic and not automatic (Theorem X), so it is not a counterexample. Sampled 2-uniform maps on 5, 6, 8 letters coded onto `{0,1,3,4}` failed by length 27 (40 each, not a theorem). Affine / Pisot / two-sum strata are already excluded.
 
 **Attack:** Theorem X/Y kill same-word uniformization. They do not kill every automatic candidate.
 
-Kernel/regular attack (Theorems AA–AC): synchronized summatory is exactly bounded \(p_T\) (already Ardal cubes). Prefix T-squares of the famous map form an infinite 4-adic family and still do not yield cubes. Structured m=3 4-letter samples (3953+4012 primitive 3-sum maps) all cubed by length 160. Still not a proof for \(m\ge 3\).
+Kernel/regular attack (Theorems AA–AC): synchronized summatory is exactly bounded \(p_T\) (already Ardal cubes). Prefix T-squares of the famous map form an infinite 4-adic family and still do not yield cubes. Exhaustive primitive prolongable m=3 on 4 letters: all cube, \(B(3)=1647\) (Theorem AG). Still not a proof for \(m\ge 4\). Conjecture A is equivalent to this conjecture restricted to automatic words (Corollary AH), not a new implication.
 
 ---
 
@@ -116,3 +116,8 @@ Generic k-regular zeros are not regular (Allouche–Shallit 5.2 / Krenn–Shalli
 
 ## C15. Every primitive 3-letter uniform numerical word has additive cubes (Layer B)
 **Status:** COMPUTATIONALLY SUPPORTED for m=2 (exhaustive) and m=3 cap 81; not proved. Best ACF prefix 108 on \(\{0,1,4\}\). Rao’s 3-letter ACF word is non-uniform, so it is not a counterexample to the uniform statement.
+
+---
+
+## C16. Primitive automatic ACF \(\Rightarrow\) bounded \(p_T\) (Conjecture A)
+**Status:** KILLED without automaticity (Cassaigne). OPEN with automaticity, and equivalent to C12 via Ardal (Corollary AH). Exhaustive m=2 and m=3 are computational support, not a proof. Do not attack it as a new lever.

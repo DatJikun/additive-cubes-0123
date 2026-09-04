@@ -186,3 +186,28 @@ The characteristic sequence of \(\{n:S(2n)=2S(n)\}\) has 2-kernel fingerprints s
 
 ## H26. A 2-uniform 3-letter map on \(\{0,1,4\}\) is an automatic ACF candidate
 **Status:** KILLED at ACF prefix 108. Map \(0\to 01,\ 1\to 14,\ 4\to 40\), seed 0, cube \((i,d,\mathrm{sum})=(2,63,105)\). Dual C++/Python. Alphabet not affine-equivalent to \(\{0,1,2\}\). All 210 prolongable 3-sum 2-uniform maps on \(\{0,1,2\}\) cube by length 26.
+
+---
+
+## H27. ACF \(\Rightarrow\) bounded additive complexity (Conjecture A without automaticity)
+**Status:** KILLED (KNOWN). Cassaigne is ACF with \(p_{\max}=66\) already on a length-2048 prefix, diameter 95 at \(n=64\), holes present, 0 equal-weight triples. Dual Python. Ardal’s contrappositive says this must happen for any ACF word.
+
+---
+
+## H28. Unbounded diameter plus uniform recurrence forces additive cubes
+**Status:** KILLED. Same witness as H27. Recurrence without automaticity is not enough. Do not repeat the “syndetic returns force cubes” argument.
+
+---
+
+## H29. Van der Waerden on the finite colouring \(i\mapsto\omega(w[i:i+n))\) forces an additive cube
+**Status:** KILLED (Theorem AF). VdW produces monochromatic 3-APs whose difference need not be \(n\). Famous \(n=8\): 372 mono 3-AP starts, 2 with \(d=n\). Cassaigne \(n=8\): 524 starts, **0** with \(d=n\).
+
+---
+
+## H30. ACF forces a uniform discrepancy bound, so a large modulus converts modular zeros to integer zeros
+**Status:** KILLED. Ardal contrappositive: ACF \(\Rightarrow\) unbounded \(p_T\) \(\Leftrightarrow\) unbounded diameter (Theorem AE). The modular-to-integer bridge requires an a priori bound that ACF forbids.
+
+---
+
+## H31. An expanding non-Perron eigenvalue prevents a long ACF prefix
+**Status:** KILLED as a “quick cube” claim. The m=3 maximizer has eigenvalues \(3,1\pm\sqrt{2},1\), so \(\lvert\lambda_2\rvert=1+\sqrt{2}>1\), and still reaches ACF prefix **1647** before cubing. Expansion is compatible with a long finite ACF prefix. The map is not an infinite ACF word.

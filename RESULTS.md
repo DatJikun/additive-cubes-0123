@@ -76,6 +76,11 @@ Liétard already concluded that a Cupisca morphism, if it exists, has size ≥7.
 
 Reproduce: `./bin/acf_tool uniform 2 250`
 
+### NEW 3b. Exhaustive failure of primitive 3-uniform morphisms
+**Class:** COMPUTATIONALLY VERIFIED certificate (Theorem AG). See `PT_REPORT.md`.
+
+All \(4^{12}=16{,}777{,}216\) three-uniform maps; 6{,}116{,}013 primitive prolongable with \(\ge 3\) image sums. None has an ACF iterate of length 2187. Maximum ACF prefix: **1647**, map \(0\mapsto 100,\ 1\mapsto 102,\ 2\mapsto 132,\ 3\mapsto 332\), seed 1, cube \((982,222,229)\). Dual C++/Python. This is not a proof for \(m\ge 4\) and not an infinite ACF word.
+
 ### NEW 4. Explicit obstruction for the best size-3 Cassaigne-shaped morphism
 **Class:** COMPUTATIONALLY VERIFIED counterexample.
 

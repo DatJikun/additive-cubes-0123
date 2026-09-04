@@ -303,6 +303,109 @@ Cassaigne has no prefix squares in length 2048 (\(n_{\mathrm{sq}}=0\)) and is no
 
 ---
 
+## Theorem AD — Compactness at fixed \(m\) is a finite maximum
+**Status: PROVED** (ELEMENTARY). Novelty: ELEMENTARY.
+
+Let \(A\) be a finite alphabet and \(m\ge 2\) fixed. There are exactly \(|A|^{m|A|}\) many \(m\)-uniform substitutions \(\sigma:A\to A^m\). For each prolongable seed \(a\) write \(N(\sigma,a)\) for the length of the longest additive-cube-free prefix of the nested iterate \(\sigma^\omega(a)\), or \(\infty\) if the iterate is infinite ACF. Set
+\[
+B(m)=\sup\bigl\{N(\sigma,a):\sigma\text{ primitive }m\text{-uniform on }A,\ \sigma(a)\text{ starts with }a\bigr\}.
+\]
+The supremum is taken over a finite set, hence lies in \(\mathbb{N}\cup\{\infty\}\). The following are equivalent:
+
+1. \(B(m)<\infty\);
+2. every primitive prolongable \(m\)-uniform fixed point over \(A\) contains an additive cube;
+3. there is no infinite primitive \(m\)-automatic ACF word arising as such a fixed point.
+
+In particular the compactness claim
+
+> arbitrarily long primitive \(m\)-uniform ACF prefixes \(\Longrightarrow\) an infinite \(m\)-automatic ACF word
+
+is true at fixed \(m\), and is the pigeonhole principle: a finite discrete set of maps cannot send \(N(\sigma,a)\to\infty\) along a sequence of distinct substitutions unless some single \(\sigma\) is itself infinite ACF. There is no additional limiting object. Primitivity is not lost in a limit, because there is no limit to take.
+
+This does **not** prove \(B(m)<\infty\). It identifies \(B(m)<\infty\) with the nonexistence statement for that base. Varying \(m\) is a different problem: the substitution space is then infinite and compactness would require a genuine inverse-limit argument, which we do not claim.
+
+---
+
+## Theorem AE — Unbounded \(p_T\) iff unbounded diameter
+**Status: PROVED** (ELEMENTARY). Novelty: ELEMENTARY.
+
+Let \(w\) be an infinite word over a finite integer alphabet \(A\subset\mathbb{Z}\), and write \(\Delta=\max A-\min A\). For each \(n\) let \(p(n)\) be the number of distinct length-\(n\) block sums and let \(\mathrm{diam}(n)=H_n-L_n\). Then
+\[
+1+\Bigl\lceil\frac{\mathrm{diam}(n)}{\Delta}\Bigr\rceil
+\le p(n)
+\le \mathrm{diam}(n)+1.
+\]
+The right-hand inequality is the number of integers in \([L_n,H_n]\). The left-hand inequality holds because consecutive length-\(n\) windows differ in sum by an element of \(A-A\), hence by at most \(\Delta\): a walk from a minimum-weight window to a maximum-weight window cannot skip more than \(\Delta\) at a time.
+
+Therefore \(p(n)\) is unbounded if and only if \(\mathrm{diam}(n)\) is unbounded. Dual C++/Python: \(p\le\mathrm{diam}+1\) holds with 0 failures on Cassaigne, vtm, Thue–Morse-like, famous, \(\{0,1,4\}\), and the \(m=3\) maximizer ACF prefix. Holes (\(p<\mathrm{diam}+1\)) occur (Cassaigne \(n=16\); maximizer ACF prefix \(\mathrm{holes}_{\max}=57\)).
+
+---
+
+## Theorem AF — Van der Waerden on weight colourings does not force additive cubes
+**Status: PROVED** (ELEMENTARY failure of a proposed argument). Novelty: ELEMENTARY.
+
+Fix \(n\) and colour position \(i\) by \(\omega(w[i:i+n))\). A finite integer alphabet realises only finitely many colours at that \(n\), so van der Waerden produces monochromatic 3-term arithmetic progressions \(i,i+d,i+2d\). The additive-cube condition requires the common difference to be **exactly** \(n\). There is no reason for VdW to return that \(d\).
+
+Witnesses, dual Python (and C++ on the famous cube itself):
+
+- Famous iterate length 512, \(n=8\): 372 monochromatic 3-AP starts, of which **2** have \(d=n\).
+- Famous \(n=25\): 276 starts, **3** with \(d=n\).
+- Cassaigne length 800, \(n=8\): 524 monochromatic 3-AP starts, of which **0** have \(d=n\).
+
+Cassaigne is uniformly recurrent and ACF, so the colouring is a finite colouring of a syndetic set of positions with no monochromatic 3-AP of difference \(n\). Do not invoke van der Waerden as a cube-forcing theorem.
+
+---
+
+## Theorem AG — \(B(3)=1647\) for primitive 3-uniform maps on \(\{0,1,2,3\}\)
+**Status: COMPUTATIONALLY VERIFIED** (exhaustive C++ census; independent Python rebuild of the entire cap-243 tail; independent C++ filter recount and maximizer cube). Novelty: UNVERIFIED NOVELTY as a packaged classification. Not a proof for general \(m\).
+
+Let \(\sigma\) range over primitive prolongable 3-uniform substitutions on \(\{0,1,2,3\}\) with at least three distinct image sums, and let \(N(\sigma)\) be the longest ACF prefix among prolongable seeds. Then
+\[
+B_{\ge 3}(3)=\max N(\sigma)=1647<\infty,
+\]
+attained uniquely (among cap-243 survivors, all prolongable seeds rechecked) at code \(12507201\), seed \(1\):
+\[
+0\mapsto 100,\quad 1\mapsto 102,\quad 2\mapsto 132,\quad 3\mapsto 332,
+\]
+\(T=(1,3,6,8)\), first cube \((i,d,\mathrm{sum})=(982,222,229)\). The prefix of length 1647 is ACF; length 1648 contains that cube. Independent C++ `find_cube` and Python `find_cube` / `first_acf_len` agree.
+
+Census (`src/pt_scan.cpp`, \(4^{12}=16{,}777{,}216\) maps; dual filter recount `src/pt_verify.cpp`):
+
+| filter | count |
+|---|---|
+| prolongable | 11,468,800 |
+| primitive (among prolongable) | 6,993,126 |
+| \(\ge 3\) image sums (among prolongable) | 9,992,241 |
+| primitive and \(\ge 3\) sums (tried) | 6,116,013 |
+| cubed before length 243 | 6,115,927 |
+| ACF through 243 | 86 |
+| ACF through 2187 | **0** |
+
+Among maps that cube before 243: median ACF prefix 15, 90th percentile 29, 99th percentile 56. The 86 survivors were pushed to \(3^7=2187\); none survive. Rechecking **every prolongable seed** of those 86 maps (C++ and Python independently) does not raise the maximum above 1647.
+
+Two-image-sum maps are excluded from the census because Theorem C already supplies aligned cubes; they cannot beat 1647. Therefore the same bound is \(B(3)\) over all primitive prolongable 3-uniform maps on this alphabet.
+
+The maximizer is not Pisot. Incidence
+\[
+M=\begin{pmatrix}2&1&0&0\\1&1&1&0\\0&1&1&1\\0&0&1&2\end{pmatrix}
+\]
+has characteristic polynomial \(t^4-6t^3+10t^2-2t-3=(t-3)(t-1)(t^2-2t-1)\), eigenvalues \(3,1,1\pm\sqrt{2}\). The expanding non-Perron eigenvalue \(1+\sqrt{2}\) (Case III) coexists with a cube at length 1648. On the ACF prefix one already has \(p_T(1)=4\), \(p_T(8)=17\), \(p_T(16)=35\), \(p_T(64)=81\), \(p_{\max}(n\le 80)=107\), \(\mathrm{diam}(64)=102\), no equal-weight triples.
+
+This is **not** an infinite ACF word, **not** a proof of \(B(m)<\infty\) for all \(m\), and **not** a proof of Conjecture A.
+
+---
+
+## Corollary AH — Conjecture A is not a new lever
+**Status: PROVED** as a logical reduction (DIRECT COROLLARY of Ardal et al. 2012, Thm 5). Novelty: DIRECT COROLLARY.
+
+Ardal–Brown–Jungić–Sahasrabudhe: a word of bounded additive complexity contains additive \(k\)-powers for every \(k\). Contrapositive: ACF \(\Rightarrow\) unbounded \(p_T\). Therefore the statement
+
+> primitive automatic ACF \(\Rightarrow\) bounded \(p_T\)
+
+together with Ardal is equivalent to “there is no primitive automatic ACF word”. Proving Conjecture A is the same problem as proving every primitive automatic numerical word has an additive cube. Cassaigne kills the statement with automaticity deleted (ACF + unbounded \(p_T\)). No source located that automaticity restores bounded \(p_T\) under an ACF hypothesis.
+
+---
+
 ## Theorem G — High complexity of Up-and-Down words
 **Status: COMPUTATIONALLY VERIFIED**
 

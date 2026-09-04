@@ -1,5 +1,11 @@
 # Research Log
 
+## 2026-09-04 — bounded \(p_T\) / exhaustive \(B(3)\)
+
+Mission: does automatic ACF force bounded additive complexity (Conjecture A)? Kill it or prove it. Exhaustive m=3. Compactness at fixed m. Do **not** chase generic \((D_1,D_2)\) zeros.
+
+Proved: compactness at fixed m is a finite maximum (Thm AD); unbounded \(p_T\) iff unbounded diameter (Thm AE); VdW on weight colourings does not force \(d=n\) (Thm AF); Conjecture A + Ardal is the open automatic problem (Cor AH). Computationally verified: \(B(3)=1647\) (Thm AG), maximizer \(0\mapsto 100,1\mapsto 102,2\mapsto 132,3\mapsto 332\), cube \((982,222,229)\), expanding eigenvalue \(1+\sqrt{2}\). Dual C++/Python. Report: `PT_REPORT.md`. Infinite problem still open. ENDGAME C (fixed base m=3 only).
+
 ## 2026-09-04 — m-kernel / k-regular block sums
 
 Mission: structure of \(R_\sigma\) via m-kernel, linear representations, zero sets; force cubes or find an automatic ACF candidate. **No factor graph.**

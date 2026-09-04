@@ -1,0 +1,13 @@
+cassaigne len=2048 acf=2048 cube=None pmax=66 diam=95 holes=32 pairs=64 trips=0
+vtm len=2000 acf=8 cube=(0, 3, 3) pmax=3 diam=2 holes=0 pairs=57 trips=57
+tm_like_012 len=2048 acf=18 cube=(0, 132, 132) pmax=15 diam=14 holes=0 pairs=64 trips=52
+thue_morse len=2048 acf=5 cube=(0, 2, 1) pmax=3 diam=2 holes=0 pairs=64 trips=32
+paperfolding len=2048 acf=7 cube=(0, 3, 2) pmax=8 diam=7 holes=0 pairs=64 trips=64
+rudin_shapiro len=2048 acf=2 cube=(0, 1, 0) pmax=23 diam=22 holes=0 pairs=64 trips=56
+01440 len=256 acf=108 cube=(2, 63, 105) pmax=27 diam=26 holes=3 pairs=46 trips=7
+famous_acf 119
+p_le_diam_fails 0
+vtm_cube (0, 3, 3)
+tmlike_pmax 15
+cassaigne_pmax 66
+cassaigne_cube None

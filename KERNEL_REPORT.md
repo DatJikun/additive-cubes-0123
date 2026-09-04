@@ -225,7 +225,7 @@ The new object that actually uses m-adic structure is \(L\cdot\psi(n)\) and \(LM
 
 **NO.**
 
-Remaining bottleneck: decide whether the bivariate regular pair \((D_1(i,d),D_2(i,d))\) is ever \((0,0)\) (aligned) or lands in finite \(E_\sigma\) (unaligned) for **every** primitive uniform \(\sigma\) over {0,1,2,3}, or produce one \(\sigma\) whose pair avoids \(E_\sigma\) for all \((i,d)\). Generic k-regular zero-emptiness is undecidable; this special pair is still not shown decidable. Exhaustive m=2 is already negative for ACF. Exhaustive m=3 on 4 letters (\(4^{12}\)) was not run; structured samples all cubed.
+Remaining bottleneck: decide whether the bivariate regular pair \((D_1(i,d),D_2(i,d))\) is ever \((0,0)\) (aligned) or lands in finite \(E_\sigma\) (unaligned) for **every** primitive uniform \(\sigma\) over {0,1,2,3}, or produce one \(\sigma\) whose pair avoids \(E_\sigma\) for all \((i,d)\). Generic k-regular zero-emptiness is undecidable; this special pair is still not shown decidable. Exhaustive m=2 is already negative for ACF. Exhaustive m=3 on 4 letters was subsequently run: \(B(3)=1647\) (Theorem AG, `PT_REPORT.md`); not a decision procedure for \((D_1,D_2)\).
 
 ---
 

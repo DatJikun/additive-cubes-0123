@@ -1,7 +1,7 @@
 # Additive-cube research archive
 
 Autonomous attack on additive-cube-free words over `{0,1,2,3}`.  
-The infinite problem is **open**. Structural results: `STRUCTURAL_REPORT.md`. Unaligned desubstitution: `DESUBSTITUTION_REPORT.md`. Quotient dynamics of `T·v+Δδ=0`: `QUOTIENT_REPORT.md`. Triple / \(\omega\)-graph: `TRIPLE_REPORT.md`. Non-affine uniform templates: `TEMPLATE_REPORT.md`. m-kernel / k-regular block sums: `KERNEL_REPORT.md`.
+The infinite problem is **open**. Structural results: `STRUCTURAL_REPORT.md`. Unaligned desubstitution: `DESUBSTITUTION_REPORT.md`. Quotient dynamics of `T·v+Δδ=0`: `QUOTIENT_REPORT.md`. Triple / \(\omega\)-graph: `TRIPLE_REPORT.md`. Non-affine uniform templates: `TEMPLATE_REPORT.md`. m-kernel / k-regular block sums: `KERNEL_REPORT.md`. Bounded \(p_T\) / exhaustive \(B(3)\): `PT_REPORT.md`.
 
 ## Build and test
 
@@ -20,6 +20,7 @@ g++ -std=c++17 -O3 -o bin/mutate_candidate src/mutate_candidate.cpp
 
 | File | Contents |
 |---|---|
+| `PT_REPORT.md` | Conjecture A, \(B(3)=1647\), compactness at fixed \(m\), VdW failure, dual census |
 | `KERNEL_REPORT.md` | m-kernel of the T-word, regular block sums, 4-adic prefix squares, synchronized iff bounded \(\Delta\) |
 | `TRIPLE_REPORT.md` | Shared-middle triples, \(\omega\)-identity, junction covering; no finite factor-graph obstruction |
 | `QUOTIENT_REPORT.md` | Defect equation modulo `ker(T)`: quotient is infinite; Krylov package; killed finite-state `Q` |
@@ -38,6 +39,7 @@ g++ -std=c++17 -O3 -o bin/mutate_candidate src/mutate_candidate.cpp
 
 ## Data
 
+- `data/pt_scan3.txt` / `data/pt_verify_cert.txt` / `data/pt_verify_cpp.txt` / `data/pt_acf_cert.txt` — exhaustive m=3 census and dual \(p_T\) / ACF certificates
 - `data/kernel_cert.txt` / `data/kernel_cert_cpp.txt` — dual kernel / regular identities, 3-letter scans
 - `data/template_cert.txt` — dual C++/Python numbers for length rigidity, Cassaigne spectrum, pads, T-word
 - `data/deadends14.txt` — 8170 right-crucial ACF words of length 14

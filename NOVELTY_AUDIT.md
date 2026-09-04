@@ -425,3 +425,21 @@ Sixth search: Allouche–Shallit TCS 1992 Thm 5.2 (undecidable zeros of k-regula
 
 See `KERNEL_REPORT.md`.
 
+---
+
+## 23. Addendum (bounded \(p_T\) / \(B(m)\), 2026-09-04)
+
+Seventh search: Ardal 2012 Thm 5; Banero 2013; FSTTCS 2024 (additive complexity of automatic sequences; TM-like logarithmic \(p_T\); vtm bounded additive / unbounded abelian); Allouche–Shallit 5.2; Shallit 10.6.1; Liétard–Rosenfeld m=2 exhaustive; van der Waerden (misuse recorded, not a cube theorem).
+
+**KNOWN:** Ardal bounded \(p_T\Rightarrow\) cubes, hence ACF \(\Rightarrow\) unbounded \(p_T\). FSTTCS Thm 28–29. Cassaigne ACF with unbounded \(p_T\). Exhaustive m=2, best prefix 119.
+
+**DIRECT COROLLARY:** Conjecture A (automatic ACF \(\Rightarrow\) bounded \(p_T\)) + Ardal \(\Leftrightarrow\) no primitive automatic ACF word (Corollary AH).
+
+**ELEMENTARY:** Theorem AD (finite substitution space \(\Rightarrow\) \(B(m)<\infty\) iff no infinite m-automatic primitive ACF fixed point). Theorem AE (\(p_T\) unbounded iff diameter unbounded). Theorem AF (VdW difference \(\neq n\)).
+
+**UNVERIFIED NOVELTY:** Theorem AG, \(B(3)=1647\), exhaustive \(4^{12}\) classification of primitive prolongable 3-uniform maps on \(\{0,1,2,3\}\). Dual C++/Python. Do not claim \(B(m)<\infty\) for all \(m\). Do not claim Conjecture A proved. Do not call the maximizer an infinite ACF word.
+
+**No source found** that automatic + ACF \(\Rightarrow\) bounded \(p_T\) except via nonexistence of automatic ACF. No source found that \(4^{12}\) had already been exhausted.
+
+See `PT_REPORT.md`.
+
