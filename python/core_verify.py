@@ -602,6 +602,39 @@ def main():
             else:
                 print("OK Theorem AW affine Δ on dead_s1", "d", d, "Δ", deltas)
 
+    # Envelope greedy |Δ|≈5√n: independent rebuild of a short prefix.
+    def env_greedy(cap, c=5.0):
+        w = []
+        while len(w) < cap:
+            opts = [a for a in range(4) if find_cube(w + [a]) is None]
+            if not opts:
+                break
+            n = len(w)
+
+            def score(a):
+                D = abs(sum(w) + a - 1.5 * (n + 1))
+                return abs(D - c * (n + 1) ** 0.5)
+
+            opts.sort(key=score)
+            w.append(opts[0])
+        return w
+
+    w30 = env_greedy(30)
+    if find_cube(w30) is not None:
+        print("FAIL env greedy 30 cubed", find_cube(w30))
+        fails += 1
+    else:
+        print("OK env greedy 30 ACF", "".join(map(str, w30)), "mean", sum(w30) / 30)
+    path = "data/env_greedy.txt"
+    if os.path.exists(path):
+        w = load_digits(path)
+        py = env_greedy(min(40, len(w)))
+        if py != w[: len(py)]:
+            print("FAIL env greedy C++/Python mismatch", "".join(map(str, w[:30])), "".join(map(str, py[:30])))
+            fails += 1
+        else:
+            print("OK env greedy dual prefix", len(py))
+
     print("core_verify_fails", fails)
     if fails:
         sys.exit(1)

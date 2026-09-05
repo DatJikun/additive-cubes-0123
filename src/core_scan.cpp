@@ -854,6 +854,12 @@ static uint64_t word_hash(const std::vector<u8>& w) {
     return h;
 }
 
+static double env_score(i64 S, int n, double c) {
+    if (n <= 0) return 0;
+    double D = std::abs((double)S - 1.5 * n);
+    return std::abs(D - c * std::sqrt((double)n));
+}
+
 static void mode_beam(int depth, int beam, int style) {
     // style 0: two smallest legal letters (unary if q=1)
     // style 1: two letters whose new mean is closest to 1.5
@@ -888,7 +894,16 @@ static void mode_beam(int depth, int beam, int style) {
                 pick = {opts[0]};
             else if (style == 0 || style == 3)
                 pick = {opts[0], opts[1]};
-            else {
+            else if (style == 4) {
+                // two letters closest to |Δ|=5√n
+                double n = (double)nd.b.size();
+                i64 s = nd.b.S.back();
+                std::vector<std::pair<double, u8>> sc;
+                for (u8 a : opts) sc.push_back({env_score(s + a, (int)n + 1, 5.0), a});
+                std::sort(sc.begin(), sc.end());
+                pick.push_back(sc[0].second);
+                pick.push_back(sc[1].second);
+            } else {
                 // style 1: two closest to mean 1.5; style 2: two farthest
                 double n = (double)nd.b.size();
                 double s = (double)nd.b.S.back();
@@ -954,11 +969,14 @@ static void mode_beam(int depth, int beam, int style) {
         if ((int)nxt.size() > beam) {
             std::vector<size_t> idx(nxt.size());
             for (size_t i = 0; i < idx.size(); ++i) idx[i] = i;
-            const bool keep_close = (style <= 1);  // 0,1: Cesaro band; 2,3: high discrepancy
             std::nth_element(idx.begin(), idx.begin() + beam, idx.end(), [&](size_t i, size_t j) {
+                if (style == 4) {
+                    return env_score(nxt[i].b.S.back(), nxt[i].b.size(), 5.0) <
+                           env_score(nxt[j].b.S.back(), nxt[j].b.size(), 5.0);
+                }
                 double di = std::abs(word_mean(nxt[i].b) - 1.5);
                 double dj = std::abs(word_mean(nxt[j].b) - 1.5);
-                return keep_close ? (di < dj) : (di > dj);
+                return (style <= 1) ? (di < dj) : (di > dj);
             });
             std::vector<Nd> kept;
             kept.reserve((size_t)beam);
@@ -1147,6 +1165,52 @@ static void mode_delta(const char* path) {
     }
     std::cout << "AW_affine_hits " << n_aw << " aff_near2 " << n_near << " closest_d " << best_d
               << " max|Δ|@triple " << best_m << "\n";
+}
+
+static void mode_env(const std::string& kind, int cap, double c, uint64_t budget) {
+    // Envelope greedy: |Δ| target c√n. kind=greedy (no backtrack) or bt (chronological).
+    if (kind == "greedy") {
+        Builder b;
+        auto ord_fn = envelope_order(c);
+        int last_print = 0;
+        while (b.size() < cap) {
+            auto opts = legal_letters(b);
+            if (opts.empty()) break;
+            auto ord = ord_fn(b.size(), b);
+            u8 chosen = 255;
+            for (u8 a : ord)
+                if (std::find(opts.begin(), opts.end(), a) != opts.end()) {
+                    chosen = a;
+                    break;
+                }
+            if (chosen == 255 || !b.try_push(chosen)) break;
+            if (b.size() - last_print >= 1000 || b.size() == cap) {
+                last_print = b.size();
+                double D = std::abs((double)b.S.back() - 1.5 * b.size());
+                std::cout << "env_greedy n " << b.size() << " mean " << word_mean(b) << " |Δ| " << D
+                          << " |Δ|/√n " << D / std::sqrt((double)b.size()) << " q "
+                          << (int)legal_letters(b).size() << "\n";
+            }
+        }
+        dump_word("data/env_greedy.txt", b.w);
+        std::cout << "env_greedy cap " << cap << " c " << c << " len " << b.size() << " mean " << word_mean(b)
+                  << " prefix20 "
+                  << to_string(std::vector<u8>(b.w.begin(), b.w.begin() + std::min(20, (int)b.w.size())))
+                  << "\n";
+        return;
+    }
+    if (kind == "bt") {
+        auto w = greedy_backtrack(budget, envelope_order(c), cap);
+        dump_word("data/env_bt.txt", w);
+        Builder b;
+        for (u8 a : w) b.try_push(a);
+        double D = w.empty() ? 0 : std::abs((double)b.S.back() - 1.5 * b.size());
+        std::cout << "env_bt cap " << cap << " c " << c << " budget " << budget << " len " << w.size()
+                  << " mean " << (w.empty() ? 0 : word_mean(b)) << " |Δ| " << D << " |Δ|/√n "
+                  << (w.empty() ? 0 : D / std::sqrt((double)w.size())) << "\n";
+        return;
+    }
+    std::cerr << "env kind greedy|bt\n";
 }
 
 static void mode_inject_iter(int n0, int rounds, int r) {
@@ -2143,7 +2207,7 @@ int main(int argc, char** argv) {
             << "core_scan trie N | word FILE [pe] | suffix FILE k | updown FILE P | random D T seed |\n"
             << "  branch n R samples | findq1 N budget | inject n | basin | cass N | walk FILE |\n"
             << "  recgen CAP | grow2 D budget | beam D BEAM STYLE | mutate FILE samples extra stride |\n"
-            << "  inject_iter n0 rounds r | band n eps | delta FILE | lcp | macro FILE L | look n R | ops n r |\n"
+            << "  inject_iter n0 rounds r | band n eps | delta FILE | env greedy|bt CAP C [budget] |\n"
             << "  cycle n | detfsm | twocore n | drive n drv cap blind|legal | dscan | tmblocks lu lv cap lim\n";
         return 1;
     }
@@ -2213,6 +2277,12 @@ int main(int argc, char** argv) {
         mode_band(n, eps);
     } else if (cmd == "delta") {
         mode_delta(argv[2]);
+    } else if (cmd == "env") {
+        std::string kind = (argc > 2) ? argv[2] : "greedy";
+        int cap = (argc > 3) ? std::atoi(argv[3]) : 8000;
+        double c = (argc > 4) ? std::atof(argv[4]) : 5.0;
+        uint64_t bud = (argc > 5) ? std::strtoull(argv[5], nullptr, 10) : 2000000ull;
+        mode_env(kind, cap, c, bud);
     } else if (cmd == "lcp") {
         mode_lcp();
     } else if (cmd == "macro") {

@@ -2,7 +2,9 @@
 // Search algorithms for additive-cube-free words over {0,1,2,3}.
 
 #include "acf.hpp"
+#include <algorithm>
 #include <chrono>
+#include <cmath>
 #include <functional>
 #include <map>
 #include <random>
@@ -210,6 +212,25 @@ inline std::function<std::array<u8, 4>(int, const Builder&)> drift_order(double 
         if (mean > 1.5 + threshold) return order_fixed_up();    // prefer 0,1,2,3
         if (mean < 1.5 - threshold) return order_fixed_down();  // prefer 3,2,1,0
         return order_fixed_down();
+    };
+}
+
+// Envelope: prefer the letter whose new |S-(3/2)n| is closest to c√n.
+// This is the discrepancy regime of the 400k archive (c≈5), not mean-threshold drift.
+inline std::function<std::array<u8, 4>(int, const Builder&)> envelope_order(double c) {
+    return [c](int /*depth*/, const Builder& b) {
+        int n = b.size();
+        i64 S = b.S.back();
+        std::array<std::pair<double, u8>, 4> sc;
+        for (int a = 0; a < 4; ++a) {
+            double Dn = std::abs((double)(S + a) - 1.5 * (n + 1));
+            double tgt = c * std::sqrt((double)(n + 1));
+            sc[a] = {std::abs(Dn - tgt), (u8)a};
+        }
+        std::sort(sc.begin(), sc.end());
+        std::array<u8, 4> ord{};
+        for (int i = 0; i < 4; ++i) ord[i] = sc[i].second;
+        return ord;
     };
 }
 
