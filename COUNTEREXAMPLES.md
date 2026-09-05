@@ -255,3 +255,6 @@ The characteristic sequence of \(\{n:S(2n)=2S(n)\}\) has 2-kernel fingerprints s
 
 ## H44. Envelope letter-order backtracking is as good as Up-and-Down
 **Status:** KILLED. \(10^7\) nodes \(\to\) 7066 (dead). Fixed-order with \(2\cdot 10^6\) already reached 24396. Up-and-Down \(p=2000\) reached 400k.
+
+## H45. A 4-interval rotation coding (or Beatty \(\bmod 4\), or two-bit mechanical word) is an infinite ACF word over \(\{0,1,2,3\}\)
+**Status:** KILLED for a 898-word sample, cap 1500. Best ACF prefix 67 (Beatty \(\lfloor(n+1)\sqrt{2}\rfloor+1\bmod 4\)), cube \((32,12,19)\). Dual Python. Not a theorem for every \(\alpha\) and partition.

@@ -1,5 +1,11 @@
 # Research Log
 
+## 2026-09-05 — rotation / Beatty / mechanical 4-letter words
+
+Mission: an explicit infinite ACF candidate from a rotation coding or Beatty sequence, not a search heuristic. Do **not** repeat envelope greedy, TM 2-cores, morphisms.
+
+Killed as a sample: 898 rotation/Beatty/skew/3-interval words, all cube before 200, best ACF prefix 67 (H45). Dual Python on \(\lfloor(n+1)\sqrt{2}\rfloor+1\bmod 4\), cube \((32,12,19)\). Infinite problem still open. Up-and-Down remains the longest construction, without a finite rule.
+
 ## 2026-09-05 — envelope \(\lvert\Delta\rvert\sim c\sqrt{n}\) greedy
 
 Mission: turn the 400k archive’s discrepancy curve into an explicit letter order, or kill it. Do **not** repeat mean-balancing, 0-greedy beams, TM 2-cores.

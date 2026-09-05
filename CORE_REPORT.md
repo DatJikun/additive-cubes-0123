@@ -451,3 +451,15 @@ The 400k word is not “envelope greedy plus a little backtracking”. Period re
 Not claimed: an infinite word, or that every \(\sqrt{n}\)-discrepancy walk cubes. Cassaigne has large non-affine \(\Delta\) and is infinite over a different alphabet. The finite rule “stay near \(c\sqrt{n}\)” on \(\{0,1,2,3\}\) is not a core.
 
 Reproduce: `./bin/core_scan env greedy 80 5`; `./bin/core_scan env bang 200 5`; `./bin/core_scan env bt 40000 5 3000000`; `python3 python/core_verify.py`.
+
+---
+
+## 22. Rotation / Beatty / skew-mechanical words
+
+Explicit infinite candidates (no search): 4-interval coding of \(x\mapsto \{x+\alpha\}\), Beatty \(\lfloor(n+1)\alpha\rfloor\bmod 4\), two mechanical bits packed as a letter, and 3-interval codings onto \(\{0,1,2\}\) and \(\{0,1,3\}\).
+
+898 combinations (8 irrationals including \(\varphi,\sqrt{2},\pi-3\); 3 phases; several partitions and label permutations). Cap 1500. **Every one cubes before length 200.** Best ACF prefix: **67**, Beatty \(\lfloor(n+1)\sqrt{2}\rfloor+1\bmod 4\), cube \((i,d,\mathrm{sum})=(32,12,19)\) at length 68. Dual Python. Golden equal-interval 4-coding cubes at 13.
+
+This is a sample, not a theorem that every rotation coding cubes. It kills the hope that a 4-IET / mechanical word is a ready-made infinite ACF source on \(\{0,1,2,3\}\) the way Cassaigne is on \(\{0,1,3,4\}\). Bounded-remainder (Kesten) cases are already Ardal; the unbounded-remainder samples died anyway.
+
+Reproduce: `./bin/core_scan rot 1500`; `python3 python/core_verify.py`.

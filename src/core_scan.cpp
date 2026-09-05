@@ -1213,6 +1213,144 @@ static void mode_env(const std::string& kind, int cap, double c, uint64_t budget
     std::cerr << "env kind greedy|bt|bang|bangbt\n";
 }
 
+static int gen_acf_until(const std::function<u8(int)>& gen, int cap, Cube* c) {
+    Builder b;
+    for (int i = 0; i < cap; ++i) {
+        u8 a = gen(i) & 3;
+        if (!b.try_push(a)) {
+            if (c) {
+                auto w = b.w;
+                w.push_back(a);
+                auto cc = find_cube(w);
+                if (cc) *c = *cc;
+            }
+            return b.size();
+        }
+    }
+    return b.size();
+}
+
+static void mode_rot(int cap) {
+    // 4-interval rotation coding, Beatty mod 4, and two-bit mechanical words.
+    // Explicit infinite candidates (no search). Report longest ACF prefix.
+    struct Hit {
+        int L;
+        std::string name;
+        Cube c{};
+        std::vector<u8> prefix;
+    };
+    Hit best{-1, "", {}, {}};
+    auto consider = [&](int L, const std::string& name, const Cube& c, const std::function<u8(int)>& gen) {
+        if (L > best.L) {
+            best.L = L;
+            best.name = name;
+            best.c = c;
+            best.prefix.clear();
+            int m = std::min(L + 1, 80);
+            for (int i = 0; i < m; ++i) best.prefix.push_back(gen(i) & 3);
+        }
+        if (L >= cap || L >= 200)
+            std::cout << "rot_long " << name << " acf " << L << (L >= cap ? " HIT_CAP" : "") << " cube_i "
+                      << c.i << " d " << c.d << "\n";
+    };
+
+    const double alphas[] = {0.5 * (std::sqrt(5.0) - 1.0), std::sqrt(2.0) - 1.0, std::sqrt(3.0) - 1.0,
+                             4.0 * std::atan(1.0) - 3.0, std::exp(1.0) - 2.0, std::sqrt(7.0) - 2.0,
+                             std::cbrt(2.0) - 1.0, std::sqrt(2.0) / 2.0};
+    const char* aname[] = {"phi", "s2m1", "s3m1", "pi3", "e2", "s7m2", "cbrt2", "s2h"};
+    const double betas[] = {0.0, 0.17, 0.41};
+    const double parts[][3] = {{0.25, 0.50, 0.75}, {0.10, 0.40, 0.70}, {0.15, 0.30, 0.80}, {0.20, 0.55, 0.85}};
+    const u8 perms[][4] = {{0, 1, 2, 3}, {3, 2, 1, 0}, {0, 1, 3, 2}, {0, 3, 1, 2}, {1, 0, 2, 3}, {0, 2, 1, 3}};
+
+    int n_try = 0;
+    for (int ai = 0; ai < 8; ++ai) {
+        for (double beta : betas) {
+            for (int pi = 0; pi < 4; ++pi) {
+                for (int mi = 0; mi < 6; ++mi) {
+                    ++n_try;
+                    double a = alphas[ai], b0 = beta;
+                    auto gen = [&](int n) -> u8 {
+                        double x = b0 + (double)n * a;
+                        x -= std::floor(x);
+                        u8 lab = 3;
+                        if (x < parts[pi][0]) lab = 0;
+                        else if (x < parts[pi][1]) lab = 1;
+                        else if (x < parts[pi][2]) lab = 2;
+                        return perms[mi][lab];
+                    };
+                    Cube c{};
+                    int L = gen_acf_until(gen, cap, &c);
+                    std::ostringstream nm;
+                    nm << "rot " << aname[ai] << " b" << beta << " p" << pi << " m" << mi;
+                    consider(L, nm.str(), c, gen);
+                }
+            }
+        }
+    }
+    // Beatty: floor((n+1)α) mod 4
+    for (int ai = 0; ai < 8; ++ai) {
+        for (int off = 0; off < 4; ++off) {
+            ++n_try;
+            double a = alphas[ai] + 1.0;  // >1 so floor grows
+            auto gen = [&](int n) -> u8 { return (u8)(((int)std::floor((double)(n + 1) * a) + off) & 3); };
+            Cube c{};
+            int L = gen_acf_until(gen, cap, &c);
+            std::ostringstream nm;
+            nm << "beatty " << aname[ai] << "+1 off" << off;
+            consider(L, nm.str(), c, gen);
+        }
+    }
+    // Two mechanical bits → letter in {0,1,2,3}
+    const double phi = 0.5 * (std::sqrt(5.0) - 1.0);
+    const double s2 = std::sqrt(2.0) - 1.0;
+    for (int swap = 0; swap < 2; ++swap) {
+        ++n_try;
+        auto gen = [&](int n) -> u8 {
+            auto bit = [](double a, int n) {
+                int A = (int)std::floor((n + 1) * a);
+                int B = (int)std::floor(n * a);
+                return A - B;
+            };
+            int x = bit(phi, n), y = bit(s2, n);
+            if (swap) std::swap(x, y);
+            return (u8)(2 * x + y);
+        };
+        Cube c{};
+        int L = gen_acf_until(gen, cap, &c);
+        consider(L, swap ? "skew s2,phi" : "skew phi,s2", c, gen);
+    }
+    // 3-interval coding onto {0,1,2} and {0,1,3} (subalphabets).
+    const double cuts3[][2] = {{1.0 / 3.0, 2.0 / 3.0}, {0.2, 0.5}, {0.15, 0.7}};
+    const u8 labs3[][3] = {{0, 1, 2}, {0, 1, 3}, {0, 2, 3}, {1, 2, 3}};
+    for (int ai = 0; ai < 8; ++ai) {
+        for (double beta : betas) {
+            for (int pi = 0; pi < 3; ++pi) {
+                for (int li = 0; li < 4; ++li) {
+                    ++n_try;
+                    double a = alphas[ai], b0 = beta;
+                    auto gen = [&](int n) -> u8 {
+                        double x = b0 + (double)n * a;
+                        x -= std::floor(x);
+                        int lab = 2;
+                        if (x < cuts3[pi][0]) lab = 0;
+                        else if (x < cuts3[pi][1]) lab = 1;
+                        return labs3[li][lab];
+                    };
+                    Cube c{};
+                    int L = gen_acf_until(gen, cap, &c);
+                    std::ostringstream nm;
+                    nm << "rot3 " << aname[ai] << " b" << beta << " p" << pi << " L" << li;
+                    consider(L, nm.str(), c, gen);
+                }
+            }
+        }
+    }
+    std::cout << "rot_scan tries " << n_try << " cap " << cap << " best_acf " << best.L << " " << best.name
+              << " cube_i " << best.c.i << " d " << best.c.d << " prefix "
+              << to_string(best.prefix) << "\n";
+    if (!best.prefix.empty()) dump_word("data/rot_best.txt", best.prefix);
+}
+
 static void mode_inject_iter(int n0, int rounds, int r) {
     // Start from all ACF n0-mers. Each round: keep words that have >=2 ACF
     // r-letter extensions whose result still has q>=2. Count survivors.
@@ -2207,7 +2345,7 @@ int main(int argc, char** argv) {
             << "core_scan trie N | word FILE [pe] | suffix FILE k | updown FILE P | random D T seed |\n"
             << "  branch n R samples | findq1 N budget | inject n | basin | cass N | walk FILE |\n"
             << "  recgen CAP | grow2 D budget | beam D BEAM STYLE | mutate FILE samples extra stride |\n"
-            << "  inject_iter n0 rounds r | band n eps | delta FILE | env greedy|bt CAP C [budget] |\n"
+            << "  inject_iter n0 rounds r | band n eps | delta FILE | env greedy|bt CAP C [budget] | rot CAP |\n"
             << "  cycle n | detfsm | twocore n | drive n drv cap blind|legal | dscan | tmblocks lu lv cap lim\n";
         return 1;
     }
@@ -2283,6 +2421,8 @@ int main(int argc, char** argv) {
         double c = (argc > 4) ? std::atof(argv[4]) : 5.0;
         uint64_t bud = (argc > 5) ? std::strtoull(argv[5], nullptr, 10) : 2000000ull;
         mode_env(kind, cap, c, bud);
+    } else if (cmd == "rot") {
+        mode_rot((argc > 2) ? std::atoi(argv[2]) : 4000);
     } else if (cmd == "lcp") {
         mode_lcp();
     } else if (cmd == "macro") {

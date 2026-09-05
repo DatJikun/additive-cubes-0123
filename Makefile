@@ -98,6 +98,7 @@ test: bin/acf_tool bin/desub_scan bin/quotient_scan bin/triple_scan bin/template
 	./bin/core_scan band 8 0.25
 	./bin/core_scan env greedy 80 5
 	./bin/core_scan beam 16 32 4
+	./bin/core_scan rot 200
 	python3 python/core_verify.py
 
 clean:

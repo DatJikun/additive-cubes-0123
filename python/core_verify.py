@@ -635,6 +635,18 @@ def main():
         else:
             print("OK env greedy dual prefix", len(py))
 
+    # Beatty maximizer of the rotation scan: floor((n+1)√2)+1 mod 4, ACF 67, cube at 68.
+    import math
+
+    a = math.sqrt(2)
+    wb = [((int(math.floor((n + 1) * a)) + 1) & 3) for n in range(68)]
+    cb = find_cube(wb)
+    if find_cube(wb[:-1]) is not None or cb != (32, 12, 19):
+        print("FAIL beatty s2", find_cube(wb[:-1]), cb)
+        fails += 1
+    else:
+        print("OK rot Beatty √2 ACF 67 cube", cb)
+
     print("core_verify_fails", fails)
     if fails:
         sys.exit(1)
