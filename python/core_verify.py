@@ -420,6 +420,36 @@ def main():
     else:
         print("OK tm-drive n=8 cube", c8)
 
+    # Theorem AS: TM prefix uvvuvu of equal-length blocks is an additive cube of d=2|u|.
+    def tm_concat(u, v, nblocks, start=0):
+        w = []
+        for i in range(start, start + nblocks):
+            w.extend(v if bin(i).count("1") % 2 else u)
+        return w
+
+    u, v = [0, 0, 1], [0, 0, 2]
+    w = tm_concat(u, v, 6, 0)
+    c = find_cube(w)
+    if c is None or c[0] != 0 or c[1] != 6:
+        print("FAIL AS equal TM", w, c)
+        fails += 1
+    else:
+        print("OK Theorem AS uvvuvu d=6", c)
+    # Any equal lengths: sums of uv, vu, vu.
+    for L in (2, 3, 4, 5):
+        u = [0] * (L - 1) + [1]
+        v = [0] * (L - 1) + [2]
+        w = tm_concat(u, v, 6, 0)
+        S = [0]
+        for a in w:
+            S.append(S[-1] + a)
+        d = 2 * L
+        s1, s2, s3 = S[d] - S[0], S[2 * d] - S[d], S[3 * d] - S[2 * d]
+        if not (s1 == s2 == s3) or len(w) != 6 * L:
+            print("FAIL AS L", L, s1, s2, s3)
+            fails += 1
+    print("OK Theorem AS for L=2..5 (d=2L sums equal)")
+
     print("core_verify_fails", fails)
     if fails:
         sys.exit(1)

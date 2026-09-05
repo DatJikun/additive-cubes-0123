@@ -1407,13 +1407,99 @@ static void mode_drive_scan(int n, const std::string& drv, int cap, int nstarts)
               << best << " best_start " << bests << " cube_i " << best_i << " d " << best_d << "\n";
 }
 
+static std::vector<std::vector<u8>> all_acf_len(int n) {
+    std::vector<std::vector<u8>> out;
+    Builder b;
+    std::function<void()> rec = [&]() {
+        if (b.size() == n) {
+            out.push_back(b.w);
+            return;
+        }
+        for (int a = 0; a < 4; ++a)
+            if (b.try_push((u8)a)) {
+                rec();
+                b.pop();
+            }
+    };
+    rec();
+    return out;
+}
+
+static int tm_block_len(const std::vector<u8>& u, const std::vector<u8>& v, int cap, Cube* cube_out,
+                        uint64_t start, const std::string& drv) {
+    Builder b;
+    uint64_t i = start;
+    while (b.size() < cap) {
+        int bit = (drv == "pf") ? (__builtin_ctzll(i + 1) & 1) : (__builtin_popcountll(i) & 1);
+        const auto& blk = bit ? v : u;
+        ++i;
+        for (u8 a : blk) {
+            if (!b.try_push(a)) {
+                b.S.push_back(b.S.back() + a);
+                b.w.push_back(a);
+                auto c = find_cube_ending_at(b.S, b.size());
+                if (cube_out && c) *cube_out = *c;
+                return b.size();
+            }
+        }
+    }
+    return cap;
+}
+
+static void mode_tmblocks(int lu, int lv, int cap, int pair_limit, uint64_t start, const std::string& drv) {
+    auto U = all_acf_len(lu);
+    auto V = (lu == lv) ? U : all_acf_len(lv);
+    uint64_t ntry = 0, n_hit_cap = 0;
+    int best = 0, worst = 1 << 30;
+    std::string bestu, bestv, worstu, worstv;
+    Cube bestc{}, worstc{};
+    int ui_max = (int)U.size();
+    int vi_max = (int)V.size();
+    for (int i = 0; i < ui_max; ++i) {
+        for (int j = 0; j < vi_max; ++j) {
+            if (lu == lv && j == i) continue;
+            if (pair_limit > 0 && (int)ntry >= pair_limit) goto done;
+            ++ntry;
+            Cube c{};
+            int L = tm_block_len(U[i], V[j], cap, &c, start, drv);
+            if (L >= cap) {
+                ++n_hit_cap;
+                if (L >= best) {
+                    best = L;
+                    bestu = to_string(U[i]);
+                    bestv = to_string(V[j]);
+                    bestc = c;
+                }
+            } else {
+                if (L > best) {
+                    best = L;
+                    bestu = to_string(U[i]);
+                    bestv = to_string(V[j]);
+                    bestc = c;
+                }
+                if (L < worst) {
+                    worst = L;
+                    worstu = to_string(U[i]);
+                    worstv = to_string(V[j]);
+                    worstc = c;
+                }
+            }
+        }
+    }
+done:
+    std::cout << "tmblocks lu=" << lu << " lv=" << lv << " cap " << cap << " start " << start << " drv " << drv
+              << " pairs " << ntry << " hit_cap " << n_hit_cap << " best " << best << " u " << bestu << " v "
+              << bestv << " cube_i " << bestc.i << " d " << bestc.d << " worst "
+              << (worst == (1 << 30) ? 0 : worst) << " wu " << worstu << " wv " << worstv << "\n";
+}
+
 int main(int argc, char** argv) {
     if (argc < 2) {
         std::cerr
             << "core_scan trie N | word FILE [pe] | suffix FILE k | updown FILE P | random D T seed |\n"
             << "  branch n R samples | findq1 N budget | inject n | basin | cass N | walk FILE |\n"
             << "  recgen CAP | grow2 D budget | lcp | macro FILE L | look n R | ops n r |\n"
-            << "  cycle n | detfsm | twocore n | drive n drv cap blind|legal\n";
+            << "  cycle n | detfsm | twocore n | drive n drv cap blind|legal | dscan | tmblocks lu lv cap lim\n";
         return 1;
     }
     std::string cmd = argv[1];
@@ -1486,6 +1572,14 @@ int main(int argc, char** argv) {
         int cap = (argc > 4) ? std::atoi(argv[4]) : 2000;
         int ns = (argc > 5) ? std::atoi(argv[5]) : 200;
         mode_drive_scan(n, drv, cap, ns);
+    } else if (cmd == "tmblocks") {
+        int lu = (argc > 2) ? std::atoi(argv[2]) : 3;
+        int lv = (argc > 3) ? std::atoi(argv[3]) : lu;
+        int cap = (argc > 4) ? std::atoi(argv[4]) : 200;
+        int lim = (argc > 5) ? std::atoi(argv[5]) : 0;
+        uint64_t start = (argc > 6) ? std::strtoull(argv[6], nullptr, 10) : 0;
+        std::string drv = (argc > 7) ? argv[7] : "tm";
+        mode_tmblocks(lu, lv, cap, lim, start, drv);
     } else {
         std::cerr << "unknown cmd\n";
         return 1;

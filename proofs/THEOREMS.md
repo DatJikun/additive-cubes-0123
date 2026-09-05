@@ -453,6 +453,15 @@ Exhaustive starts: max ACF length is 22 (\(n=5\), 864 starts), 23 (\(n=6\), 3152
 
 Theorem AI does **not** imply Theorem AR: AI only forbids taking every path, including the periodic ones.
 
+## Theorem AS — equal-length Thue–Morse block coding is an additive cube
+**Status: PROVED** (elementary). Novelty: ELEMENTARY.
+
+Let \(u,v\) be any words of equal length \(L\ge 1\) over an integer alphabet. Let \(t_i\) be the Thue–Morse sequence \(t_i=\mathrm{popcount}(i)\bmod 2\), and let \(W\) be the concatenation that writes \(u\) for \(t_i=0\) and \(v\) for \(t_i=1\). The prefix of \(W\) of length \(6L\) is \(uvvuvu = (uv)(vu)(vu)\). The three blocks of length \(2L\) have equal sums. Hence \(W\) contains an additive cube of block length \(2L\) starting at 0.
+
+Independent check: `python/core_verify.py`. Census of ACF pairs of length 3 and 4 matches the bound \(6L\).
+
+This does **not** kill unequal-length pairs. Those were sampled computationally and died by length 30 for small lengths (`CORE_REPORT.md` §17).
+
 ---
 
 ## Corollary AH — Conjecture A is not a new lever

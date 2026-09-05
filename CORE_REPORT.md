@@ -296,3 +296,21 @@ python3 python/core_verify.py
 ```
 
 This kills last-n-letter branching automata driven by these three binary automatic sequences, for \(n\le 8\). It does not kill every transducer, every k>8, or every other driver.
+
+---
+
+## 17. Macro-letters: two ACF blocks coded by Thue–Morse
+
+**Equal length — Theorem AS, PROVED.** Novelty: ELEMENTARY.
+
+Thue–Morse on \(\{0,1\}\) begins `0,1,1,0,1,0`. Substituting blocks \(u,v\) of equal length \(L\) produces
+\[
+uv\,|\,vu\,|\,vu.
+\]
+The three blocks of length \(2L\) have sums \(\sum u+\sum v\), \(\sum v+\sum u\), \(\sum v+\sum u\). These are equal, so there is an additive cube of block length \(2L\) at the start, at letter-length \(6L\). This does not use that \(u,v\) are ACF. It kills **every** equal-length two-block TM coding, including a shift that still contains the factor `011010` (which TM does, at position 0). Offsets 1,3,5,7 of length-4 blocks still all die by length 28 (computational; the same identity may apply after a prefix).
+
+**Unequal length — COMPUTATIONALLY VERIFIED, not a theorem.** All ACF pairs of lengths \((3,5)\) (51840 pairs, six TM offsets), \((3,4)\), \((2,5)\), \((2,6)\), and samples of \((4,5)\), \((4,6)\), \((3,7)\): none reach length 40. Paperfold is worse. Best observed: 30.
+
+So the next finite-memory idea after letter automata — “take two safe blocks and play Thue–Morse” — also dies for small blocks. Larger unequal blocks are not exhausted.
+
+Reproduce: `./bin/core_scan tmblocks 3 3 50 0` (best 18 \(=6\cdot 3\)); `python3 python/core_verify.py` (Theorem AS).
