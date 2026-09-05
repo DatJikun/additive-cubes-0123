@@ -387,3 +387,26 @@ python3 python/core_verify.py
 ```
 
 Not claimed: a closed injection, positive entropy, or an infinite word. The unrestricted globally pruned 2-tree (every pair of legal letters, no cap) is still unrefuted and unproved.
+
+---
+
+## 20. Why the mean beam dies: affine \(\Delta\) (Theorem AW)
+
+The length-479 dead-end of the mean-balancing 2-tree, plus letter \(3\), is the prefix cube \((0,160,241)\). Prefix-sum discrepancy \(\Delta(n)=S(n)-\frac32 n\) takes values \(\Delta(160,320,480)=(1,2,3)\): a straight line. Equal block sums \(241\) are then automatic (Theorem AW). Dual Python.
+
+The same identity is why herding \(\lvert\mathrm{mean}-3/2\rvert\) is a death strategy: a nearly linear walk through the origin makes some even \(d\) complete a prefix cube. Bounded discrepancy of the infinite word is already Ardal; this is the **finite, one-scale** form.
+
+Discrepancy census (`core_scan delta`):
+
+| word | \(N\) | \(\max\lvert\Delta\rvert\) | affine hits | aff\(<2\) near-misses |
+|---|---|---|---|---|
+| mean-beam dead | 479 | **7** | 0 (still ACF) | 11 |
+| two-smallest, close cap, alive 500 | 500 | **9** | 0 | 10 |
+| high-disc beam s2 | 500 | **412** | — | — |
+| Up-and-Down \(p=2000\) | 400000 | **3199.5** | 0 | **2** |
+
+The long archive lives by keeping \(\Delta\) large and non-affine. The Cesàro-capped 2-tree does the opposite.
+
+**High-discrepancy 2-tree (styles 2–3), cap 4096:** alive at 500, mean \(\approx 0.67\), no 480 collapse, \(q_2\) stays thousands. Prefix `00100100200100200100…`, LCP 14 with the known fixed-order greedy archive (then they diverge; LCP 130 between s2 and s3). Dual Python: both dumps ACF. This is the 0-heavy greedy basin, not a new morphism. Fixed-order already died at 24396. Do not read “alive at 500 with mean 0.67” as an infinite word.
+
+Reproduce: `./bin/core_scan delta data/beam_dead_s1.txt`; `./bin/core_scan beam 500 4096 2`; `python3 python/core_verify.py`.

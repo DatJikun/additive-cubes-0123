@@ -1,5 +1,11 @@
 # Research Log
 
+## 2026-09-05 — affine discrepancy cubes / high-disc 2-tree
+
+Mission: explain the mean-beam extinction; try the opposite 2-tree. Do **not** repeat TM 2-cores, equal TM blocks, S-adic samples, sofic all-paths.
+
+Proved: affine \(\Delta\) at \(\{d,2d,3d\}\) is an additive cube (Thm AW, elementary). Mean-beam dead-end + `3` is \(\Delta=(1,2,3)\) at scale 160. Computationally: 400k archive \(\max\lvert\Delta\rvert=3199.5\), 0 affine hits; mean-beam \(\max\lvert\Delta\rvert=7\). High-disc beams survive 500 in the 0-heavy greedy basin (H42), not a new core. Dual Python. Infinite problem still open.
+
 ## 2026-09-05 — two-operator injection / globally pruned 2-tree
 
 Mission: a composing pair \(E_0,E_1\) or a closed 2-injection, else a hard obstruction. Do **not** rediscover unique-vote, B(m), TM n-mer 2-cores, equal-length TM blocks, S-adic samples.

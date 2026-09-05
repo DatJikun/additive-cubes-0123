@@ -246,3 +246,6 @@ The characteristic sequence of \(\{n:S(2n)=2S(n)\}\) has 2-kernel fingerprints s
 
 ## H41. Unused legal letters of a long Up-and-Down word are equally good continuations
 **Status:** KILLED. 133 alternative letters at 80 \(q\ge 2\) positions in the first 25000 letters of the period-2000 archive: all die under balanced greedy, mean extra length 46.6, max 156.
+
+## H42. A 2-tree that maximises \(\lvert\mathrm{mean}-3/2\rvert\) is a new infinite ACF generator
+**Status:** KILLED as a *new* generator. Styles 2–3 survive 500 with mean \(\approx 0.67\) and \(\max\lvert\Delta\rvert\approx 412\), but the prefix is the 0-heavy greedy family (LCP 14 with `word_fixed_p1000`), already known to die at 24396. The useful fact is the contrast with H40: far-from-\(3/2\) avoids the affine-\(\Delta\) wall; it does not produce a core.

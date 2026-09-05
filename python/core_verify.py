@@ -527,7 +527,8 @@ def main():
         print("OK 2tree depth 14 frontier", len(frontier), "no death yet")
 
     for path in ("data/beam_word.txt", "data/inject_word.txt", "data/beam_word_s0.txt", "data/beam_word_s1.txt",
-                 "data/beam_dead_s1.txt", "data/beam_dead_s0.txt"):
+                 "data/beam_dead_s1.txt", "data/beam_dead_s0.txt", "data/beam_word_s2.txt",
+                 "data/beam_word_s3.txt"):
         if not os.path.exists(path):
             continue
         w = load_digits(path)

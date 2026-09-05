@@ -479,6 +479,24 @@ Let \(B_8\) be the ACF 8-mers with \(\lvert(\sum w)/8-3/2\rvert\le 1/4\). \(|B_8
 
 This does not speak to infinite words (Conjecture C5 is only for infinite Cesàro means).
 
+## Theorem AW — affine prefix-sum discrepancy at \(\{d,2d,3d\}\) is an additive cube
+**Status: PROVED** (elementary). Novelty: ELEMENTARY (finite aligned form of a linear walk; not Ardal).
+
+Let \(S\) be the prefix-sum function of a finite word and \(\Delta(n)=S(n)-\frac32 n\). For any block length \(d\ge 1\) the three consecutive block sums of length \(d\) starting at 0 satisfy
+\[
+s_1-s_2 = 2\Delta(d)-\Delta(2d),\qquad s_2-s_3 = 2\Delta(2d)-\Delta(d)-\Delta(3d).
+\]
+If both right-hand sides have absolute value \(<1\), then \(s_1=s_2=s_3\) as integers, so the prefix of length \(3d\) is an additive cube.
+
+Two special cases used in the beam:
+
+1. Even \(d\) and \(\lvert\Delta\rvert<1/3\) at \(d,2d,3d\). Then each \(\Delta\) is an integer of modulus \(<1/3\), hence \(0\), and the prefix lies on the line \(\frac32 n\).
+2. \(\Delta(kd)=k\alpha\) for \(k=1,2,3\) (any slope \(\alpha\)). Then both identities vanish. A slowly drifting **constant** mean, not only mean exactly \(\frac32\), already cubes.
+
+Witness: the length-479 mean-beam dead-end, appended \(3\), cube \((i,d,\mathrm{sum})=(0,160,241)\). Here \(\Delta(160,320,480)=(1,2,3)\). Dual Python.
+
+This does **not** forbid infinite ACF words: Cassaigne and the 400k Up-and-Down archive have large \(\Delta\) that is not affine at those triples (400k word: \(\max\lvert\Delta\rvert=3199.5\), zero affine hits, two near-misses). It **does** explain why a 2-tree that herds \(\lvert\mathrm{mean}-3/2\rvert\) to zero dies around length \(400\)–\(480\): \(\Delta\) becomes nearly linear, some even \(d\) completes a prefix cube.
+
 ---
 
 ## Corollary AH — Conjecture A is not a new lever
