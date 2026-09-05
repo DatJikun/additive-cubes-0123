@@ -13,6 +13,11 @@
 - **Nested palindrome / doubling templates from short seeds:** die (Theorem AO).
 - **Up-and-Down as a nested block recurrence:** false (Theorem AP).
 
+- **Equal-length two-block Thue–Morse:** always an additive cube at length \(6L\) (Theorem AS).
+- **Binary drivers with the factor \(000\):** always the ordinary cube \(uuu\) (Theorem AT). Period-doubling and Rudin–Shapiro are strictly worse than Thue–Morse.
+- **Unequal small blocks + Fib/PD/RS:** all die by length 30.
+- **Two random 3-uniform morphisms directed by period-doubling (S-adic):** best ACF prefix **243** in 16k trials, cube at 729. Dual Python. Not an infinite word.
+
 No infinite ACF word was constructed. No positive-entropy theorem was proved. The infinite problem remains **open**.
 
 What remains unkilled as a core: a *different* finite state than last-n letters (danger profiles with a genuine invariant, graph-directed substitutions with a boundary-cube certificate, two-operators on a proper subset closed by something other than the n-mer 2-core), or unbounded memory.
@@ -314,3 +319,24 @@ The three blocks of length \(2L\) have sums \(\sum u+\sum v\), \(\sum v+\sum u\)
 So the next finite-memory idea after letter automata — “take two safe blocks and play Thue–Morse” — also dies for small blocks. Larger unequal blocks are not exhausted.
 
 Reproduce: `./bin/core_scan tmblocks 3 3 50 0` (best 18 \(=6\cdot 3\)); `python3 python/core_verify.py` (Theorem AS).
+
+---
+
+## 18. Other drivers, three blocks, S-adic
+
+**Theorem AT — PROVED, elementary.** If a binary driving sequence contains the factor \(000\), the two-block coding contains the ordinary cube \(uuu\). Rudin–Shapiro begins \(000\); every ACF pair of 3-mers dies at length 9. Period-doubling contains \(000\) (positions 2–4). Any driver with cubes of the index word is strictly weaker than Thue–Morse, which is overlap-free.
+
+**Fibonacci / period-doubling / Rudin–Shapiro on unequal lengths (3,5), all 51840 ACF pairs:** max 24, 17, 9. No survivor to 40.
+
+**Three ACF blocks + greedy ternary cubefree index:** the greedy index itself stuck at length 26; 6000 triples of lengths 3,4,5: best 19.
+
+**Return words** of `01` in the 400k Up-and-Down word: 9373 distinct returns (not a finite macro-alphabet). Concatenating the two most frequent with Fib/PD/RS cubes by length 9.
+
+**S-adic (two random k-uniform morphisms, period-doubling chooses which to apply).** 20k trials k=2: best ACF prefix 64. 16k trials k=3: best **243**, then cube at 729, maps
+```
+h0: 0→002, 1→132, 2→012, 3→133
+h1: 0→002, 1→211, 2→231, 3→210
+```
+Dual Python: length 243 ACF, cube at 729 is \((i,d,\mathrm{sum})=(2,19,22)\). This is a finite recursive generator. It is **not** an infinite ACF word. It is shorter than the known backtracking archives.
+
+The two-operator / growth-rate proof was not obtained: no closed injection \(E_0,E_1\) that composes indefinitely was found.

@@ -450,6 +450,54 @@ def main():
             fails += 1
     print("OK Theorem AS for L=2..5 (d=2L sums equal)")
 
+    # Theorem AT: driver 000 => block cube uuu.
+    u, v = [0, 0, 1], [0, 1, 2]
+    w = u + u + u
+    c = find_cube(w)
+    if c is None:
+        print("FAIL AT uuu")
+        fails += 1
+    else:
+        print("OK Theorem AT uuu d", c[1])
+
+    # S-adic k=3 PD maximizer: ACF at 243, cube at 729.
+    h0 = {0: [0, 0, 2], 1: [1, 3, 2], 2: [0, 1, 2], 3: [1, 3, 3]}
+    h1 = {0: [0, 0, 2], 1: [2, 1, 1], 2: [2, 3, 1], 3: [2, 1, 0]}
+
+    def pd_bit(n):
+        flips = 0
+        while n & 1:
+            flips ^= 1
+            n >>= 1
+        return flips
+
+    w = [0]
+    for depth in range(5):
+        h = h1 if pd_bit(depth) else h0
+        nxt = []
+        for a in w:
+            nxt.extend(h[a])
+        if find_cube(nxt) is not None:
+            print("FAIL sadic cubed before 243 at", len(nxt), find_cube(nxt))
+            fails += 1
+            break
+        w = nxt
+    if len(w) != 243 or find_cube(w) is not None:
+        print("FAIL sadic 243", len(w), find_cube(w))
+        fails += 1
+    else:
+        print("OK sadic ACF 243")
+    h = h1 if pd_bit(5) else h0
+    nxt = []
+    for a in w:
+        nxt.extend(h[a])
+    c = find_cube(nxt)
+    if c is None or len(nxt) != 729:
+        print("FAIL sadic 729", len(nxt), c)
+        fails += 1
+    else:
+        print("OK sadic cube at 729", c)
+
     print("core_verify_fails", fails)
     if fails:
         sys.exit(1)

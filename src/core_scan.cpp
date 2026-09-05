@@ -13,6 +13,7 @@
 #include <map>
 #include <random>
 #include <set>
+#include <sstream>
 #include <unordered_map>
 #include <unordered_set>
 using namespace acf;
@@ -1425,12 +1426,40 @@ static std::vector<std::vector<u8>> all_acf_len(int n) {
     return out;
 }
 
+static int seq_bit(const std::string& drv, uint64_t n) {
+    if (drv == "pf") return __builtin_ctzll(n + 1) & 1;
+    if (drv == "rs") {
+        int b = 0;
+        uint64_t x = n;
+        while (x) {
+            if ((x & 3ull) == 3ull) b ^= 1;
+            x >>= 1;
+        }
+        return b;
+    }
+    if (drv == "pd") {
+        int flips = 0;
+        while (n & 1ull) {
+            flips ^= 1;
+            n >>= 1;
+        }
+        return flips;
+    }
+    if (drv == "fib") {
+        const double phi = 1.6180339887498948482;
+        int a = (int)std::floor((n + 1) * phi);
+        int b = (int)std::floor(n * phi);
+        return a - b - 1;
+    }
+    return __builtin_popcountll(n) & 1;  // tm
+}
+
 static int tm_block_len(const std::vector<u8>& u, const std::vector<u8>& v, int cap, Cube* cube_out,
                         uint64_t start, const std::string& drv) {
     Builder b;
     uint64_t i = start;
     while (b.size() < cap) {
-        int bit = (drv == "pf") ? (__builtin_ctzll(i + 1) & 1) : (__builtin_popcountll(i) & 1);
+        int bit = seq_bit(drv, i);
         const auto& blk = bit ? v : u;
         ++i;
         for (u8 a : blk) {
@@ -1491,6 +1520,214 @@ done:
               << " pairs " << ntry << " hit_cap " << n_hit_cap << " best " << best << " u " << bestu << " v "
               << bestv << " cube_i " << bestc.i << " d " << bestc.d << " worst "
               << (worst == (1 << 30) ? 0 : worst) << " wu " << worstu << " wv " << worstv << "\n";
+}
+
+static std::vector<u8> greedy_cubefree_ternary(int n) {
+    std::vector<u8> w;
+    for (int i = 0; i < n; ++i) {
+        bool placed = false;
+        for (u8 a = 0; a < 3; ++a) {
+            w.push_back(a);
+            bool cube = false;
+            int N = (int)w.size();
+            for (int d = 1; 3 * d <= N && !cube; ++d) {
+                bool eq = true;
+                for (int t = 0; t < d; ++t) {
+                    if (w[N - d + t] != w[N - 2 * d + t] || w[N - d + t] != w[N - 3 * d + t]) {
+                        eq = false;
+                        break;
+                    }
+                }
+                if (eq) cube = true;
+            }
+            if (!cube) {
+                placed = true;
+                break;
+            }
+            w.pop_back();
+        }
+        if (!placed) break;
+    }
+    return w;
+}
+
+static int concat_blocks(Builder& b, const std::vector<u8>& blk) {
+    for (u8 a : blk) {
+        if (!b.try_push(a)) return 0;
+    }
+    return 1;
+}
+
+static void mode_triblocks(int l0, int l1, int l2, int cap, int pair_limit) {
+    auto A0 = all_acf_len(l0);
+    auto A1 = all_acf_len(l1);
+    auto A2 = all_acf_len(l2);
+    auto T = greedy_cubefree_ternary(80);
+    std::cout << "ternary_cubefree_len " << T.size() << " prefix ";
+    for (int i = 0; i < std::min(24, (int)T.size()); ++i) std::cout << (int)T[i];
+    std::cout << "\n";
+    uint64_t ntry = 0, n_hit = 0;
+    int best = 0;
+    std::string b0, b1, b2;
+    Cube bc{};
+    int n0 = (int)A0.size(), n1 = (int)A1.size(), n2 = (int)A2.size();
+    for (int i = 0; i < n0; ++i) {
+        for (int j = 0; j < n1; ++j) {
+            for (int k = 0; k < n2; ++k) {
+                if (pair_limit > 0 && (int)ntry >= pair_limit) goto done;
+                ++ntry;
+                const std::vector<u8>* B[3] = {&A0[i], &A1[j], &A2[k]};
+                Builder b;
+                Cube c{};
+                int died = 0;
+                for (u8 t : T) {
+                    for (u8 a : *B[t]) {
+                        if (!b.try_push(a)) {
+                            b.S.push_back(b.S.back() + a);
+                            b.w.push_back(a);
+                            auto cc = find_cube_ending_at(b.S, b.size());
+                            if (cc) c = *cc;
+                            died = b.size();
+                            goto after;
+                        }
+                    }
+                    if (b.size() >= cap) break;
+                }
+            after:
+                int L = died ? died : b.size();
+                if (!died && L >= cap) ++n_hit;
+                if (L > best) {
+                    best = L;
+                    b0 = to_string(A0[i]);
+                    b1 = to_string(A1[j]);
+                    b2 = to_string(A2[k]);
+                    bc = c;
+                }
+            }
+        }
+    }
+done:
+    std::cout << "triblocks " << l0 << "," << l1 << "," << l2 << " cap " << cap << " pairs " << ntry
+              << " hit_cap " << n_hit << " best " << best << " b0 " << b0 << " b1 " << b1 << " b2 " << b2
+              << " cube_i " << bc.i << " d " << bc.d << "\n";
+}
+
+static void mode_returns(const char* path, const char* marker, int cap) {
+    auto w = load_word(path);
+    std::string m = marker;
+    int k = (int)m.size();
+    std::vector<int> pos;
+    for (int i = 0; i + k <= (int)w.size(); ++i) {
+        bool ok = true;
+        for (int t = 0; t < k; ++t)
+            if (char('0' + w[i + t]) != m[t]) {
+                ok = false;
+                break;
+            }
+        if (ok) pos.push_back(i);
+    }
+    std::map<std::string, int> freq;
+    std::map<std::string, std::map<std::string, int>> trans;
+    std::vector<std::string> rets;
+    for (size_t j = 0; j + 1 < pos.size(); ++j) {
+        int a = pos[j], b = pos[j + 1];
+        std::string r;
+        r.reserve(b - a);
+        for (int t = a; t < b; ++t) r.push_back(char('0' + w[t]));
+        freq[r]++;
+        rets.push_back(r);
+        if (j + 2 < pos.size()) {
+            std::string s;
+            for (int t = pos[j + 1]; t < pos[j + 2]; ++t) s.push_back(char('0' + w[t]));
+            trans[r][s]++;
+        }
+    }
+    std::cout << "returns marker " << m << " N " << w.size() << " occ " << pos.size() << " distinct "
+              << freq.size() << "\n";
+    std::vector<std::pair<int, std::string>> top;
+    for (auto& kv : freq) top.push_back({kv.second, kv.first});
+    std::sort(top.begin(), top.end(), std::greater<>());
+    int take = std::min(8, (int)top.size());
+    std::cout << "top";
+    for (int i = 0; i < take; ++i)
+        std::cout << " " << top[i].second.size() << ":" << top[i].first << ":" << top[i].second.substr(0, 20);
+    std::cout << "\n";
+    if (take < 2) return;
+    auto to_blk = [](const std::string& s) {
+        std::vector<u8> v;
+        for (char c : s) v.push_back((u8)(c - '0'));
+        return v;
+    };
+    // Drive the two most frequent of different lengths if possible, else top two.
+    int i0 = 0, i1 = 1;
+    for (int i = 1; i < take; ++i)
+        if ((int)top[i].second.size() != (int)top[0].second.size()) {
+            i1 = i;
+            break;
+        }
+    Cube c{};
+    int Ltm = tm_block_len(to_blk(top[i0].second), to_blk(top[i1].second), cap, &c, 0, "fib");
+    std::cout << "return_fib bestpair lens " << top[i0].second.size() << "," << top[i1].second.size()
+              << " acf_until " << Ltm << " cube_i " << c.i << " d " << c.d << "\n";
+    Ltm = tm_block_len(to_blk(top[i0].second), to_blk(top[i1].second), cap, &c, 0, "pd");
+    std::cout << "return_pd acf_until " << Ltm << " cube_i " << c.i << " d " << c.d << "\n";
+    Ltm = tm_block_len(to_blk(top[i0].second), to_blk(top[i1].second), cap, &c, 0, "rs");
+    std::cout << "return_rs acf_until " << Ltm << " cube_i " << c.i << " d " << c.d << "\n";
+}
+
+static std::array<std::vector<u8>, 4> rand_morph(std::mt19937_64& rng, int k) {
+    std::array<std::vector<u8>, 4> h;
+    std::uniform_int_distribution<int> d(0, 3);
+    for (int a = 0; a < 4; ++a) {
+        h[a].resize(k);
+        for (int t = 0; t < k; ++t) h[a][t] = (u8)d(rng);
+        if (a == 0) h[0][0] = 0;  // prolongable-ish
+    }
+    return h;
+}
+
+static void mode_sadic(int k, int trials, int cap, uint64_t seed) {
+    std::mt19937_64 rng(seed);
+    int best = 0, n_hit = 0;
+    std::string report;
+    for (int t = 0; t < trials; ++t) {
+        auto h0 = rand_morph(rng, k);
+        auto h1 = rand_morph(rng, k);
+        // W_{n+1} = h_{pd(n)}(W_n), start 0, until length cap or cube
+        std::vector<u8> w = {0};
+        int depth = 0;
+        int acf_ok = (int)w.size();
+        int died = 0;
+        Cube c{};
+        while ((int)w.size() < cap && depth < 16) {
+            int bit = seq_bit("pd", (uint64_t)depth);
+            const auto& h = bit ? h1 : h0;
+            std::vector<u8> nxt;
+            nxt.reserve(w.size() * k);
+            for (u8 a : w) nxt.insert(nxt.end(), h[a].begin(), h[a].end());
+            if (!is_acf(nxt)) {
+                auto cc = find_cube(nxt);
+                if (cc) c = *cc;
+                died = (int)nxt.size();
+                break;
+            }
+            w.swap(nxt);
+            acf_ok = (int)w.size();
+            ++depth;
+        }
+        int L = acf_ok;
+        if (!died && acf_ok >= cap) ++n_hit;
+        if (L > best) {
+            best = L;
+            std::ostringstream oss;
+            oss << "depth " << depth << " died " << died << " i=" << c.i << " d=" << c.d << " h0 ";
+            for (int a = 0; a < 4; ++a) oss << to_string(h0[a]) << (a < 3 ? "," : " h1 ");
+            for (int a = 0; a < 4; ++a) oss << to_string(h1[a]) << (a < 3 ? "," : "");
+            report = oss.str();
+        }
+    }
+    std::cout << "sadic k=" << k << " trials " << trials << " cap " << cap << " hit_cap " << n_hit << " best "
+              << best << " " << report << "\n";
 }
 
 int main(int argc, char** argv) {
@@ -1580,6 +1817,24 @@ int main(int argc, char** argv) {
         uint64_t start = (argc > 6) ? std::strtoull(argv[6], nullptr, 10) : 0;
         std::string drv = (argc > 7) ? argv[7] : "tm";
         mode_tmblocks(lu, lv, cap, lim, start, drv);
+    } else if (cmd == "triblocks") {
+        int a = std::atoi(argv[2]);
+        int b = std::atoi(argv[3]);
+        int c = std::atoi(argv[4]);
+        int cap = (argc > 5) ? std::atoi(argv[5]) : 200;
+        int lim = (argc > 6) ? std::atoi(argv[6]) : 8000;
+        mode_triblocks(a, b, c, cap, lim);
+    } else if (cmd == "returns") {
+        const char* path = argv[2];
+        const char* mk = (argc > 3) ? argv[3] : "01";
+        int cap = (argc > 4) ? std::atoi(argv[4]) : 500;
+        mode_returns(path, mk, cap);
+    } else if (cmd == "sadic") {
+        int k = (argc > 2) ? std::atoi(argv[2]) : 2;
+        int tr = (argc > 3) ? std::atoi(argv[3]) : 3000;
+        int cap = (argc > 4) ? std::atoi(argv[4]) : 512;
+        uint64_t seed = (argc > 5) ? std::strtoull(argv[5], nullptr, 10) : 1;
+        mode_sadic(k, tr, cap, seed);
     } else {
         std::cerr << "unknown cmd\n";
         return 1;

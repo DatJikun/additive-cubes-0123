@@ -462,6 +462,16 @@ Independent check: `python/core_verify.py`. Census of ACF pairs of length 3 and 
 
 This does **not** kill unequal-length pairs. Those were sampled computationally and died by length 30 for small lengths (`CORE_REPORT.md` §17).
 
+## Theorem AT — a \(000\) in the driver is the cube \(uuu\)
+**Status: PROVED** (elementary). Novelty: ELEMENTARY.
+
+If a binary sequence contains three consecutive 0s (resp. 1s), the two-block coding \(0\mapsto u\), \(1\mapsto v\) contains the ordinary cube \(uuu\) (resp. \(vvv\)). Rudin–Shapiro begins \(000\). Period-doubling contains \(000\). Overlap-free drivers (Thue–Morse) avoid this; they still fail for equal \(|u|=|v|\) by Theorem AS.
+
+## Theorem AU — a period-doubling S-adic pair of 3-uniform maps cubes at 729
+**Status: COMPUTATIONALLY VERIFIED.** Novelty: COMPUTATIONALLY VERIFIED sample, not exhaustive.
+
+Maps \(h_0\colon 0\mapsto 002,1\mapsto 132,2\mapsto 012,3\mapsto 133\) and \(h_1\colon 0\mapsto 002,1\mapsto 211,2\mapsto 231,3\mapsto 210\), directive period-doubling, seed 0: the iterate of length 243 is ACF; the next iterate of length 729 has cube \((2,19,22)\). Dual Python. 16k random 3-uniform pairs: none beat 243 as an ACF prefix. Not an infinite word.
+
 ---
 
 ## Corollary AH — Conjecture A is not a new lever

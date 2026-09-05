@@ -31,4 +31,9 @@ OK n=38 four extensions cube
 OK n=28 q=1
 OK tm-drive n=6 cube (6, 5, 4)
 OK tm-drive n=8 cube (7, 9, 8)
+OK Theorem AS uvvuvu d=6 (0, 6, 3)
+OK Theorem AS for L=2..5 (d=2L sums equal)
+OK Theorem AT uuu d 3
+OK sadic ACF 243
+OK sadic cube at 729 (2, 19, 22)
 core_verify_fails 0

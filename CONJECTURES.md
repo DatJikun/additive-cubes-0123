@@ -68,7 +68,7 @@ There exists a Lipschitz f:ℕ→ℤ whose graph has no 3-AP.
 ---
 
 ## C17. A finite-memory self-sustaining core of the ACF language exists
-**Status:** The *all-paths* version is KILLED (Theorem AI, elementary, already known). The *aperiodic k-mer 2-core + Thue–Morse* version is KILLED computationally for \(n\le 8\) (Theorem AR, max length 37). Other finite states are OPEN.
+**Status:** The *all-paths* version is KILLED (Theorem AI, elementary, already known). The *aperiodic k-mer 2-core + Thue–Morse* version is KILLED computationally for \(n\le 8\) (Theorem AR, max length 37). Equal-length two-block Thue–Morse coding is KILLED for every length (Theorem AS). Unequal small blocks die computationally by length 30. Other finite states are OPEN.
 
 ## C18. Every ACF word of length \(\ge N\) has \(q(w)\ge 2\)
 **Status:** KILLED (\(N=8\) already fails). See Theorem AL.
