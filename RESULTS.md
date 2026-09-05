@@ -112,11 +112,14 @@ A 400,000-letter Up-and-Down word (period 2000) contains every ACF factor of len
 - No progress on Green’s Problem 15 (additive squares / 3-APs).
 - The universal unaligned letter-desubstitution theorem is false; see `DESUBSTITUTION_REPORT.md` (Theorems J, K, L).
 - No force-cubes theorem for non-affine uniform morphisms. Krylov escape and CCSS-style length templates do not supply one (`TEMPLATE_REPORT.md`, Theorems V–Z). The remaining bottleneck is whether an *automatic* 4-letter numerical word can avoid \(E_\sigma\)-cubes.
-- No finite-memory self-sustaining core: Theorems AI–AK. Isolated \(q=1\) from length 8; length-14 dead-ends are leaves with live siblings; Up-and-Down is not a nested recurrence (`CORE_REPORT.md`).
+- All-paths finite graphs cannot be ACF cores (Theorem AI, elementary). The ACF n-mer 2-core driven by Thue–Morse is an aperiodic finite-state generator and cubes by length 37 for every start at \(n\le 8\) (Theorem AR). Isolated \(q=1\) from length 8; length-14 dead-ends are leaves; Up-and-Down is not a nested recurrence (`CORE_REPORT.md`).
 
 ### NEW 6. No all-paths finite-state ACF core
-**Class:** PROVED (elementary periodic points) plus computational kills of operators/templates. Not an infinite word.
+**Class:** PROVED (elementary periodic points). Already implicit in Theorem A. Not a new infinite-word obstruction for aperiodic generators.
+
+### NEW 7. Thue–Morse on the ACF n-mer 2-core dies by length 37
+**Class:** COMPUTATIONALLY VERIFIED (Theorem AR). Exhaustive starts for \(n=5,6,7,8\). Dual C++/Python witnesses. This *is* an aperiodic finite-state generator extracted from the finite language, and it is not a core.
 
 ## Status of the original problem
 
-**Still open.** Finite-state geometry cannot certify global ACF. Unbounded-memory search and large morphisms remain.
+**Still open.** Last-n-letter 2-core + Thue–Morse is not a core. Other finite states and unbounded-memory search remain.

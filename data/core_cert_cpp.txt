@@ -41,3 +41,9 @@ lookahead n=8 R=2 tot 42070 surv 42070 branch2 42070 dead 0
 === ops 5 1 ===
 operators n=5 r=1 n_words 864 n_ops 4
 no_uniform_pair best_ok 726 / 864 ops 0 3
+drive n=6 drv=tm var=blind twocore 3152 start 001001 cap 100
+CUBE at 21 i=6 d=5 steps 15 word 001001021010031002011
+drive n=8 drv=tm var=blind twocore 41998 start 00100100 cap 100
+CUBE at 34 i=7 d=9 steps 26 word 0010010021101003100201103002011013
+scan n=8 drv=tm starts 41998 cap 80 best_len 37 best_start 00131022 cube_i 14 d 8
+n 8 nodes 42070 out0 0 out1 72 twocore 41998

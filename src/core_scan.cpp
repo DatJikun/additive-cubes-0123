@@ -1180,13 +1180,240 @@ static void mode_detfsm() {
               << n_alive100 << " max_acf_prefix " << max_acf << "\n";
 }
 
+static uint64_t pack_word(const std::vector<u8>& w, int i, int k) {
+    uint64_t x = 0;
+    for (int t = 0; t < k; ++t) x = (x << 2) | w[i + t];
+    return x;
+}
+
+struct NmerGraph {
+    int n = 0;
+    std::vector<std::vector<u8>> nodes;
+    std::vector<std::vector<std::pair<u8, int>>> adj;  // letter, next node
+    std::vector<char> in2core;
+};
+
+static NmerGraph build_nmer_graph(int n) {
+    NmerGraph G;
+    G.n = n;
+    Builder b;
+    std::function<void()> rec = [&]() {
+        if (b.size() == n) {
+            G.nodes.push_back(b.w);
+            return;
+        }
+        for (int a = 0; a < 4; ++a)
+            if (b.try_push((u8)a)) {
+                rec();
+                b.pop();
+            }
+    };
+    rec();
+    std::unordered_map<uint64_t, int> idx;
+    idx.reserve(G.nodes.size() * 2);
+    for (int i = 0; i < (int)G.nodes.size(); ++i) idx[pack_word(G.nodes[i], 0, n)] = i;
+    G.adj.resize(G.nodes.size());
+    for (int i = 0; i < (int)G.nodes.size(); ++i) {
+        Builder B;
+        for (u8 a : G.nodes[i]) B.try_push(a);
+        for (int a = 0; a < 4; ++a) {
+            if (!B.try_push((u8)a)) continue;
+            uint64_t q = pack_word(B.w, 1, n);
+            auto it = idx.find(q);
+            if (it != idx.end()) G.adj[i].push_back({(u8)a, it->second});
+            B.pop();
+        }
+    }
+    std::vector<char> alive(G.nodes.size(), 1);
+    bool changed = true;
+    while (changed) {
+        changed = false;
+        for (int i = 0; i < (int)G.nodes.size(); ++i) {
+            if (!alive[i]) continue;
+            int od = 0;
+            for (auto& e : G.adj[i])
+                if (alive[e.second]) ++od;
+            if (od < 2) {
+                alive[i] = 0;
+                changed = true;
+            }
+        }
+    }
+    G.in2core = std::move(alive);
+    return G;
+}
+
+static int twocore_count(const NmerGraph& G) {
+    int c = 0;
+    for (char x : G.in2core) c += x;
+    return c;
+}
+
+static int driver_bit(const std::string& drv, uint64_t i) {
+    if (drv == "tm") return __builtin_popcountll(i) & 1;
+    if (drv == "pf") {
+        uint64_t x = i + 1;
+        return __builtin_ctzll(x) & 1;
+    }
+    if (drv == "sturm") {
+        // mechanical word of golden ratio
+        const double phi = 1.6180339887498948482;
+        int a = (int)((i + 1) * (phi - 1.0));
+        int b = (int)(i * (phi - 1.0));
+        return a - b;
+    }
+    return (int)(i & 1);  // period-2, will cube; control
+}
+
+static void mode_twocore(int n) {
+    auto G = build_nmer_graph(n);
+    int n2 = twocore_count(G);
+    int n1 = 0, n0 = 0;
+    for (int i = 0; i < (int)G.nodes.size(); ++i) {
+        int od = (int)G.adj[i].size();
+        if (od == 0) ++n0;
+        if (od == 1) ++n1;
+    }
+    std::cout << "n " << n << " nodes " << G.nodes.size() << " out0 " << n0 << " out1 " << n1 << " twocore "
+              << n2 << "\n";
+}
+
+static void mode_drive(int n, const std::string& drv, int cap, const char* variant) {
+    // variant "blind": follow 2-core edges, stop at first global cube
+    // variant "legal": among globally legal letters, prefer 2-core, TM-select
+    auto G = build_nmer_graph(n);
+    int n2 = twocore_count(G);
+    int start = -1;
+    for (int i = 0; i < (int)G.nodes.size(); ++i)
+        if (G.in2core[i]) {
+            start = i;
+            break;
+        }
+    std::cout << "drive n=" << n << " drv=" << drv << " var=" << variant << " twocore " << n2 << " start "
+              << (start < 0 ? "-" : to_string(G.nodes[start])) << " cap " << cap << "\n";
+    if (start < 0) {
+        std::cout << "empty_2core\n";
+        return;
+    }
+    std::unordered_map<uint64_t, int> idx;
+    idx.reserve(G.nodes.size() * 2);
+    for (int i = 0; i < (int)G.nodes.size(); ++i) idx[pack_word(G.nodes[i], 0, n)] = i;
+
+    Builder b;
+    for (u8 a : G.nodes[start]) b.try_push(a);
+    int v = start;
+    uint64_t step = 0;
+    if (std::string(variant) == "blind") {
+        while (b.size() < cap) {
+            std::vector<std::pair<u8, int>> opts;
+            for (auto& e : G.adj[v])
+                if (G.in2core[e.second]) opts.push_back(e);
+            if (opts.empty()) {
+                std::cout << "stuck_graph at " << b.size() << "\n";
+                return;
+            }
+            int bit = driver_bit(drv, step++);
+            auto e = opts[bit % (int)opts.size()];
+            if (!b.try_push(e.first)) {
+                // try_push already popped; reconstruct the cube on the rejected letter
+                b.S.push_back(b.S.back() + e.first);
+                b.w.push_back(e.first);
+                auto c = find_cube_ending_at(b.S, b.size());
+                std::cout << "CUBE at " << b.size() << " i=" << (c ? c->i : -1) << " d=" << (c ? c->d : -1)
+                          << " steps " << step << " word " << to_string(b.w) << "\n";
+                b.w.pop_back();
+                b.S.pop_back();
+                return;
+            }
+            v = e.second;
+        }
+    } else {
+        while (b.size() < cap) {
+            std::vector<u8> legal, core;
+            for (int a = 0; a < 4; ++a) {
+                if (!b.try_push((u8)a)) continue;
+                legal.push_back((u8)a);
+                uint64_t q = pack_word(b.w, b.size() - n, n);
+                auto it = idx.find(q);
+                if (it != idx.end() && G.in2core[it->second]) core.push_back((u8)a);
+                b.pop();
+            }
+            if (legal.empty()) {
+                std::cout << "DEAD at " << b.size() << " steps " << step << "\n";
+                return;
+            }
+            auto& pool = !core.empty() ? core : legal;
+            int bit = driver_bit(drv, step++);
+            u8 a = pool[bit % (int)pool.size()];
+            b.try_push(a);
+        }
+    }
+    std::cout << "SURVIVE " << b.size() << " steps " << step << " mean " << (double)b.S.back() / b.size()
+              << "\n";
+}
+
+static void mode_drive_scan(int n, const std::string& drv, int cap, int nstarts) {
+    auto G = build_nmer_graph(n);
+    int best = 0, n_tried = 0;
+    std::string bests;
+    int best_d = -1, best_i = -1;
+    for (int s = 0; s < (int)G.nodes.size() && n_tried < nstarts; ++s) {
+        if (!G.in2core[s]) continue;
+        ++n_tried;
+        Builder b;
+        bool ok = true;
+        for (u8 a : G.nodes[s])
+            if (!b.try_push(a)) {
+                ok = false;
+                break;
+            }
+        if (!ok) continue;
+        int v = s;
+        uint64_t step = 0;
+        int reached = b.size();
+        int cube_i = -1, cube_d = -1;
+        while (b.size() < cap) {
+            std::vector<std::pair<u8, int>> opts;
+            for (auto& e : G.adj[v])
+                if (G.in2core[e.second]) opts.push_back(e);
+            if (opts.empty()) break;
+            auto e = opts[driver_bit(drv, step++) % (int)opts.size()];
+            if (!b.try_push(e.first)) {
+                b.S.push_back(b.S.back() + e.first);
+                b.w.push_back(e.first);
+                auto c = find_cube_ending_at(b.S, b.size());
+                cube_i = c ? c->i : -1;
+                cube_d = c ? c->d : -1;
+                b.w.pop_back();
+                b.S.pop_back();
+                break;
+            }
+            v = e.second;
+            reached = b.size();
+        }
+        if (reached > best) {
+            best = reached;
+            bests = to_string(G.nodes[s]);
+            best_d = cube_d;
+            best_i = cube_i;
+        }
+        if (reached >= cap) {
+            std::cout << "SCAN_SURVIVE n=" << n << " drv=" << drv << " start " << to_string(G.nodes[s])
+                      << " cap " << cap << "\n";
+            return;
+        }
+    }
+    std::cout << "scan n=" << n << " drv=" << drv << " starts " << n_tried << " cap " << cap << " best_len "
+              << best << " best_start " << bests << " cube_i " << best_i << " d " << best_d << "\n";
+}
+
 int main(int argc, char** argv) {
     if (argc < 2) {
         std::cerr
             << "core_scan trie N | word FILE [pe] | suffix FILE k | updown FILE P | random D T seed |\n"
             << "  branch n R samples | findq1 N budget | inject n | basin | cass N | walk FILE |\n"
             << "  recgen CAP | grow2 D budget | lcp | macro FILE L | look n R | ops n r |\n"
-            << "  cycle n | detfsm\n";
+            << "  cycle n | detfsm | twocore n | drive n drv cap blind|legal\n";
         return 1;
     }
     std::string cmd = argv[1];
@@ -1245,6 +1472,20 @@ int main(int argc, char** argv) {
         mode_cycle((argc > 2) ? std::atoi(argv[2]) : 6);
     } else if (cmd == "detfsm") {
         mode_detfsm();
+    } else if (cmd == "twocore") {
+        mode_twocore((argc > 2) ? std::atoi(argv[2]) : 8);
+    } else if (cmd == "drive") {
+        int n = (argc > 2) ? std::atoi(argv[2]) : 6;
+        std::string drv = (argc > 3) ? argv[3] : "tm";
+        int cap = (argc > 4) ? std::atoi(argv[4]) : 20000;
+        const char* var = (argc > 5) ? argv[5] : "blind";
+        mode_drive(n, drv, cap, var);
+    } else if (cmd == "dscan") {
+        int n = std::atoi(argv[2]);
+        std::string drv = (argc > 3) ? argv[3] : "tm";
+        int cap = (argc > 4) ? std::atoi(argv[4]) : 2000;
+        int ns = (argc > 5) ? std::atoi(argv[5]) : 200;
+        mode_drive_scan(n, drv, cap, ns);
     } else {
         std::cerr << "unknown cmd\n";
         return 1;

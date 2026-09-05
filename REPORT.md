@@ -165,4 +165,4 @@ Environment used: g++ 13.3, C++17, `-O3`, 4 cores, 15 GB RAM.
 
 The ACF language over \(\{0,1,2,3\}\) is extendable from every word of length \(\le 13\), and the first right-crucial words appear at length **14**, where there are **8170** of them. Combined with the first public terms of the counting sequence past the ordinary-cubefree regime (\(c_6=3152\), through \(c_{12}=6772220\)) and an exhaustive certificate that no 2-uniform morphism produces an ACF iterate of length 250, this is a structural description of the finite problem. It does not produce an infinite word, does not beat 70.88M, and does not decide Green’s Problem 15.
 
-The main problem remains open. Finite-memory cores that certify every generated path cannot exist (Theorems AI–AK; `CORE_REPORT.md`). The correct remaining targets are a growth-rate proof, morphisms of size \(\ge 7\), and unbounded-memory constructions — not another suffix automaton.
+The main problem remains open. All-paths finite graphs cannot stay ACF (Theorem AI). The ACF n-mer 2-core with Thue–Morse driving cubes by length 37 for \(n\le 8\) (Theorem AR). That does not rule out every finite state.

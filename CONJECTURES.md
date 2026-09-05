@@ -68,9 +68,7 @@ There exists a Lipschitz f:ℕ→ℤ whose graph has no 3-AP.
 ---
 
 ## C17. A finite-memory self-sustaining core of the ACF language exists
-**Status:** KILLED as stated (Theorems AI–AK, `CORE_REPORT.md`).
-
-A recurrent finite letter- or block-labelled graph always has a periodic path, hence an ordinary cube. Deterministic finite-memory strategies are eventually periodic. The remaining infinite-word candidates are unbounded-memory procedures (Up-and-Down) and morphic/S-adic systems with an already-infinite driver — not finite cores.
+**Status:** The *all-paths* version is KILLED (Theorem AI, elementary, already known). The *aperiodic k-mer 2-core + Thue–Morse* version is KILLED computationally for \(n\le 8\) (Theorem AR, max length 37). Other finite states are OPEN.
 
 ## C18. Every ACF word of length \(\ge N\) has \(q(w)\ge 2\)
 **Status:** KILLED (\(N=8\) already fails). See Theorem AL.

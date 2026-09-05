@@ -403,6 +403,23 @@ def main():
         print("FAIL updown p1000 tail not q=0")
         fails += 1
 
+    w6tm = "001001021010031002011"
+    w6 = [int(c) for c in w6tm]
+    c6 = find_cube(w6)
+    if c6 != (6, 5, 4) or find_cube(w6[:-1]) is not None:
+        print("FAIL tm n=6", c6, find_cube(w6[:-1]))
+        fails += 1
+    else:
+        print("OK tm-drive n=6 cube", c6)
+    w8tm = "0010010021101003100201103002011013"
+    w8 = [int(c) for c in w8tm]
+    c8 = find_cube(w8)
+    if c8 != (7, 9, 8) or find_cube(w8[:-1]) is not None:
+        print("FAIL tm n=8", c8, find_cube(w8[:-1]))
+        fails += 1
+    else:
+        print("OK tm-drive n=8 cube", c8)
+
     print("core_verify_fails", fails)
     if fails:
         sys.exit(1)

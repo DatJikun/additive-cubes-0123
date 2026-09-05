@@ -29,4 +29,6 @@ OK no uniform two-letter operator on all ACF 4-mers
 OK n=38 q=0 00100100200100112001020011003010130300
 OK n=38 four extensions cube
 OK n=28 q=1
+OK tm-drive n=6 cube (6, 5, 4)
+OK tm-drive n=8 cube (7, 9, 8)
 core_verify_fails 0

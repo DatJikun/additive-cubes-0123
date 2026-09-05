@@ -215,7 +215,10 @@ The characteristic sequence of \(\{n:S(2n)=2S(n)\}\) has 2-kernel fingerprints s
 ---
 
 ## H32. A recurrent finite-state / macro-block core can generate only ACF infinite paths
-**Status:** KILLED (Theorems AI, AJ, AK). A recurrent labelled graph has a cycle; the periodic path is an ordinary cube. Deterministic finite-memory strategies are eventually periodic. Macro-block cycles are the same obstruction at block scale.
+**Status:** KILLED for the all-paths reading (Theorems AI, AK). Not a kill of aperiodic walks on the same graph.
+
+## H32b. The ACF n-mer 2-core driven by Thue–Morse (paperfold, Sturmian) is an infinite ACF generator
+**Status:** KILLED for \(n\le 8\) (Theorem AR). Every start cubes by length 37.
 
 ## H33. Every sufficiently long ACF word over {0,1,2,3} has at least two legal extensions
 **Status:** KILLED at length 8 (`20010100`, \(q=1\)). Also false for Cassaigne over {0,1,3,4} (first \(q=1\) at 337), so the statement is not even a special obstruction of the exceptional alphabet.

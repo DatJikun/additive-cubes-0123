@@ -91,6 +91,7 @@ test: bin/acf_tool bin/desub_scan bin/quotient_scan bin/triple_scan bin/template
 	./bin/core_scan detfsm
 	./bin/core_scan cycle 6
 	./bin/core_scan inject 5
+	./bin/core_scan drive 6 tm 100 blind
 	python3 python/core_verify.py
 
 clean:

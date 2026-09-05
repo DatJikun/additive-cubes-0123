@@ -1,7 +1,7 @@
 # Additive-cube research archive
 
 Autonomous attack on additive-cube-free words over `{0,1,2,3}`.  
-The infinite problem is **open**. There is no finite-memory self-sustaining ACF core (`CORE_REPORT.md`). Structural results: `STRUCTURAL_REPORT.md`. Unaligned desubstitution: `DESUBSTITUTION_REPORT.md`. Quotient dynamics of `T·v+Δδ=0`: `QUOTIENT_REPORT.md`. Triple / \(\omega\)-graph: `TRIPLE_REPORT.md`. Non-affine uniform templates: `TEMPLATE_REPORT.md`. m-kernel / k-regular block sums: `KERNEL_REPORT.md`. Bounded \(p_T\) / exhaustive \(B(3)\): `PT_REPORT.md`.
+The infinite problem is **open**. The all-paths sofic core is impossible; the ACF n-mer 2-core driven by Thue–Morse dies by length 37 for \(n\le 8\) (`CORE_REPORT.md`). Structural results: `STRUCTURAL_REPORT.md`. Unaligned desubstitution: `DESUBSTITUTION_REPORT.md`. Quotient dynamics of `T·v+Δδ=0`: `QUOTIENT_REPORT.md`. Triple / \(\omega\)-graph: `TRIPLE_REPORT.md`. Non-affine uniform templates: `TEMPLATE_REPORT.md`. m-kernel / k-regular block sums: `KERNEL_REPORT.md`. Bounded \(p_T\) / exhaustive \(B(3)\): `PT_REPORT.md`.
 
 ## Build and test
 

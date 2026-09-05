@@ -402,7 +402,7 @@ Let \(G\) be a finite directed graph with edges labelled by letters. If \(G\) is
 
 The overlap graph of ACF \(n\)-mers is an instance: it is cyclic, and any cycle period \(u\) yields the cube \(uuu\). Certificates: `./bin/core_scan cycle 6` (period `001`, cube \(d=3\)) and `cycle 8` (period `200100100`, cube \(d=9\)).
 
-This kills the “self-sustaining core” of `CORE_REPORT.md` as defined (recurrent component, every generated path globally ACF).
+This kills the all-paths reading of a “self-sustaining core”. It does **not** kill a branching automaton with aperiodic output (see Theorem AR).
 
 ## Theorem AJ — deterministic finite-memory next-letter strategies
 **Status: PROVED** (elementary). Census: COMPUTATIONALLY VERIFIED.
@@ -443,6 +443,15 @@ Archived Up-and-Down words with periods \(P<Q\) have longest common prefix exact
 **Status: COMPUTATIONALLY VERIFIED.**
 
 The word `data/word_updown_p1000_n65986.txt` has \(q=0\) at length 65986 (C++ unique-vote in `core_scan word` and independent Python `q_vote`). It is right-crucial, not budget-limited. The fixed-order word of length 24396 is likewise \(q=0\). The period-2000 and period-5000 archives of length 400000 have tail \(q=1\) and \(q=3\) (cap-limited). Dual check of the vote oracle: `q_vote` matches `q_brute` on all ACF words of length \(\le 6\) and on the \(n=38\) dead-end.
+
+## Theorem AR — Thue–Morse walks on the ACF n-mer 2-core cube immediately
+**Status: COMPUTATIONALLY VERIFIED.** Novelty: UNVERIFIED NOVELTY.
+
+Let \(G_n^{(2)}\) be the maximum subgraph of the ACF n-mer overlap graph in which every vertex has out-degree at least 2. A Thue–Morse walk chooses, at step \(i\), the out-edge of index \((\mathrm{popcount}(i)\bmod 2)\) among remaining 2-core edges ordered by letter.
+
+Exhaustive starts: max ACF length is 22 (\(n=5\), 864 starts), 23 (\(n=6\), 3152), 24 (\(n=7\), 11468), 37 (\(n=8\), 41998). Witnesses `001001021010031002011` (cube \(i=6,d=5\)) and `0010010021101003100201103002011013` (cube \(i=7,d=9\)), dual Python. This is an aperiodic finite-state generator extracted from the finite ACF language. It is not a core.
+
+Theorem AI does **not** imply Theorem AR: AI only forbids taking every path, including the periodic ones.
 
 ---
 
