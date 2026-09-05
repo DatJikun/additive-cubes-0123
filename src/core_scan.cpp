@@ -886,16 +886,22 @@ static void mode_beam(int depth, int beam, int style) {
             std::vector<u8> pick;
             if (q == 1)
                 pick = {opts[0]};
-            else if (style == 0)
+            else if (style == 0 || style == 3)
                 pick = {opts[0], opts[1]};
             else {
+                // style 1: two closest to mean 1.5; style 2: two farthest
                 double n = (double)nd.b.size();
                 double s = (double)nd.b.S.back();
                 std::vector<std::pair<double, u8>> sc;
                 for (u8 a : opts) sc.push_back({std::abs((s + a) / (n + 1.0) - 1.5), a});
                 std::sort(sc.begin(), sc.end());
-                pick.push_back(sc[0].second);
-                pick.push_back(sc[1].second);
+                if (style == 2) {
+                    pick.push_back(sc.back().second);
+                    pick.push_back(sc[sc.size() - 2].second);
+                } else {
+                    pick.push_back(sc[0].second);
+                    pick.push_back(sc[1].second);
+                }
             }
             if (pick.size() == 1) ++n_unary;
             for (size_t pi = 0; pi < pick.size(); ++pi) {
@@ -917,13 +923,20 @@ static void mode_beam(int depth, int beam, int style) {
         }
         int nlen = d + 1;
         double mean = nxt.empty() ? 0 : (double)sum_S / (double)(nxt.size() * std::max(1, nlen));
+        double dmin = 1e99, dmax = 0;
+        const auto& src_disc = nxt.empty() ? cur : nxt;
+        for (auto& nd : src_disc) {
+            double dd = std::abs(word_mean(nd.b) - 1.5);  // |Δ|/n
+            dmin = std::min(dmin, dd);
+            dmax = std::max(dmax, dd);
+        }
         if (d < 20 || (d + 1) % 20 == 0 || nxt.empty()) {
             std::unordered_set<uint64_t> hs;
             const auto& src = nxt.empty() ? cur : nxt;
             for (auto& nd : src) hs.insert(word_hash(nd.b.w));
             std::cout << "layer " << nlen << " frontier " << nxt.size() << " unique " << hs.size() << " qmin "
                       << layer_qmin << " q0 " << n_q0 << " q1 " << n_q1 << " q2 " << n_q2 << " mean " << mean
-                      << "\n";
+                      << " meandev_min " << dmin << " max " << dmax << "\n";
         }
         if (nxt.empty()) {
             std::cout << "beam EXTINCT at " << nlen << " deaths " << n_death << " first_death " << first_death
@@ -941,8 +954,11 @@ static void mode_beam(int depth, int beam, int style) {
         if ((int)nxt.size() > beam) {
             std::vector<size_t> idx(nxt.size());
             for (size_t i = 0; i < idx.size(); ++i) idx[i] = i;
+            const bool keep_close = (style <= 1);  // 0,1: Cesaro band; 2,3: high discrepancy
             std::nth_element(idx.begin(), idx.begin() + beam, idx.end(), [&](size_t i, size_t j) {
-                return std::abs(word_mean(nxt[i].b) - 1.5) < std::abs(word_mean(nxt[j].b) - 1.5);
+                double di = std::abs(word_mean(nxt[i].b) - 1.5);
+                double dj = std::abs(word_mean(nxt[j].b) - 1.5);
+                return keep_close ? (di < dj) : (di > dj);
             });
             std::vector<Nd> kept;
             kept.reserve((size_t)beam);
@@ -1088,6 +1104,49 @@ static void mode_band(int n, double eps) {
     rec();
     std::cout << "band n=" << n << " eps " << eps << " all " << n_all << " in_band " << n_band << " ge2 " << n_ge2
               << " eq1 " << n_1 << " eq0 " << n_0 << " min_good " << min_good << " worst " << worst << "\n";
+}
+
+static void mode_delta(const char* path) {
+    // Prefix-sum discrepancy Δ(n)=S(n)-(3/2)n. Theorem AW: even d and
+    // |Δ|<1/3 at d,2d,3d ⇒ the prefix of length 3d is an additive cube.
+    auto w = load_word(path);
+    const int N = (int)w.size();
+    std::vector<i64> S(N + 1, 0);
+    for (int i = 0; i < N; ++i) S[i + 1] = S[i] + w[i];
+    double dmax = 0;
+    int nmax = 0;
+    for (int n = 1; n <= N; ++n) {
+        double d = std::abs((double)S[n] - 1.5 * n);
+        if (d > dmax) {
+            dmax = d;
+            nmax = n;
+        }
+    }
+    std::cout << "delta N " << N << " sum " << S[N] << " mean " << (double)S[N] / N << " max|Δ| " << dmax
+              << " at " << nmax << "\n";
+    int n_aw = 0, n_near = 0;
+    int best_d = -1;
+    double best_m = 1e99;
+    for (int d = 2; 3 * d <= N; d += 2) {
+        double a = (double)S[d] - 1.5 * d;
+        double b = (double)S[2 * d] - 1.5 * 2 * d;
+        double c = (double)S[3 * d] - 1.5 * 3 * d;
+        double m = std::max(std::abs(a), std::max(std::abs(b), std::abs(c)));
+        double aff = std::max(std::abs(2 * a - b), std::abs(2 * b - a - c));
+        if (m < best_m) {
+            best_m = m;
+            best_d = d;
+        }
+        if (aff < 1.0 - 1e-12) {
+            ++n_aw;
+            i64 s1 = S[d], s2 = S[2 * d] - S[d], s3 = S[3 * d] - S[2 * d];
+            std::cout << "AW_HIT d " << d << " s " << s1 << "," << s2 << "," << s3 << " aff " << aff
+                      << " |Δ| " << m << "\n";
+        } else if (aff < 2.0)
+            ++n_near;
+    }
+    std::cout << "AW_affine_hits " << n_aw << " aff_near2 " << n_near << " closest_d " << best_d
+              << " max|Δ|@triple " << best_m << "\n";
 }
 
 static void mode_inject_iter(int n0, int rounds, int r) {
@@ -2084,7 +2143,7 @@ int main(int argc, char** argv) {
             << "core_scan trie N | word FILE [pe] | suffix FILE k | updown FILE P | random D T seed |\n"
             << "  branch n R samples | findq1 N budget | inject n | basin | cass N | walk FILE |\n"
             << "  recgen CAP | grow2 D budget | beam D BEAM STYLE | mutate FILE samples extra stride |\n"
-            << "  inject_iter n0 rounds r | band n eps | lcp | macro FILE L | look n R | ops n r |\n"
+            << "  inject_iter n0 rounds r | band n eps | delta FILE | lcp | macro FILE L | look n R | ops n r |\n"
             << "  cycle n | detfsm | twocore n | drive n drv cap blind|legal | dscan | tmblocks lu lv cap lim\n";
         return 1;
     }
@@ -2152,6 +2211,8 @@ int main(int argc, char** argv) {
         int n = (argc > 2) ? std::atoi(argv[2]) : 8;
         double eps = (argc > 3) ? std::atof(argv[3]) : 0.25;
         mode_band(n, eps);
+    } else if (cmd == "delta") {
+        mode_delta(argv[2]);
     } else if (cmd == "lcp") {
         mode_lcp();
     } else if (cmd == "macro") {

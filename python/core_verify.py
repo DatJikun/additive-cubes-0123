@@ -570,6 +570,37 @@ def main():
         else:
             print("OK Theorem AV band witness 01303120 has 0 in-band q>=2 children")
 
+    # Theorem AW: even d and |Δ|<1/3 at d,2d,3d ⇒ prefix 3d is an additive cube.
+    for d in (2, 4, 6, 8, 10):
+        w = ([1, 2] * (3 * d))[: 3 * d]
+        S = prefix_sums(w)
+        if any(abs(S[k * d] - 1.5 * k * d) >= 1.0 / 3 for k in (1, 2, 3)):
+            print("FAIL AW setup d", d, [S[k * d] - 1.5 * k * d for k in (1, 2, 3)])
+            fails += 1
+            continue
+        s1, s2, s3 = S[d], S[2 * d] - S[d], S[3 * d] - S[2 * d]
+        if not (s1 == s2 == s3) or find_cube(w) is None:
+            print("FAIL AW cube d", d, s1, s2, s3, find_cube(w))
+            fails += 1
+        else:
+            print("OK Theorem AW d", d, "block_sum", s1, "first_cube", find_cube(w))
+    # Dead mean-beam: appending 3 completes a scale-160 cube from 0.
+    path = "data/beam_dead_s1.txt"
+    if os.path.exists(path):
+        w = load_digits(path)
+        c = find_cube(w + [3])
+        if c is None or c[0] != 0:
+            print("NOTE dead_s1 ext3 cube", c, "len", len(w))
+        else:
+            d = c[1]
+            S = prefix_sums(w + [3])
+            deltas = [S[k * d] - 1.5 * k * d for k in (1, 2, 3)]
+            if abs(2 * deltas[0] - deltas[1]) > 1e-9 or abs(3 * deltas[0] - deltas[2]) > 1e-9:
+                print("FAIL AW affine Δ on dead_s1", deltas, c)
+                fails += 1
+            else:
+                print("OK Theorem AW affine Δ on dead_s1", "d", d, "Δ", deltas)
+
     print("core_verify_fails", fails)
     if fails:
         sys.exit(1)
