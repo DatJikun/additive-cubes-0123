@@ -498,6 +498,45 @@ def main():
     else:
         print("OK sadic cube at 729", c)
 
+    # Two-smallest 2-tree: first death cannot precede the known length-14 leaves.
+    def legal(w):
+        return [a for a in range(4) if find_cube(list(w) + [a]) is None]
+
+    frontier = [[]]
+    first_death = None
+    n_death = 0
+    for depth in range(14):
+        nxt = []
+        for w in frontier:
+            opts = legal(w)
+            if not opts:
+                n_death += 1
+                if first_death is None:
+                    first_death = len(w)
+                continue
+            pick = opts[:1] if len(opts) == 1 else opts[:2]
+            for a in pick:
+                nxt.append(w + [a])
+        frontier = nxt
+    if first_death is not None:
+        print("FAIL 2tree death before 14 at", first_death)
+        fails += 1
+    elif any(legal(w) == [] for w in frontier):
+        print("OK 2tree first deaths at 14 among", sum(1 for w in frontier if legal(w) == []), "of", len(frontier))
+    else:
+        print("OK 2tree depth 14 frontier", len(frontier), "no death yet")
+
+    for path in ("data/beam_word.txt", "data/inject_word.txt"):
+        if not os.path.exists(path):
+            continue
+        w = load_digits(path)
+        c = find_cube(w)
+        if c is not None:
+            print("FAIL dumped", path, "cube", c)
+            fails += 1
+        else:
+            print("OK dumped ACF", path, "len", len(w), "q", q_brute(w))
+
     print("core_verify_fails", fails)
     if fails:
         sys.exit(1)

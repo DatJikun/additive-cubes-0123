@@ -824,6 +824,280 @@ static void mode_grow2(int depth, uint64_t budget) {
               << " first_death " << first_death << " unary_steps " << max_unary << " nodes " << nodes << "\n";
 }
 
+static std::vector<u8> legal_letters(Builder& b) {
+    std::vector<u8> opts;
+    for (int a = 0; a < 4; ++a)
+        if (b.try_push((u8)a)) {
+            opts.push_back((u8)a);
+            b.pop();
+        }
+    return opts;
+}
+
+static double word_mean(const Builder& b) {
+    if (b.w.empty()) return 1.5;
+    return (double)b.S.back() / (double)b.size();
+}
+
+static void dump_word(const char* path, const std::vector<u8>& w) {
+    std::ofstream out(path);
+    for (u8 a : w) out << char('0' + a);
+    out << "\n";
+}
+
+static void mode_beam(int depth, int beam, int style) {
+    // style 0: two smallest legal letters (unary if q=1)
+    // style 1: two letters whose new mean is closest to 1.5
+    // Cap keeps nodes closest to mean 1.5 (left-truncation biased toward 0 and death).
+    struct Nd {
+        Builder b;
+    };
+    std::vector<Nd> cur;
+    cur.emplace_back();
+    uint64_t n_death = 0, n_unary = 0;
+    int first_death = -1;
+    int qmin = 4;
+    for (int d = 0; d < depth; ++d) {
+        std::vector<Nd> nxt;
+        nxt.reserve((size_t)std::min(beam * 2, 1 << 18));
+        int layer_qmin = 4, n_q0 = 0, n_q1 = 0, n_q2 = 0;
+        i64 sum_S = 0;
+        for (auto& nd : cur) {
+            auto opts = legal_letters(nd.b);
+            int q = (int)opts.size();
+            if (q < layer_qmin) layer_qmin = q;
+            if (q == 0) {
+                ++n_q0;
+                ++n_death;
+                if (first_death < 0) first_death = nd.b.size();
+                continue;
+            }
+            if (q == 1) ++n_q1;
+            if (q >= 2) ++n_q2;
+            std::vector<u8> pick;
+            if (q == 1)
+                pick = {opts[0]};
+            else if (style == 0)
+                pick = {opts[0], opts[1]};
+            else {
+                double n = (double)nd.b.size();
+                double s = (double)nd.b.S.back();
+                std::vector<std::pair<double, u8>> sc;
+                for (u8 a : opts) sc.push_back({std::abs((s + a) / (n + 1.0) - 1.5), a});
+                std::sort(sc.begin(), sc.end());
+                pick.push_back(sc[0].second);
+                pick.push_back(sc[1].second);
+            }
+            if (pick.size() == 1) ++n_unary;
+            for (size_t pi = 0; pi < pick.size(); ++pi) {
+                if (pi == 0) {
+                    nd.b.try_push(pick[0]);
+                    sum_S += nd.b.S.back();
+                    nxt.push_back(std::move(nd));
+                } else {
+                    Nd ch;
+                    ch.b.w = nxt.back().b.w;
+                    ch.b.S = nxt.back().b.S;
+                    ch.b.w.pop_back();
+                    ch.b.S.pop_back();
+                    ch.b.try_push(pick[pi]);
+                    sum_S += ch.b.S.back();
+                    nxt.push_back(std::move(ch));
+                }
+            }
+        }
+        int nlen = d + 1;
+        double mean = nxt.empty() ? 0 : (double)sum_S / (double)(nxt.size() * std::max(1, nlen));
+        if (d < 20 || (d + 1) % 20 == 0 || nxt.empty())
+            std::cout << "layer " << nlen << " frontier " << nxt.size() << " qmin " << layer_qmin << " q0 " << n_q0
+                      << " q1 " << n_q1 << " q2 " << n_q2 << " mean " << mean << "\n";
+        if (nxt.empty()) {
+            std::cout << "beam EXTINCT at " << nlen << " deaths " << n_death << " first_death " << first_death
+                      << "\n";
+            return;
+        }
+        if ((int)nxt.size() > beam) {
+            std::vector<size_t> idx(nxt.size());
+            for (size_t i = 0; i < idx.size(); ++i) idx[i] = i;
+            std::nth_element(idx.begin(), idx.begin() + beam, idx.end(), [&](size_t i, size_t j) {
+                return std::abs(word_mean(nxt[i].b) - 1.5) < std::abs(word_mean(nxt[j].b) - 1.5);
+            });
+            std::vector<Nd> kept;
+            kept.reserve((size_t)beam);
+            for (int i = 0; i < beam; ++i) kept.push_back(std::move(nxt[idx[i]]));
+            nxt.swap(kept);
+        }
+        cur.swap(nxt);
+        if (layer_qmin < qmin && layer_qmin > 0) qmin = layer_qmin;
+    }
+    std::cout << "beam depth " << depth << " style " << style << " frontier " << cur.size() << " deaths "
+              << n_death << " first_death " << first_death << " unary " << n_unary << "\n";
+    if (!cur.empty()) {
+        dump_word("data/beam_word.txt", cur[0].b.w);
+        std::cout << "beam_dump data/beam_word.txt len " << cur[0].b.size() << " mean " << word_mean(cur[0].b)
+                  << " prefix20 " << to_string(std::vector<u8>(cur[0].b.w.begin(), cur[0].b.w.begin() + std::min(20, (int)cur[0].b.w.size())))
+                  << "\n";
+    }
+}
+
+static void greedy_extend(Builder& b, int cap, int style) {
+    while (b.size() < cap) {
+        auto opts = legal_letters(b);
+        if (opts.empty()) return;
+        u8 a = opts[0];
+        if (style == 1 && opts.size() >= 2) {
+            double n = (double)b.size();
+            double s = (double)b.S.back();
+            double best = 1e99;
+            for (u8 x : opts) {
+                double m = std::abs((s + x) / (n + 1.0) - 1.5);
+                if (m < best) {
+                    best = m;
+                    a = x;
+                }
+            }
+        }
+        b.try_push(a);
+    }
+}
+
+static void mode_mutate(const char* path, int samples, int extra, int stride) {
+    // Walk the archive once. At q>=2 positions, copy the prefix, take another
+    // legal letter, then balanced-greedy extend by `extra`. Incremental: no
+    // O(N^2) rebuild per sample.
+    auto w = load_word(path);
+    const int N = (int)w.size();
+    const int walk_cap = std::min(N, 25000);  // O(n) per letter; 25k is ~3e8 checks
+    Builder live;
+    int n_try = 0, n_live = 0, n_die = 0;
+    int best_alt = 0, best_pos = -1, worst_die = 0, worst_die_pos = -1;
+    int next_n = 40;
+    for (int n = 0; n < walk_cap && n_try < samples; ++n) {
+        if (!live.try_push(w[n])) {
+            std::cout << "mutate archive not ACF at " << n + 1 << "\n";
+            return;
+        }
+        int pos = live.size();  // length of prefix, next letter is w[pos] if pos < N
+        if (pos < next_n || pos + 1 >= N) continue;
+        auto opts = legal_letters(live);
+        if ((int)opts.size() < 2) continue;
+        u8 orig = w[pos];
+        bool orig_legal = false;
+        for (u8 a : opts)
+            if (a == orig) orig_legal = true;
+        if (!orig_legal) continue;
+        ++n_try;
+        next_n = pos + std::max(1, stride);
+        for (u8 a : opts) {
+            if (a == orig) continue;
+            Builder b;
+            b.w = live.w;
+            b.S = live.S;
+            if (!b.try_push(a)) continue;
+            greedy_extend(b, pos + extra, 1);
+            int L = b.size();
+            if (L >= pos + extra) {
+                ++n_live;
+                if (L > best_alt) {
+                    best_alt = L;
+                    best_pos = pos;
+                }
+            } else {
+                ++n_die;
+                if (L > worst_die) {
+                    worst_die = L;
+                    worst_die_pos = pos;
+                }
+            }
+        }
+    }
+    std::cout << "mutate N " << N << " walked " << walk_cap << " tried_pos " << n_try << " alt_live " << n_live
+              << " alt_die " << n_die << " best_alt " << best_alt << " best_pos " << best_pos << " extra "
+              << extra << " worst_die " << worst_die << " worst_die_pos " << worst_die_pos << "\n";
+}
+
+static void mode_inject_iter(int n0, int rounds, int r) {
+    // Start from all ACF n0-mers. Each round: keep words that have >=2 ACF
+    // r-letter extensions whose result still has q>=2. Count survivors.
+    // This is a finite injection test, not a theorem.
+    std::vector<std::vector<u8>> cur;
+    {
+        Builder b;
+        std::function<void()> rec = [&]() {
+            if (b.size() == n0) {
+                cur.push_back(b.w);
+                return;
+            }
+            for (int a = 0; a < 4; ++a)
+                if (b.try_push((u8)a)) {
+                    rec();
+                    b.pop();
+                }
+        };
+        rec();
+    }
+    std::cout << "inject_iter n0=" << n0 << " r=" << r << " start " << cur.size() << "\n";
+    for (int rd = 1; rd <= rounds; ++rd) {
+        std::vector<std::vector<u8>> nxt;
+        int n_ge2 = 0, n_1 = 0, n_0 = 0;
+        for (auto& w : cur) {
+            Builder b;
+            for (u8 a : w) b.try_push(a);
+            // DFS r-extensions
+            std::vector<std::vector<u8>> good;
+            std::function<void(int)> rec = [&](int left) {
+                if (left == 0) {
+                    int q = (int)legal_letters(b).size();
+                    if (q >= 2) good.push_back(b.w);
+                    return;
+                }
+                auto opts = legal_letters(b);
+                for (u8 a : opts) {
+                    b.try_push(a);
+                    rec(left - 1);
+                    b.pop();
+                }
+            };
+            rec(r);
+            if ((int)good.size() >= 2) {
+                ++n_ge2;
+                // keep two of them (first two)
+                nxt.push_back(good[0]);
+                nxt.push_back(good[1]);
+            } else if ((int)good.size() == 1)
+                ++n_1;
+            else
+                ++n_0;
+        }
+        std::cout << " round " << rd << " parents " << cur.size() << " ge2 " << n_ge2 << " eq1 " << n_1
+                  << " eq0 " << n_0 << " children " << nxt.size() << "\n";
+        if (nxt.empty()) {
+            std::cout << "inject_iter EXTINCT round " << rd << "\n";
+            return;
+        }
+        if (nxt.size() > 8000) {
+            std::vector<size_t> idx(nxt.size());
+            for (size_t i = 0; i < idx.size(); ++i) idx[i] = i;
+            std::nth_element(idx.begin(), idx.begin() + 8000, idx.end(), [&](size_t i, size_t j) {
+                i64 si = 0, sj = 0;
+                for (u8 a : nxt[i]) si += a;
+                for (u8 a : nxt[j]) sj += a;
+                double mi = (double)si / (double)nxt[i].size();
+                double mj = (double)sj / (double)nxt[j].size();
+                return std::abs(mi - 1.5) < std::abs(mj - 1.5);
+            });
+            std::vector<std::vector<u8>> kept;
+            kept.reserve(8000);
+            for (int i = 0; i < 8000; ++i) kept.push_back(std::move(nxt[idx[i]]));
+            nxt.swap(kept);
+        }
+        cur.swap(nxt);
+    }
+    std::cout << "inject_iter SURVIVE rounds " << rounds << " frontier " << cur.size() << " len "
+              << cur[0].size() << "\n";
+    dump_word("data/inject_word.txt", cur[0]);
+}
+
 static void mode_lcp() {
     const char* files[] = {"data/word_updown_p100_n20306.txt", "data/word_updown_p1000_n65986.txt",
                            "data/word_updown_p2000_n400000.txt", "data/word_updown_p5000_n400000.txt",
@@ -1735,7 +2009,8 @@ int main(int argc, char** argv) {
         std::cerr
             << "core_scan trie N | word FILE [pe] | suffix FILE k | updown FILE P | random D T seed |\n"
             << "  branch n R samples | findq1 N budget | inject n | basin | cass N | walk FILE |\n"
-            << "  recgen CAP | grow2 D budget | lcp | macro FILE L | look n R | ops n r |\n"
+            << "  recgen CAP | grow2 D budget | beam D BEAM STYLE | mutate FILE samples extra stride |\n"
+            << "  inject_iter n0 rounds r | lcp | macro FILE L | look n R | ops n r |\n"
             << "  cycle n | detfsm | twocore n | drive n drv cap blind|legal | dscan | tmblocks lu lv cap lim\n";
         return 1;
     }
@@ -1783,6 +2058,22 @@ int main(int argc, char** argv) {
         int D = (argc > 2) ? std::atoi(argv[2]) : 40;
         uint64_t bud = (argc > 3) ? std::strtoull(argv[3], nullptr, 10) : 200000ull;
         mode_grow2(D, bud);
+    } else if (cmd == "beam") {
+        int D = (argc > 2) ? std::atoi(argv[2]) : 80;
+        int B = (argc > 3) ? std::atoi(argv[3]) : 2048;
+        int st = (argc > 4) ? std::atoi(argv[4]) : 0;
+        mode_beam(D, B, st);
+    } else if (cmd == "mutate") {
+        const char* path = (argc > 2) ? argv[2] : "data/word_updown_p2000_n400000.txt";
+        int samples = (argc > 3) ? std::atoi(argv[3]) : 80;
+        int extra = (argc > 4) ? std::atoi(argv[4]) : 2000;
+        int stride = (argc > 5) ? std::atoi(argv[5]) : 200;
+        mode_mutate(path, samples, extra, stride);
+    } else if (cmd == "inject_iter") {
+        int n0 = (argc > 2) ? std::atoi(argv[2]) : 4;
+        int rounds = (argc > 3) ? std::atoi(argv[3]) : 12;
+        int r = (argc > 4) ? std::atoi(argv[4]) : 2;
+        mode_inject_iter(n0, rounds, r);
     } else if (cmd == "lcp") {
         mode_lcp();
     } else if (cmd == "macro") {
