@@ -537,6 +537,25 @@ def main():
         else:
             print("OK dumped ACF", path, "len", len(w), "q", q_brute(w))
 
+    # Theorem AV: mean-band |mean-1.5|<=0.25 is not a 2-injection at n=8.
+    w = [int(c) for c in "01303120"]
+    if find_cube(w) is not None or abs(sum(w) / 8 - 1.5) > 0.25 + 1e-12 or q_brute(w) < 2:
+        print("FAIL band witness not in band", w, find_cube(w), sum(w) / 8, q_brute(w))
+        fails += 1
+    else:
+        n_good = 0
+        for a in range(4):
+            ww = w + [a]
+            if find_cube(ww) is not None:
+                continue
+            if q_brute(ww) >= 2 and abs(sum(ww) / 9 - 1.5) <= 0.25:
+                n_good += 1
+        if n_good != 0:
+            print("FAIL band witness has", n_good, "in-band q>=2 children")
+            fails += 1
+        else:
+            print("OK Theorem AV band witness 01303120 has 0 in-band q>=2 children")
+
     print("core_verify_fails", fails)
     if fails:
         sys.exit(1)

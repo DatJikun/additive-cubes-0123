@@ -845,6 +845,15 @@ static void dump_word(const char* path, const std::vector<u8>& w) {
     out << "\n";
 }
 
+static uint64_t word_hash(const std::vector<u8>& w) {
+    uint64_t h = 1469598103934665603ull;
+    for (u8 a : w) {
+        h ^= a;
+        h *= 1099511628211ull;
+    }
+    return h;
+}
+
 static void mode_beam(int depth, int beam, int style) {
     // style 0: two smallest legal letters (unary if q=1)
     // style 1: two letters whose new mean is closest to 1.5
@@ -908,12 +917,25 @@ static void mode_beam(int depth, int beam, int style) {
         }
         int nlen = d + 1;
         double mean = nxt.empty() ? 0 : (double)sum_S / (double)(nxt.size() * std::max(1, nlen));
-        if (d < 20 || (d + 1) % 20 == 0 || nxt.empty())
-            std::cout << "layer " << nlen << " frontier " << nxt.size() << " qmin " << layer_qmin << " q0 " << n_q0
-                      << " q1 " << n_q1 << " q2 " << n_q2 << " mean " << mean << "\n";
+        if (d < 20 || (d + 1) % 20 == 0 || nxt.empty()) {
+            std::unordered_set<uint64_t> hs;
+            const auto& src = nxt.empty() ? cur : nxt;
+            for (auto& nd : src) hs.insert(word_hash(nd.b.w));
+            std::cout << "layer " << nlen << " frontier " << nxt.size() << " unique " << hs.size() << " qmin "
+                      << layer_qmin << " q0 " << n_q0 << " q1 " << n_q1 << " q2 " << n_q2 << " mean " << mean
+                      << "\n";
+        }
         if (nxt.empty()) {
             std::cout << "beam EXTINCT at " << nlen << " deaths " << n_death << " first_death " << first_death
-                      << "\n";
+                      << " dying_parents " << cur.size() << "\n";
+            if (!cur.empty()) {
+                dump_word(("data/beam_dead_s" + std::to_string(style) + ".txt").c_str(), cur[0].b.w);
+                std::cout << "beam_dead_dump len " << cur[0].b.size() << " mean " << word_mean(cur[0].b)
+                          << " prefix20 "
+                          << to_string(std::vector<u8>(cur[0].b.w.begin(),
+                                                      cur[0].b.w.begin() + std::min(20, (int)cur[0].b.w.size())))
+                          << " q " << (int)legal_letters(cur[0].b).size() << "\n";
+            }
             return;
         }
         if ((int)nxt.size() > beam) {
@@ -933,9 +955,11 @@ static void mode_beam(int depth, int beam, int style) {
     std::cout << "beam depth " << depth << " style " << style << " frontier " << cur.size() << " deaths "
               << n_death << " first_death " << first_death << " unary " << n_unary << "\n";
     if (!cur.empty()) {
-        dump_word("data/beam_word.txt", cur[0].b.w);
-        std::cout << "beam_dump data/beam_word.txt len " << cur[0].b.size() << " mean " << word_mean(cur[0].b)
-                  << " prefix20 " << to_string(std::vector<u8>(cur[0].b.w.begin(), cur[0].b.w.begin() + std::min(20, (int)cur[0].b.w.size())))
+        dump_word(("data/beam_word_s" + std::to_string(style) + ".txt").c_str(), cur[0].b.w);
+        std::cout << "beam_dump data/beam_word_s" << style << ".txt len " << cur[0].b.size() << " mean "
+                  << word_mean(cur[0].b) << " prefix20 "
+                  << to_string(std::vector<u8>(cur[0].b.w.begin(),
+                                              cur[0].b.w.begin() + std::min(20, (int)cur[0].b.w.size())))
                   << "\n";
     }
 }
