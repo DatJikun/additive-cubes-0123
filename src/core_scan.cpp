@@ -972,6 +972,8 @@ static void mode_mutate(const char* path, int samples, int extra, int stride) {
     int n_try = 0, n_live = 0, n_die = 0;
     int best_alt = 0, best_pos = -1, worst_die = 0, worst_die_pos = -1;
     int next_n = 40;
+    i64 extra_sum = 0;
+    int extra_min = 1 << 30, extra_max = 0;
     for (int n = 0; n < walk_cap && n_try < samples; ++n) {
         if (!live.try_push(w[n])) {
             std::cout << "mutate archive not ACF at " << n + 1 << "\n";
@@ -996,6 +998,10 @@ static void mode_mutate(const char* path, int samples, int extra, int stride) {
             if (!b.try_push(a)) continue;
             greedy_extend(b, pos + extra, 1);
             int L = b.size();
+            int got = L - pos;
+            extra_sum += got;
+            if (got < extra_min) extra_min = got;
+            if (got > extra_max) extra_max = got;
             if (L >= pos + extra) {
                 ++n_live;
                 if (L > best_alt) {
@@ -1011,9 +1017,53 @@ static void mode_mutate(const char* path, int samples, int extra, int stride) {
             }
         }
     }
+    double extra_mean = (n_live + n_die) ? (double)extra_sum / (n_live + n_die) : 0;
     std::cout << "mutate N " << N << " walked " << walk_cap << " tried_pos " << n_try << " alt_live " << n_live
               << " alt_die " << n_die << " best_alt " << best_alt << " best_pos " << best_pos << " extra "
-              << extra << " worst_die " << worst_die << " worst_die_pos " << worst_die_pos << "\n";
+              << extra << " worst_die " << worst_die << " worst_die_pos " << worst_die_pos << " fork_extra_min "
+              << extra_min << " max " << extra_max << " mean " << extra_mean << "\n";
+}
+
+static void mode_band(int n, double eps) {
+    // All ACF n-mers with |mean-1.5|<=eps: how many have >=2 letters a with
+    // wa still ACF, q(wa)>=2, and |mean(wa)-1.5|<=eps?
+    Builder b;
+    uint64_t n_all = 0, n_band = 0, n_ge2 = 0, n_1 = 0, n_0 = 0;
+    int min_good = 99;
+    std::string worst;
+    std::function<void()> rec = [&]() {
+        if (b.size() == n) {
+            ++n_all;
+            double m = word_mean(b);
+            if (std::abs(m - 1.5) > eps) return;
+            ++n_band;
+            int good = 0;
+            auto opts = legal_letters(b);
+            for (u8 a : opts) {
+                b.try_push(a);
+                double m2 = word_mean(b);
+                int q = (int)legal_letters(b).size();
+                if (q >= 2 && std::abs(m2 - 1.5) <= eps) ++good;
+                b.pop();
+            }
+            if (good >= 2) ++n_ge2;
+            else if (good == 1) ++n_1;
+            else ++n_0;
+            if (good < min_good) {
+                min_good = good;
+                worst = to_string(b.w);
+            }
+            return;
+        }
+        for (int a = 0; a < 4; ++a)
+            if (b.try_push((u8)a)) {
+                rec();
+                b.pop();
+            }
+    };
+    rec();
+    std::cout << "band n=" << n << " eps " << eps << " all " << n_all << " in_band " << n_band << " ge2 " << n_ge2
+              << " eq1 " << n_1 << " eq0 " << n_0 << " min_good " << min_good << " worst " << worst << "\n";
 }
 
 static void mode_inject_iter(int n0, int rounds, int r) {
@@ -2010,7 +2060,7 @@ int main(int argc, char** argv) {
             << "core_scan trie N | word FILE [pe] | suffix FILE k | updown FILE P | random D T seed |\n"
             << "  branch n R samples | findq1 N budget | inject n | basin | cass N | walk FILE |\n"
             << "  recgen CAP | grow2 D budget | beam D BEAM STYLE | mutate FILE samples extra stride |\n"
-            << "  inject_iter n0 rounds r | lcp | macro FILE L | look n R | ops n r |\n"
+            << "  inject_iter n0 rounds r | band n eps | lcp | macro FILE L | look n R | ops n r |\n"
             << "  cycle n | detfsm | twocore n | drive n drv cap blind|legal | dscan | tmblocks lu lv cap lim\n";
         return 1;
     }
@@ -2074,6 +2124,10 @@ int main(int argc, char** argv) {
         int rounds = (argc > 3) ? std::atoi(argv[3]) : 12;
         int r = (argc > 4) ? std::atoi(argv[4]) : 2;
         mode_inject_iter(n0, rounds, r);
+    } else if (cmd == "band") {
+        int n = (argc > 2) ? std::atoi(argv[2]) : 8;
+        double eps = (argc > 3) ? std::atof(argv[3]) : 0.25;
+        mode_band(n, eps);
     } else if (cmd == "lcp") {
         mode_lcp();
     } else if (cmd == "macro") {
