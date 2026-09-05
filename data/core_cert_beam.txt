@@ -1,0 +1,9 @@
+band n=8 eps 0.25 all 42070 in_band 25998 ge2 24074 eq1 1868 eq0 56 min_good 0 worst 01303120
+beam style1 cap 4096 EXTINCT at 399 unique dying 4096 len 398
+beam style1 cap 16384 EXTINCT at 480 unique dying 16384 len 479
+beam style0 cap 4096 EXTINCT at 416 unique dying 2524 len 415
+beam style0 cap 16384 SURVIVE depth 500 frontier 16384 deaths 736905 bottleneck_480 q2=406
+inject_iter n0=4 r=2 rounds 40 SURVIVE len 84 cap 8000 leak round40 eq0=31
+mutate p2000 walked 25000 tried_pos 80 alt_live 0 alt_die 133 fork_extra min 1 max 156 mean 46.6391
+dead_s1 cubes (84,132,198) (279,67,102) (282,66,100) (0,160,241)
+dead_s0 cubes (167,83,123) (185,77,115) (89,109,163) (170,82,123)

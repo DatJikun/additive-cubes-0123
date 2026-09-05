@@ -237,3 +237,12 @@ The characteristic sequence of \(\{n:S(2n)=2S(n)\}\) has 2-kernel fingerprints s
 
 ## H38. Positive finite-language growth implies a finite-state ACF core
 **Status:** KILLED. Growth of \(c_n\) (open as a theorem, empirical through \(n=12\)) does not produce an all-paths finite graph of ACF infinite words (Theorem AI). König’s lemma needs unbounded lengths, not a sofic generator.
+
+## H39. Words with \(\lvert\mathrm{mean}-3/2\rvert\le 1/4\) and \(q\ge 2\) form a 2-injective core
+**Status:** KILLED at \(n=8\) (Theorem AV). Witness `01303120`.
+
+## H40. Always taking the two legal letters closest to mean \(3/2\) generates unbounded ACF words
+**Status:** KILLED computationally for this local rule with frontier caps 4096 and 16384. Extinct at lengths 399 and 480 respectively; at cap 16384 the 16384 dying parents of length 479 are pairwise distinct, ACF, and \(q=0\). Dual Python on the dump. Not a kill of every globally pruned 2-tree (two-smallest with cap 16384 is still alive at 500).
+
+## H41. Unused legal letters of a long Up-and-Down word are equally good continuations
+**Status:** KILLED. 133 alternative letters at 80 \(q\ge 2\) positions in the first 25000 letters of the period-2000 archive: all die under balanced greedy, mean extra length 46.6, max 156.

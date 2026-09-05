@@ -472,6 +472,13 @@ If a binary sequence contains three consecutive 0s (resp. 1s), the two-block cod
 
 Maps \(h_0\colon 0\mapsto 002,1\mapsto 132,2\mapsto 012,3\mapsto 133\) and \(h_1\colon 0\mapsto 002,1\mapsto 211,2\mapsto 231,3\mapsto 210\), directive period-doubling, seed 0: the iterate of length 243 is ACF; the next iterate of length 729 has cube \((2,19,22)\). Dual Python. 16k random 3-uniform pairs: none beat 243 as an ACF prefix. Not an infinite word.
 
+## Theorem AV — the Cesàro band \(\lvert\mathrm{mean}-3/2\rvert\le 1/4\) is not a 2-injection
+**Status: COMPUTATIONALLY VERIFIED** at \(n=8\). Novelty: COMPUTATIONALLY VERIFIED.
+
+Let \(B_8\) be the ACF 8-mers with \(\lvert(\sum w)/8-3/2\rvert\le 1/4\). \(|B_8|=25998\) of \(42070\). The word `01303120` lies in \(B_8\) (\(q=2\)) and has **no** one-letter extension \(wa\) that is ACF with \(q(wa)\ge 2\) and \(wa\in B_9\). Letters 2,3 cube; 0,1 leave the band. Dual Python `q_brute` / `find_cube`. Therefore “stay near mean \(3/2\) and keep \(q\ge 2\)” is not a closed two-extension invariant, already at length 8.
+
+This does not speak to infinite words (Conjecture C5 is only for infinite Cesàro means).
+
 ---
 
 ## Corollary AH — Conjecture A is not a new lever

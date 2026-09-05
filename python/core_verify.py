@@ -526,7 +526,8 @@ def main():
     else:
         print("OK 2tree depth 14 frontier", len(frontier), "no death yet")
 
-    for path in ("data/beam_word.txt", "data/inject_word.txt"):
+    for path in ("data/beam_word.txt", "data/inject_word.txt", "data/beam_word_s0.txt", "data/beam_word_s1.txt",
+                 "data/beam_dead_s1.txt", "data/beam_dead_s0.txt"):
         if not os.path.exists(path):
             continue
         w = load_digits(path)
@@ -534,8 +535,21 @@ def main():
         if c is not None:
             print("FAIL dumped", path, "cube", c)
             fails += 1
+            continue
+        q = q_brute(w)
+        if "dead" in path:
+            if q != 0:
+                print("FAIL dead dump q", q, path)
+                fails += 1
+                continue
+            cubes = [find_cube(w + [a]) for a in range(4)]
+            if any(x is None for x in cubes):
+                print("FAIL dead dump extendable", path, cubes)
+                fails += 1
+            else:
+                print("OK dumped dead-end", path, "len", len(w), "cubes", cubes)
         else:
-            print("OK dumped ACF", path, "len", len(w), "q", q_brute(w))
+            print("OK dumped ACF", path, "len", len(w), "q", q)
 
     # Theorem AV: mean-band |mean-1.5|<=0.25 is not a 2-injection at n=8.
     w = [int(c) for c in "01303120"]

@@ -1,5 +1,11 @@
 # Research Log
 
+## 2026-09-05 — two-operator injection / globally pruned 2-tree
+
+Mission: a composing pair \(E_0,E_1\) or a closed 2-injection, else a hard obstruction. Do **not** rediscover unique-vote, B(m), TM n-mer 2-cores, equal-length TM blocks, S-adic samples.
+
+Computationally verified: Cesàro band \(\lvert\mathrm{mean}-3/2\rvert\le 1/4\) is not a 2-injection at \(n=8\) (Thm AV, witness `01303120`). Two mean-balancing letters extinct at 480 with cap 16384, 16384 distinct crucial words of length 479 (H40). Two-smallest with cap 4096 extincts at 416 (cap artifact); with cap 16384 alive at 500 after a bottleneck at 480. Archive unused legal letters: 133/133 die, mean extra 47 (H41). Iterated r=2 injection leaky at length 84. Dual C++/Python. No closed injection. Infinite problem still open. Report: `CORE_REPORT.md` §19.
+
 ## 2026-09-04 — self-sustaining core / finite-language geometry
 
 Mission: extract a finite-memory / macro-block / two-branch core of the ACF language, or a rigorous obstruction. Do **not** repeat unique-vote, B(m), Cassaigne lattice, Krylov, triples, automaticity, bounded \(p_T\).

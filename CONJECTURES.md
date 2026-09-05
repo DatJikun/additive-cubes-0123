@@ -68,7 +68,10 @@ There exists a Lipschitz f:ℕ→ℤ whose graph has no 3-AP.
 ---
 
 ## C17. A finite-memory self-sustaining core of the ACF language exists
-**Status:** The *all-paths* version is KILLED (Theorem AI, elementary, already known). The *aperiodic k-mer 2-core + Thue–Morse* version is KILLED computationally for \(n\le 8\) (Theorem AR, max length 37). Equal-length two-block Thue–Morse coding is KILLED for every length (Theorem AS). Unequal small blocks die computationally by length 30. Other finite states are OPEN.
+**Status:** The *all-paths* version is KILLED (Theorem AI, elementary, already known). The *aperiodic k-mer 2-core + Thue–Morse* version is KILLED computationally for \(n\le 8\) (Theorem AR, max length 37). Equal-length two-block Thue–Morse coding is KILLED for every length (Theorem AS). Unequal small blocks die computationally by length 30. Two mean-balancing letters are KILLED (H40, extinct at 480). Cesàro band 2-injection is KILLED (Theorem AV). Other finite states are OPEN.
+
+## C19. The unrestricted globally pruned 2-tree of ACF words is infinite
+**Status:** OPEN. Two-smallest with cap 16384 is alive at length 500 (leaky: \(7\cdot 10^5\) deaths, bottleneck at 480). The same rule with cap 4096 extincts at 416, so capped survival is not a proof. König still needs a closed invariant, which was not found. Do not read a live beam as positive entropy.
 
 ## C18. Every ACF word of length \(\ge N\) has \(q(w)\ge 2\)
 **Status:** KILLED (\(N=8\) already fails). See Theorem AL.

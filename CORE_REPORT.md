@@ -195,7 +195,7 @@ No Toeplitz / nested-reversal / paperfold generator was found that is infinite b
 
 Uniform random legal letters: survival \(0.918\) to depth 80 (8000 trials) and \(0.813\) to depth 120 (4000 trials). The drop is compatible with a per-step death chance on the order of \(10^{-3}\), not with a positive limiting survival probability. This is **not** a random infinite ACF process.
 
-Two-smallest branching (`grow2`): a 2-ary unfolding with frontier capped at 4096 reaches depth 50 with 320 observed deaths, **first death at length 14**. That strategy is not a closed core; it walks into the known leaves.
+Two-smallest branching (`grow2`): a 2-ary unfolding with frontier capped at 4096 reaches depth 50 with 320 observed deaths, **first death at length 14**. Pushed further (§19): the same rule with mean-cap 4096 **extincts at 416**; with cap 16384 it is still alive at 500 after a near-collapse at 480. The two-closest-to-1.5 rule extincts at 480 even with cap 16384. Neither is a closed core.
 
 ---
 
@@ -211,6 +211,9 @@ Two-smallest branching (`grow2`): a 2-ary unfolding with frontier capped at 4096
 | F | Positive finite-language growth \(\Rightarrow\) finite-state core | **Killed** (AI: a core that certifies all paths cannot exist even if \(c_n\) grows) |
 | G | Every recurrent suffix state has a safe continuation | **Killed** (unobserved next letters cube; cycles produce \(u^3\)) |
 | H | Long words have a recursively continuable danger-profile recurrence | **Killed** as stated (coarse hashes collide at \(n=3\); no certified continuation) |
+| I | Cesàro band \(\lvert\mu-3/2\rvert\le 1/4\) is a 2-injection | **Killed** at \(n=8\) (`01303120`) |
+| J | Two mean-balancing letters give unbounded ACF words | **Killed** (extinct at 480, cap 16384) |
+| K | Unused legal letters of the 400k word are live siblings | **Killed** (133/133 die, mean extra 47) |
 
 ---
 
@@ -246,6 +249,8 @@ g++ -std=c++17 -O3 -o bin/core_scan src/core_scan.cpp
 ./bin/core_scan cass 8000
 ./bin/core_scan recgen 256
 ./bin/core_scan lcp
+./bin/core_scan band 8 0.25
+./bin/core_scan beam 16 64 0
 python3 python/core_verify.py
 ```
 
@@ -257,7 +262,7 @@ Machine-readable dual logs: `data/core_cert_cpp.txt`, `data/core_cert.txt`.
 
 **Is there now a mathematically defensible mechanism that can keep extending ACF words forever?**
 
-**Not from the all-paths sofic object, and not from the ACF n-mer 2-core driven by Thue–Morse / paperfold / Sturmian for \(n\le 8\).**
+**Not from the all-paths sofic object, not from the ACF n-mer 2-core driven by Thue–Morse / paperfold / Sturmian for \(n\le 8\), not from two mean-balancing letters, and not from a Cesàro band.**
 
 The first of those was never a new mechanism. The second is the finite-state aperiodic generator the brief actually asked for, built from the finite ACF language itself. It cubes by length 37.
 
@@ -340,3 +345,45 @@ h1: 0→002, 1→211, 2→231, 3→210
 Dual Python: length 243 ACF, cube at 729 is \((i,d,\mathrm{sum})=(2,19,22)\). This is a finite recursive generator. It is **not** an infinite ACF word. It is shorter than the known backtracking archives.
 
 The two-operator / growth-rate proof was not obtained: no closed injection \(E_0,E_1\) that composes indefinitely was found.
+
+---
+
+## 19. Two-operator injection: local 2-trees, mean band, archive forks
+
+König’s lemma would give an infinite ACF word from a **closed** 2-injection: a set \(F\) of finite ACF words, unbounded lengths, every \(w\in F\) has two ACF extensions of fixed length \(r\) that stay in \(F\). The whole language is not closed (dead-ends). The n-mer 2-core is locally 2-regular but not globally ACF (Theorem AR). This section tests the remaining objects: a globally pruned 2-tree, a Cesàro band, and unused legal letters of the 400k archive.
+
+**Mean band is not a 2-injection (Theorem AV).** Among all 42070 ACF 8-mers, 25998 have \(\lvert\mathrm{mean}-1.5\rvert\le 0.25\). Of those, 56 have **zero** one-letter extensions that stay in the band with \(q\ge 2\). Witness `01303120` (mean \(1.25\), \(q=2\)): letters 2 and 3 cube; 0 and 1 stay ACF but drop the mean to \(1.11\) and \(1.22\). Dual Python. Wider band \(\varepsilon=0.4\) still has \(\mathrm{min\_good}=1\) at \(n=8\), and \(\mathrm{eq0}>0\) at \(n=10\). Average \(3/2\) is not an invariant that two-extends.
+
+**Two closest-to-1.5 letters: the strategy dies.** Persistent-builder 2-tree, each node keeps the two legal letters whose new mean is closest to \(1.5\), unary if \(q=1\), cap keeps nodes closest to mean \(1.5\):
+
+| cap | extinct at | distinct dying parents | first death |
+|---|---|---|---|
+| 4096 | **399** | 4096 words of length 398 | 14 |
+| 16384 | **480** | 16384 words of length 479 | 14 |
+
+Not clones: unique = frontier at every printed layer. The length-479 dump is ACF, \(q=0\), mean \(1.503\); the four extensions cube at \((84,132)\), \((279,67)\), \((282,66)\), \((0,160)\). The last of those is a cube of the whole length-480 word. Dual Python. This kills the local rule “always pick the two mean-balancing letters”. It does **not** kill every 2-tree.
+
+**Two-smallest letters: small cap dies, large cap lives to 500.** Same cap-by-mean, but children are the two smallest legal letters:
+
+| cap | fate |
+|---|---|
+| 4096 | extinct at **416**, 2524 distinct crucial words of length 415 |
+| 16384 | **alive at 500**, frontier 16384, after a bottleneck at 480 (\(q_2=406\), \(q_0=4566\)) then rebound |
+
+The 416 extinction is a **cap artifact**: enlarging the frontier past that family lets other two-smallest paths through. Survival to 500 with a cap is **not** exponential growth and **not** an infinite word. Deaths along the way: 736905 observed. First death at 14, matching the known leaves.
+
+**Iterated r=2 injection** from all 228 ACF 4-mers, keep two r-extensions with \(q\ge 2\), cap 8000, prefer mean \(1.5\): survives 40 rounds to length 84. Leakage is real and growing (round 40: 7898/8000 parents still 2-extend, 31 have zero good children). Not a closed set.
+
+**Archive forks all die.** Walk the period-2000 Up-and-Down word to length 25000. At 80 positions with \(q\ge 2\), take a **different** legal letter and balanced-greedy extend by 2500: **133/133 alternatives die**. Extra length until death: min 1, mean 46.6, max 156. Dual Python on the first forks: they reach a right-crucial word (\(q=0\)), they do not beat the original path. Unused legal letters of the long construction are traps. The 400k word is a backtracking survivor, not a typical 2-core walk.
+
+Reproduce:
+```
+./bin/core_scan beam 500 16384 0
+./bin/core_scan beam 500 16384 1
+./bin/core_scan inject_iter 4 40 2
+./bin/core_scan mutate data/word_updown_p2000_n400000.txt 80 2500 250
+./bin/core_scan band 8 0.25
+python3 python/core_verify.py
+```
+
+Not claimed: a closed injection, positive entropy, or an infinite word. The unrestricted globally pruned 2-tree (every pair of legal letters, no cap) is still unrefuted and unproved.
