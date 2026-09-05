@@ -1168,11 +1168,12 @@ static void mode_delta(const char* path) {
 }
 
 static void mode_env(const std::string& kind, int cap, double c, uint64_t budget) {
-    // Envelope greedy: |Δ| target c√n. kind=greedy (no backtrack) or bt (chronological).
-    if (kind == "greedy") {
+    // Envelope: |Δ| target c√n. greedy/bang = no backtrack; bt/bangbt = chronological.
+    bool bang = (kind == "bang" || kind == "bangbt");
+    bool backtrack = (kind == "bt" || kind == "bangbt");
+    auto ord_fn = bang ? envelope_bang_order(c) : envelope_order(c);
+    if (!backtrack && (kind == "greedy" || kind == "bang")) {
         Builder b;
-        auto ord_fn = envelope_order(c);
-        int last_print = 0;
         while (b.size() < cap) {
             auto opts = legal_letters(b);
             if (opts.empty()) break;
@@ -1184,33 +1185,32 @@ static void mode_env(const std::string& kind, int cap, double c, uint64_t budget
                     break;
                 }
             if (chosen == 255 || !b.try_push(chosen)) break;
-            if (b.size() - last_print >= 1000 || b.size() == cap) {
-                last_print = b.size();
-                double D = std::abs((double)b.S.back() - 1.5 * b.size());
-                std::cout << "env_greedy n " << b.size() << " mean " << word_mean(b) << " |Δ| " << D
-                          << " |Δ|/√n " << D / std::sqrt((double)b.size()) << " q "
-                          << (int)legal_letters(b).size() << "\n";
-            }
         }
-        dump_word("data/env_greedy.txt", b.w);
-        std::cout << "env_greedy cap " << cap << " c " << c << " len " << b.size() << " mean " << word_mean(b)
-                  << " prefix20 "
+        const char* path = bang ? "data/env_bang.txt" : "data/env_greedy.txt";
+        dump_word(path, b.w);
+        double D = b.w.empty() ? 0 : std::abs((double)b.S.back() - 1.5 * b.size());
+        std::cout << "env_" << kind << " cap " << cap << " c " << c << " len " << b.size() << " mean "
+                  << (b.w.empty() ? 0 : word_mean(b)) << " |Δ| " << D << " |Δ|/√n "
+                  << (b.w.empty() ? 0 : D / std::sqrt((double)b.size())) << " q "
+                  << (int)legal_letters(b).size() << " prefix20 "
                   << to_string(std::vector<u8>(b.w.begin(), b.w.begin() + std::min(20, (int)b.w.size())))
                   << "\n";
         return;
     }
-    if (kind == "bt") {
-        auto w = greedy_backtrack(budget, envelope_order(c), cap);
-        dump_word("data/env_bt.txt", w);
+    if (backtrack) {
+        auto w = greedy_backtrack(budget, ord_fn, cap);
+        const char* path = bang ? "data/env_bangbt.txt" : "data/env_bt.txt";
+        dump_word(path, w);
         Builder b;
         for (u8 a : w) b.try_push(a);
         double D = w.empty() ? 0 : std::abs((double)b.S.back() - 1.5 * b.size());
-        std::cout << "env_bt cap " << cap << " c " << c << " budget " << budget << " len " << w.size()
-                  << " mean " << (w.empty() ? 0 : word_mean(b)) << " |Δ| " << D << " |Δ|/√n "
-                  << (w.empty() ? 0 : D / std::sqrt((double)w.size())) << "\n";
+        std::cout << "env_" << kind << " cap " << cap << " c " << c << " budget " << budget << " len "
+                  << w.size() << " mean " << (w.empty() ? 0 : word_mean(b)) << " |Δ| " << D << " |Δ|/√n "
+                  << (w.empty() ? 0 : D / std::sqrt((double)w.size())) << " q "
+                  << (int)legal_letters(b).size() << "\n";
         return;
     }
-    std::cerr << "env kind greedy|bt\n";
+    std::cerr << "env kind greedy|bt|bang|bangbt\n";
 }
 
 static void mode_inject_iter(int n0, int rounds, int r) {

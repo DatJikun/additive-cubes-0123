@@ -73,7 +73,7 @@ There exists a Lipschitz f:ℕ→ℤ whose graph has no 3-AP.
 ## C19. The unrestricted globally pruned 2-tree of ACF words is infinite
 **Status:** OPEN. Two-smallest with cap 16384 is alive at length 500 (leaky: \(7\cdot 10^5\) deaths, bottleneck at 480). The same rule with cap 4096 extincts at 416, so capped survival is not a proof. High-disc cap (styles 2–3) survives 500 by falling into the 0-heavy greedy basin (H42). König still needs a closed invariant, which was not found. Do not read a live beam as positive entropy.
 
-The remaining geometric target is a 2-tree that keeps \(\Delta\) **large and non-affine** without collapsing to one-sided greedy — the regime of the 400k archive, which has no finite rule.
+The remaining geometric target is a 2-tree that keeps \(\Delta\) **large and non-affine** without collapsing to one-sided greedy — the regime of the 400k archive, which has no finite rule. Envelope \(\lvert\Delta\rvert\sim c\sqrt{n}\) as an explicit letter order is KILLED (H43, death at 67). Envelope as a backtracking heuristic is strictly worse than period reversal (H44).
 
 ## C18. Every ACF word of length \(\ge N\) has \(q(w)\ge 2\)
 **Status:** KILLED (\(N=8\) already fails). See Theorem AL.

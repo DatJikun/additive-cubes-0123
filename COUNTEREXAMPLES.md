@@ -249,3 +249,9 @@ The characteristic sequence of \(\{n:S(2n)=2S(n)\}\) has 2-kernel fingerprints s
 
 ## H42. A 2-tree that maximises \(\lvert\mathrm{mean}-3/2\rvert\) is a new infinite ACF generator
 **Status:** KILLED as a *new* generator. Styles 2–3 survive 500 with mean \(\approx 0.67\) and \(\max\lvert\Delta\rvert\approx 412\), but the prefix is the 0-heavy greedy family (LCP 14 with `word_fixed_p1000`), already known to die at 24396. The useful fact is the contrast with H40: far-from-\(3/2\) avoids the affine-\(\Delta\) wall; it does not produce a core.
+
+## H43. Greedy \(\lvert\Delta\rvert\approx c\sqrt{n}\) (the 400k envelope) is an infinite ACF word
+**Status:** KILLED. No-backtrack \(c=5\) dies at length 67, \(q=0\), still on the envelope (\(\lvert\Delta\rvert/\sqrt{n}=4.95\)). Dual Python. Bang-bang variant dies at 107.
+
+## H44. Envelope letter-order backtracking is as good as Up-and-Down
+**Status:** KILLED. \(10^7\) nodes \(\to\) 7066 (dead). Fixed-order with \(2\cdot 10^6\) already reached 24396. Up-and-Down \(p=2000\) reached 400k.

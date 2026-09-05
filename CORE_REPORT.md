@@ -410,3 +410,44 @@ The long archive lives by keeping \(\Delta\) large and non-affine. The Cesàro-c
 **High-discrepancy 2-tree (styles 2–3), cap 4096:** alive at 500, mean \(\approx 0.67\), no 480 collapse, \(q_2\) stays thousands. Prefix `00100100200100200100…`, LCP 14 with the known fixed-order greedy archive (then they diverge; LCP 130 between s2 and s3). Dual Python: both dumps ACF. This is the 0-heavy greedy basin, not a new morphism. Fixed-order already died at 24396. Do not read “alive at 500 with mean 0.67” as an infinite word.
 
 Reproduce: `./bin/core_scan delta data/beam_dead_s1.txt`; `./bin/core_scan beam 500 4096 2`; `python3 python/core_verify.py`.
+
+---
+
+## 21. Envelope \(\lvert\Delta\rvert\approx c\sqrt{n}\) is not a hidden rule
+
+The 400k archive has \(\lvert\Delta\rvert/\sqrt{n}\approx 5\). The next explicit candidate after mean-balancing and 0-greedy: always take the legal letter whose new \(\lvert\Delta\rvert\) is closest to \(c\sqrt{n}\). No search.
+
+**No-backtrack (explicit infinite-word candidate): dead.** Dual C++/Python.
+
+| \(c\) | death length | \(\lvert\Delta\rvert/\sqrt{n}\) at death | \(q\) |
+|---|---|---|---|
+| 3 | 50 | — | 0 |
+| 5 | **67** | 4.95 | 0 |
+| 8 | 44 | — | 0 |
+
+Witness \(c=5\), length 67:
+```
+0010010020010011200102001102102110113011211311200110212102212030030
+```
+Four extensions cube. LCP 27 with fixed-order greedy, then it tries to hold the envelope and dies. Being on the archive’s \(\sqrt{n}\) curve does **not** prevent \(q=0\).
+
+Bang-bang (Up-and-Down analogue: grow \(\lvert\Delta\rvert\) until \(c\sqrt{n}\), then shrink): dies at **107**, still \(q=0\), still on-envelope.
+
+**Backtracking with that letter order is worse than Up-and-Down.**
+
+| order | budget | best length | tail \(q\) |
+|---|---|---|---|
+| envelope-closest \(c=5\) | \(3\cdot 10^6\) | 3851 | 0 |
+| envelope-closest \(c=5\) | \(10^7\) | 7066 | 0 |
+| envelope-closest \(c=6\) | \(3\cdot 10^6\) | 5358 | — |
+| bang-bang \(c=5\) | \(3\cdot 10^6\) | 7347 | 0 |
+| fixed-order (known) | \(2\cdot 10^6\) | 24396 | 0 |
+| Up-and-Down \(p=2000\) | cap | 400000 | (cap) |
+
+The 400k word is not “envelope greedy plus a little backtracking”. Period reversal is a strictly better search order than targeting \(\lvert\Delta\rvert\sim\sqrt{n}\).
+
+**Envelope 2-tree (beam style 4, \(c=5\), cap 4096):** alive at 500 but collapsing (frontier 1971, \(q_2=309\), 2434 deaths in the last layer). Mean 1.278, \(\lvert\mathrm{mean}-1.5\rvert\approx 0.22\) so \(\lvert\Delta\rvert/\sqrt{n}\approx 5\). On-target and sick.
+
+Not claimed: an infinite word, or that every \(\sqrt{n}\)-discrepancy walk cubes. Cassaigne has large non-affine \(\Delta\) and is infinite over a different alphabet. The finite rule “stay near \(c\sqrt{n}\)” on \(\{0,1,2,3\}\) is not a core.
+
+Reproduce: `./bin/core_scan env greedy 80 5`; `./bin/core_scan env bang 200 5`; `./bin/core_scan env bt 40000 5 3000000`; `python3 python/core_verify.py`.

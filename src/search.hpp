@@ -217,6 +217,17 @@ inline std::function<std::array<u8, 4>(int, const Builder&)> drift_order(double 
 
 // Envelope: prefer the letter whose new |S-(3/2)n| is closest to c√n.
 // This is the discrepancy regime of the 400k archive (c≈5), not mean-threshold drift.
+inline std::function<std::array<u8, 4>(int, const Builder&)> envelope_bang_order(double c) {
+    return [c](int /*depth*/, const Builder& b) {
+        if (b.w.empty()) return order_fixed_down();
+        double D = (double)b.S.back() - 1.5 * (double)b.size();
+        double tgt = c * std::sqrt((double)b.size());
+        bool grow = std::abs(D) <= tgt;
+        if (grow) return D >= 0 ? order_fixed_down() : order_fixed_up();
+        return D > 0 ? order_fixed_up() : order_fixed_down();
+    };
+}
+
 inline std::function<std::array<u8, 4>(int, const Builder&)> envelope_order(double c) {
     return [c](int /*depth*/, const Builder& b) {
         int n = b.size();

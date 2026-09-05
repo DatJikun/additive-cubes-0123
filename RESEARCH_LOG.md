@@ -1,5 +1,11 @@
 # Research Log
 
+## 2026-09-05 — envelope \(\lvert\Delta\rvert\sim c\sqrt{n}\) greedy
+
+Mission: turn the 400k archive’s discrepancy curve into an explicit letter order, or kill it. Do **not** repeat mean-balancing, 0-greedy beams, TM 2-cores.
+
+Killed: no-backtrack envelope greedy \(c=5\) dies at 67, \(q=0\), on-envelope (H43). Bang-bang dies at 107. Envelope backtracking \(10^7\) nodes \(\to\) 7066, worse than fixed-order and Up-and-Down (H44). Dual Python. The 400k word is not this rule. Infinite problem still open.
+
 ## 2026-09-05 — affine discrepancy cubes / high-disc 2-tree
 
 Mission: explain the mean-beam extinction; try the opposite 2-tree. Do **not** repeat TM 2-cores, equal TM blocks, S-adic samples, sofic all-paths.

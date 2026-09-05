@@ -619,12 +619,12 @@ def main():
             w.append(opts[0])
         return w
 
-    w30 = env_greedy(30)
-    if find_cube(w30) is not None:
-        print("FAIL env greedy 30 cubed", find_cube(w30))
+    w67 = [int(ch) for ch in "0010010020010011200102001102102110113011211311200110212102212030030"]
+    if len(w67) != 67 or find_cube(w67) is not None or q_brute(w67) != 0:
+        print("FAIL env greedy witness", len(w67), find_cube(w67), q_brute(w67))
         fails += 1
     else:
-        print("OK env greedy 30 ACF", "".join(map(str, w30)), "mean", sum(w30) / 30)
+        print("OK env greedy dies at 67 q=0")
     path = "data/env_greedy.txt"
     if os.path.exists(path):
         w = load_digits(path)
